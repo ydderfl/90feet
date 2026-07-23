@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90 Feet — A Baseball Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --field:#16301F;
+    --field-dark:#0E2116;
+    --clay:#A6633C;
+    --clay-dark:#7A492C;
+    --chalk:#F5F1E6;
+    --chalk-dim:#C9C4B4;
+    --amber:#F2A93B;
+    --amber-dark:#C6841E;
+    --brick:#C0483D;
+    --navy:#132229;
+    --navy-light:#1B323C;
+    --leather:#8C6239;
+    --radius-card:12px;
+    --radius-btn:5px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(242,169,59,0.10), transparent 60%),
+      linear-gradient(180deg, var(--field) 0%, var(--field-dark) 100%);
+    color:var(--chalk);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  .app{max-width:1080px;margin:0 auto;padding:20px 16px 60px;}
+  h1,h2,h3{margin:0;}
+  .display{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:0.5px;}
+  .label{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;}
+  button{font-family:'Oswald',sans-serif;cursor:pointer;}
+  ::selection{background:var(--amber);color:var(--navy);}
+  a{color:var(--amber);}
+
+  /* ---------- focus ---------- */
+  button:focus-visible, select:focus-visible, input:focus-visible{
+    outline:3px solid var(--amber);
+    outline-offset:2px;
+  }
+
+  /* ---------- START SCREEN ---------- */
+  .hero{
+    padding:56px 0 30px;
+    text-align:center;
+    position:relative;
+  }
+  .hero-title{
+    font-size:clamp(52px,11vw,110px);
+    color:var(--chalk);
+    text-shadow:0 0 40px rgba(242,169,59,0.25);
+    line-height:0.95;
+  }
+  .hero-title span{color:var(--amber);}
+  .hero-sub{
+    font-family:'Oswald',sans-serif;
+    color:var(--chalk-dim);
+    font-size:clamp(14px,2.2vw,18px);
+    letter-spacing:1px;
+    margin-top:10px;
+    text-transform:uppercase;
+  }
+  .home-plate{
+    width:26px;height:26px;
+    background:var(--amber);
+    margin:26px auto 0;
+    clip-path:polygon(50% 100%, 0% 55%, 0% 0%, 100% 0%, 100% 55%);
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .home-plate{animation:none;} }
+  @keyframes pulse{
+    0%,100%{opacity:0.55;transform:scale(1);}
+    50%{opacity:1;transform:scale(1.15);}
+  }
+
+  .setup-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    max-width:460px;
+    margin:36px auto 0;
+    padding:28px 26px 30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .field-group{margin-bottom:18px;text-align:left;}
+  .field-group label{
+    display:block;
+    font-size:12px;
+    color:var(--amber);
+    margin-bottom:6px;
+  }
+  .field-group input, .field-group select{
+    width:100%;
+    background:var(--navy-light);
+    border:1px solid rgba(245,241,230,0.15);
+    color:var(--chalk);
+    padding:10px 12px;
+    border-radius:var(--radius-btn);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+  }
+  .pos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .pos-opt{
+    background:var(--navy-light);
+    border:1px solid rgba(245,241,230,0.15);
+    color:var(--chalk-dim);
+    border-radius:var(--radius-btn);
+    padding:9px 6px;
+    text-align:center;
+    font-size:12px;
+    letter-spacing:0.4px;
+  }
+  .pos-opt.active{
+    border-color:var(--amber);
+    color:var(--amber);
+    background:rgba(242,169,59,0.10);
+  }
+  .cta{
+    display:block;
+    width:100%;
+    background:var(--amber);
+    color:var(--navy);
+    border:none;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:14px 18px;
+    border-radius:var(--radius-btn);
+    margin-top:8px;
+    transition:transform 0.12s ease, background 0.12s ease;
+  }
+  .cta:hover{background:var(--amber-dark);}
+  .cta:active{transform:scale(0.98);}
+  .cta.ghost{
+    background:transparent;
+    border:1px solid var(--amber);
+    color:var(--amber);
+  }
+  .cta.ghost:hover{background:rgba(242,169,59,0.1);}
+  .hint{font-size:12px;color:var(--chalk-dim);margin-top:14px;text-align:center;}
+
+  /* ---------- SCOREBOARD ---------- */
+  .scoreboard{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    overflow:hidden;
+    margin-bottom:14px;
+  }
+  .sb-cell{
+    flex:1 1 120px;
+    padding:12px 16px;
+    border-right:1px solid rgba(245,241,230,0.08);
+  }
+  .sb-cell:last-child{border-right:none;}
+  .sb-label{font-size:10px;color:var(--chalk-dim);letter-spacing:1.4px;}
+  .sb-value{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:1px;
+    color:var(--amber);
+    font-size:20px;
+    margin-top:2px;
+  }
+
+  /* ---------- DIAMOND TRACKER ---------- */
+  .diamond-wrap{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:10px 16px 4px;
+    margin-bottom:18px;
+  }
+  .diamond-svg{width:100%;height:auto;display:block;max-height:150px;margin:0 auto;}
+  .diamond-caption{
+    text-align:center;
+    font-size:12px;
+    color:var(--chalk-dim);
+    padding-bottom:8px;
+    letter-spacing:0.5px;
+  }
+  .diamond-caption b{color:var(--amber);}
+
+  /* ---------- GAME LAYOUT ---------- */
+  .game-layout{
+    display:grid;
+    grid-template-columns:250px 1fr;
+    gap:18px;
+    align-items:start;
+  }
+  @media (max-width:760px){
+    .game-layout{grid-template-columns:1fr;}
+  }
+
+  .player-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:18px;
+  }
+  .player-name{font-size:20px;margin-bottom:2px;}
+  .player-meta{font-size:12px;color:var(--chalk-dim);margin-bottom:16px;}
+  .team-banner{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(242,169,59,0.08);
+    border:1px solid rgba(242,169,59,0.25);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:8px;
+  }
+  .team-banner-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--chalk);letter-spacing:0.3px;}
+  .team-banner-sub{font-size:11px;color:var(--chalk-dim);margin-top:1px;}
+  .team-control{font-size:11px;color:var(--amber);margin-bottom:16px;letter-spacing:0.2px;}
+  .attr-group-title{
+    font-size:10px;
+    color:var(--clay);
+    letter-spacing:1.4px;
+    margin:14px 0 8px;
+    border-bottom:1px solid rgba(245,241,230,0.1);
+    padding-bottom:4px;
+  }
+  .attr-row{margin-bottom:9px;}
+  .attr-row-top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;color:var(--chalk-dim);letter-spacing:0.6px;}
+  .attr-track{height:6px;background:rgba(245,241,230,0.09);border-radius:4px;overflow:hidden;}
+  .attr-fill{height:100%;background:var(--amber);border-radius:4px;transition:width 0.4s ease;}
+  .attr-fill.meta{background:var(--clay);}
+  .attr-fill.low{background:var(--brick);}
+
+  .event-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:26px 26px 22px;
+    margin-bottom:16px;
+  }
+  .event-eyebrow{font-size:11px;color:var(--amber);letter-spacing:1.6px;margin-bottom:8px;}
+  .event-headline{font-size:clamp(20px,3vw,26px);margin-bottom:12px;}
+  .event-text{color:var(--chalk-dim);font-size:15px;margin-bottom:20px;}
+  .choice-list{display:flex;flex-direction:column;gap:10px;}
+  .choice-btn{
+    text-align:left;
+    background:var(--navy-light);
+    border:1px solid rgba(245,241,230,0.14);
+    color:var(--chalk);
+    border-radius:var(--radius-btn);
+    padding:13px 16px;
+    font-family:'Inter',sans-serif;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .choice-btn:hover{border-color:var(--amber);background:rgba(242,169,59,0.06);}
+  .choice-label{font-size:15px;font-weight:600;margin-bottom:5px;}
+  .choice-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{
+    font-family:'Oswald',sans-serif;
+    font-size:10.5px;
+    letter-spacing:0.5px;
+    padding:2px 7px;
+    border-radius:3px;
+    background:rgba(245,241,230,0.08);
+    color:var(--chalk-dim);
+  }
+  .tag.up{color:var(--amber);}
+  .tag.down{color:var(--brick);}
+  .team-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    border:1.5px solid;
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    letter-spacing:0.2px;
+    vertical-align:middle;
+    margin-right:6px;
+  }
+  .retire-note{
+    margin-top:14px;
+    font-size:12px;
+    color:var(--chalk-dim);
+    text-align:center;
+  }
+  .retire-note button{
+    background:none;border:none;color:var(--amber);
+    text-decoration:underline;font-size:12px;font-family:'Inter',sans-serif;padding:0;
+  }
+
+  .career-table-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:16px 18px;
+    margin-bottom:14px;
+  }
+  .trophy-case{display:flex;flex-wrap:wrap;gap:7px;}
+  .trophy-chip{
+    background:rgba(242,169,59,0.12);
+    border:1px solid rgba(242,169,59,0.35);
+    color:var(--amber);
+    font-family:'Oswald',sans-serif;
+    font-size:11.5px;
+    letter-spacing:0.5px;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .trophy-empty{font-size:12px;color:var(--chalk-dim);font-style:italic;}
+  .career-table-scroll{overflow-x:auto;}
+  .career-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+    white-space:nowrap;
+  }
+  .career-table th{
+    text-align:left;
+    font-family:'Oswald',sans-serif;
+    font-size:10px;
+    letter-spacing:1px;
+    color:var(--chalk-dim);
+    padding:0 10px 6px 0;
+    border-bottom:1px solid rgba(245,241,230,0.12);
+  }
+  .career-table td{
+    padding:7px 10px 7px 0;
+    border-bottom:1px solid rgba(245,241,230,0.06);
+    color:var(--chalk);
+  }
+  .career-table tr:last-child td{border-bottom:none;}
+  .career-table tr.trophy-row td{color:var(--amber);}
+  .career-table .cell-team{display:flex;align-items:center;gap:6px;}
+  .career-trophy{margin-left:4px;}
+
+  .log-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:16px 20px;
+  }
+  .log-title{font-size:11px;color:var(--clay);letter-spacing:1.4px;margin-bottom:10px;}
+  .log-list{max-height:190px;overflow-y:auto;display:flex;flex-direction:column-reverse;gap:0;}
+  .log-item{
+    font-size:12.5px;
+    color:var(--chalk-dim);
+    padding:7px 0 7px 12px;
+    border-left:2px solid rgba(245,241,230,0.12);
+    margin-bottom:2px;
+  }
+  .log-item.fresh{border-left-color:var(--amber);color:var(--chalk);}
+  .log-item b{color:var(--amber);}
+
+  /* ---------- END SCREEN ---------- */
+  .legacy-card{
+    background:var(--navy);
+    border:1px solid rgba(245,241,230,0.08);
+    border-radius:var(--radius-card);
+    padding:36px 30px;
+    text-align:center;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .legacy-tier{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(26px,5vw,40px);
+    color:var(--amber);
+    margin-bottom:6px;
+  }
+  .legacy-blurb{color:var(--chalk-dim);font-size:14.5px;max-width:480px;margin:0 auto 22px;}
+  .legacy-score-wrap{margin-bottom:24px;}
+  .legacy-score{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:56px;
+    color:var(--chalk);
+    letter-spacing:1px;
+  }
+  .legacy-score-label{font-size:11px;color:var(--chalk-dim);letter-spacing:1.6px;}
+  .stat-table{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 20px;
+    text-align:left;
+    background:var(--navy-light);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:20px;
+  }
+  .stat-row{display:flex;justify-content:space-between;font-size:13.5px;border-bottom:1px solid rgba(245,241,230,0.07);padding-bottom:6px;}
+  .stat-row span:first-child{color:var(--chalk-dim);}
+  .stat-row span:last-child{color:var(--amber);font-weight:600;font-variant-numeric:tabular-nums;}
+  .awards-wrap{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:26px;}
+  .award-chip{
+    background:rgba(242,169,59,0.12);
+    border:1px solid rgba(242,169,59,0.35);
+    color:var(--amber);
+    font-family:'Oswald',sans-serif;
+    font-size:11.5px;
+    letter-spacing:0.5px;
+    padding:5px 10px;
+    border-radius:20px;
+  }
+
+  .hidden{display:none !important;}
+  .footer-note{
+    text-align:center;
+    color:var(--chalk-dim);
+    font-size:11px;
+    opacity:0.6;
+    margin-top:34px;
+  }
+  /* ============ COPERO-STYLE LAYOUT ============ */
+  .app{max-width:640px;}
+  .hero-row{display:flex;gap:12px;align-items:stretch;margin-bottom:18px;}
+  .ovr-badge{
+    width:96px;min-width:96px;border-radius:16px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;
+  }
+  .ovr-badge .ovr-label{font-size:11px;letter-spacing:2px;opacity:0.75;}
+  .ovr-badge .ovr-num{font-size:46px;font-weight:700;line-height:1;}
+  .tier-grey{background:linear-gradient(160deg,#8A93A6,#69718A);color:#fff;}
+  .tier-bronze{background:linear-gradient(160deg,#C97B32,#9A5A1E);color:#fff;}
+  .tier-gold{background:linear-gradient(160deg,#F5C518,#D79E06);color:#3A2A00;}
+  .team-header{
+    flex:1;border-radius:16px;padding:14px 18px;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .th-chips{display:flex;gap:7px;margin-bottom:7px;}
+  .th-chip{
+    font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1px;
+    padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.14);color:#fff;
+  }
+  .th-chip.pos{background:#6D3BF5;}
+  .th-name{display:flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-size:25px;font-weight:600;color:#fff;line-height:1.1;}
+  .th-right{position:absolute;right:16px;top:14px;text-align:right;font-family:'Oswald',sans-serif;}
+  .th-right .lbl{font-size:10px;letter-spacing:1.4px;color:rgba(255,255,255,0.55);}
+  .th-right .val{font-size:23px;font-weight:600;color:#fff;line-height:1.1;}
+
+  .sheet-head{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:1.6px;
+    color:var(--chalk-dim);padding:0 6px 7px;
+  }
+  .sh-age{width:44px;}
+  .sh-club{flex:1;}
+  .sh-ovr{width:46px;text-align:center;}
+  .sh-stats{width:190px;text-align:right;}
+  @media (max-width:560px){ .sh-stats{width:120px;} }
+
+  .career-sheet{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
+  .cs-row{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(245,241,230,0.045);border-radius:11px;padding:7px 8px;
+  }
+  .cs-row.future{background:transparent;opacity:0.32;}
+  .cs-row.current{background:rgba(242,169,59,0.10);border:1px solid rgba(242,169,59,0.28);padding:6px 7px;}
+  .cs-age{
+    width:44px;min-width:44px;height:34px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;color:#fff;
+  }
+  .cs-age.dim{background:rgba(245,241,230,0.07);color:var(--chalk-dim);}
+  .cs-club{flex:1;display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--chalk);min-width:0;}
+  .cs-club span.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cs-ovr{
+    width:46px;min-width:46px;height:28px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;
+  }
+  .cs-stats{
+    width:190px;text-align:right;font-family:'Oswald',sans-serif;
+    font-size:13px;color:var(--chalk-dim);letter-spacing:0.4px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  @media (max-width:560px){ .cs-stats{width:120px;font-size:11.5px;} .cs-club{font-size:13px;} }
+
+  .trophy-case{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .team-logo{object-fit:contain;vertical-align:middle;flex-shrink:0;}
+  .th-name .team-logo{filter:drop-shadow(0 2px 5px rgba(0,0,0,0.55));}
+  .cs-awards{letter-spacing:1px;}
+
+  .decision-wrap{
+    background:rgba(245,241,230,0.045);
+    border-radius:16px;padding:20px 18px;margin-bottom:14px;
+  }
+  .d-title{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;color:var(--chalk);margin-bottom:5px;}
+  .d-sub{font-size:14px;color:var(--chalk-dim);margin-bottom:16px;line-height:1.45;}
+  .d-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+  .d-opt{
+    background:rgba(245,241,230,0.05);border:1px solid rgba(245,241,230,0.10);
+    border-radius:13px;padding:14px 12px;text-align:center;
+    font-family:'Inter',sans-serif;color:var(--chalk);
+    display:flex;flex-direction:column;gap:9px;align-items:center;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .d-opt:hover{border-color:var(--amber);background:rgba(242,169,59,0.07);}
+  .d-opt-pre{font-size:11.5px;color:var(--chalk-dim);}
+  .d-opt-label{font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;line-height:1.2;}
+  .d-opt-badge{margin:2px 0;}
+  .d-opt-meta{font-size:11.5px;color:var(--chalk-dim);}
+  .pill{
+    display:flex;align-items:center;gap:7px;width:100%;
+    border-radius:20px;padding:7px 11px;font-size:12px;text-align:left;line-height:1.3;
+  }
+  .pill .pi{width:17px;height:17px;min-width:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;}
+  .pill .ptx{flex:1;}
+  .pill .ppc{font-family:'Oswald',sans-serif;font-weight:600;font-size:11.5px;}
+  .pill.good{background:rgba(35,150,90,0.22);color:#5FE0A0;}
+  .pill.good .pi{background:rgba(95,224,160,0.25);}
+  .pill.bad{background:rgba(200,45,80,0.20);color:#FF7A96;}
+  .pill.bad .pi{background:rgba(255,122,150,0.22);}
+  .pill.flat{background:rgba(245,241,230,0.07);color:var(--chalk-dim);}
+  .pill.flat .pi{background:rgba(245,241,230,0.12);}
+
+  .log-details{
+    background:rgba(245,241,230,0.03);border-radius:12px;padding:10px 16px;margin-bottom:20px;
+  }
+  .log-details summary{
+    font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:1.2px;
+    color:var(--chalk-dim);cursor:pointer;text-transform:uppercase;
+  }
+  .log-details .log-list{margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ START SCREEN ============ -->
+  <div id="screen-start">
+    <div class="hero">
+      <div class="hero-title">90 <span>FEET</span></div>
+      <div class="hero-sub">One life. Ninety feet at a time.</div>
+      <div class="home-plate"></div>
+    </div>
+
+    <div class="setup-card">
+      <div class="field-group">
+        <label for="inp-name">Your name</label>
+        <input id="inp-name" type="text" maxlength="24" placeholder="e.g. Jordan Reyes">
+      </div>
+      <div class="field-group">
+        <label for="inp-hometown">Hometown <span style="opacity:0.6;">(optional)</span></label>
+        <input id="inp-hometown" type="text" maxlength="28" placeholder="e.g. Bakersfield, CA">
+      </div>
+      <div class="field-group">
+        <label>Where do you play?</label>
+        <div class="pos-grid" id="pos-grid">
+          <div class="pos-opt" data-pos="Pitcher">Pitcher</div>
+          <div class="pos-opt" data-pos="Catcher">Catcher</div>
+          <div class="pos-opt" data-pos="First Base">First Base</div>
+          <div class="pos-opt" data-pos="Second Base">Second Base</div>
+          <div class="pos-opt" data-pos="Third Base">Third Base</div>
+          <div class="pos-opt" data-pos="Shortstop">Shortstop</div>
+          <div class="pos-opt" data-pos="Left Field">Left Field</div>
+          <div class="pos-opt" data-pos="Center Field">Center Field</div>
+          <div class="pos-opt" data-pos="Right Field">Right Field</div>
+        </div>
+      </div>
+      <button class="cta" id="btn-start">Step Up to the Plate</button>
+      <div class="hint">You're 16, and varsity ball is where your shot at the pros begins.</div>
+    </div>
+
+    <div class="footer-note">A short baseball-life simulator. Every save is a different career.</div>
+  </div>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <div id="screen-game" class="hidden">
+
+    <div class="hero-row">
+      <div class="ovr-badge" id="ovr-badge"></div>
+      <div class="team-header" id="team-header"></div>
+    </div>
+
+    <div class="sheet-head">
+      <span class="sh-age">AGE</span>
+      <span class="sh-club">CLUB</span>
+      <span class="sh-ovr">OVR</span>
+      <span class="sh-stats" id="sh-stats">STATS</span>
+    </div>
+    <div class="career-sheet" id="career-sheet"></div>
+
+    <div class="trophy-case" id="trophy-case"></div>
+
+    <div class="decision-wrap" id="event-card"></div>
+
+    <details class="log-details">
+      <summary>Career log</summary>
+      <div class="log-list" id="log-list"></div>
+    </details>
+  </div>
+
+  <!-- ============ END SCREEN ============ -->
+  <div id="screen-end" class="hidden">
+    <div class="legacy-card" id="legacy-card"></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     CONFIG
+  ========================================================= */
+  var SKILL_ATTRS = ["power","contact","speed","glove","arm","focus"];
+  var SKILL_LABELS = {power:"Power",contact:"Contact",speed:"Speed",glove:"Glove",arm:"Arm",focus:"Focus"};
+  var META_ATTRS = ["health","fame","bank"];
+  var META_LABELS = {health:"Health",fame:"Fame",bank:"Bank"};
+  var LEGACY_DIVISOR = 4.7;
+
+  var POSITION_FLAVOR = {
+    Pitcher:{cat:"pitcher", desc:"the mound"},
+    Catcher:{cat:"hitter", desc:"behind the plate"},
+    "First Base":{cat:"hitter", desc:"first base"},
+    "Second Base":{cat:"hitter", desc:"second base"},
+    "Third Base":{cat:"hitter", desc:"third base"},
+    Shortstop:{cat:"hitter", desc:"shortstop"},
+    "Left Field":{cat:"hitter", desc:"left field"},
+    "Center Field":{cat:"hitter", desc:"center field"},
+    "Right Field":{cat:"hitter", desc:"right field"}
+  };
+
+  var STAGE_FRACTIONS = {
+    little_league:0.02, high_school:0.14, crossroads:0.20, college:0.26,
+    low_minors:0.36, high_minors:0.52, debut:0.66, mlb:0.70, retired:1.0
+  };
+
+  /* =========================================================
+     STATE
+  ========================================================= */
+  var S = null;
+
+  function newState(){
+    return {
+      name:"", hometown:"", position:"Shortstop", category:"hitter",
+      age:16, stageKey:"high_school", stageQueue:[], stageEventIdx:0,
+      wentToCollege:false, college:null,
+      team:null, teamHistory:[], draftWaitCount:0, teamControlUntilAge:null,
+      attrs:{power:0,contact:0,speed:0,glove:0,arm:0,focus:0,health:80,fame:5,bank:10},
+      seasonsPlayed:0, minorsSeasons:0, serviceYears:0,
+      contractOfferedAtSeason:-1, wbcOffered:false,
+      career:{ hr:0, rbi:0, sb:0, pa:0, hitSum:0, hits:0, runs:0, wins:0, losses:0, so:0, ip:0, eraSum:0,
+        warSum:0, allStars:0, mvps:0, cyYoungs:0, goldGloves:0, silverSluggers:0, roy:false,
+        championships:0, playoffs:0, wbc:null, demotions:0 },
+      log:[],
+      careerRows:[],
+      released:false,
+      progress:0,
+      awardsThisSeason:[],
+      usedEventIds:{}
+    };
+  }
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function ri(min,max){ return Math.round(rand(min,max)); }
+  function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+  function sampleN(arr,n){ return shuffle(arr).slice(0,n); }
+
+  function log(text, fresh){
+    S.log.push({age:S.age, text:text, fresh:!!fresh});
+  }
+
+  function applyEffects(effects){
+    if(!effects) return;
+    for(var k in effects){
+      if(SKILL_ATTRS.indexOf(k)>=0 || META_ATTRS.indexOf(k)>=0){
+        S.attrs[k] = clamp(Math.round(S.attrs[k]+effects[k]),0,100);
+      }
+    }
+  }
+
+  /* =========================================================
+     EVENT POOLS  (id, headline, text, choices[{label,effects,tag}])
+  ========================================================= */
+
+  var POOL_YOUTH = [
+    {id:"y1", h:"First Day of Practice", t:"The coach lines everyone up and asks who wants to work on hitting versus fielding drills today.",
+      c:[
+        {l:"Take extra swings off the tee", e:{power:4,contact:2}},
+        {l:"Field ground balls until your knees hurt", e:{glove:4,speed:2}},
+        {l:"Mess around with your friends instead", e:{fame:3,focus:-2}}
+      ]},
+    {id:"y2", h:"The Big Game", t:"Bottom of the last inning, tie score, and the ball is hit right to you.",
+      c:[
+        {l:"Charge it and make the play", e:{glove:3,focus:3,fame:2}},
+        {l:"Play it safe and take the sure out", e:{focus:2}},
+        {l:"Freeze up — it happens", e:{focus:-3,health:-1}}
+      ]},
+    {id:"y3", h:"Backyard Wiffle Ball", t:"Every evening after dinner, the neighborhood kids play until the streetlights come on.",
+      c:[
+        {l:"Practice your swing for hours", e:{power:3,contact:3,health:-1}},
+        {l:"Just have fun with your friends", e:{fame:3,focus:2}}
+      ]},
+    {id:"y4", h:"A Growth Spurt", t:"You shoot up two inches over the summer and your body feels new.",
+      c:[
+        {l:"Lean into the extra reach and strength", e:{power:5,arm:2}},
+        {l:"Focus on control while you adjust", e:{contact:4,focus:2}}
+      ]},
+    {id:"y5", h:"A Coach Notices You", t:"An assistant coach pulls you aside after practice with some pointed advice.",
+      c:[
+        {l:"Take the coaching seriously", e:{focus:4,contact:2}},
+        {l:"Nod along but keep doing your own thing", e:{power:2}}
+      ]},
+    {id:"y6", h:"Travel Ball Tryout", t:"A competitive travel team is holding tryouts an hour away.",
+      c:[
+        {l:"Beg your family to make the drive", e:{focus:3,fame:2,bank:-2}},
+        {l:"Stick with the local rec league", e:{health:2}}
+      ]}
+  ];
+
+  var POOL_TEEN = [
+    {id:"t1", h:"Varsity Tryouts", t:"High school ball is a different level — bigger fields, harder throws, real pressure.",
+      c:[
+        {l:"Train all summer to make the cut", e:{power:3,contact:3,health:-3}},
+        {l:"Trust the work you've already put in", e:{focus:3}}
+      ]},
+    {id:"t2", h:"Weight Room or Batting Cage?", t:"You've only got a couple hours after school before homework piles up.",
+      c:[
+        {l:"Weight room — build raw strength", e:{power:5,health:-2}},
+        {l:"Cage work — sharpen your eye", e:{contact:5}},
+        {l:"Sprint drills on the track", e:{speed:5,health:-2}}
+      ]},
+    {id:"t3", h:"A Scout Shows Up", t:"Word gets around that a college scout was in the stands for your last game.",
+      c:[
+        {l:"Play it cool and focus on the team", e:{focus:3,fame:3}},
+        {l:"Try to put on a show", e:{power:3,fame:4,focus:-2}}
+      ]},
+    {id:"t4", h:"Prom Night or Playoff Prep", t:"The district playoffs are the same week as prom.",
+      c:[
+        {l:"Skip prom, stay locked in", e:{focus:4,fame:-2}},
+        {l:"Go to prom, you're a kid once", e:{fame:4,health:1}}
+      ]},
+    {id:"t5", h:"A Rough Slump", t:"You can't buy a hit for two straight weeks and the whispers start.", cat:"hitter",
+      c:[
+        {l:"Grind through extra reps", e:{contact:4,health:-2}},
+        {l:"Talk it out with your coach", e:{focus:3}},
+        {l:"Ignore it and trust yourself", e:{focus:1}}
+      ]},
+    {id:"t5p", h:"Lost Command", t:"You can't find the strike zone for two straight starts and the whispers start.", cat:"pitcher",
+      c:[
+        {l:"Grind through extra bullpens", e:{contact:4,health:-2}},
+        {l:"Talk it out with your coach", e:{focus:3}},
+        {l:"Ignore it and trust yourself", e:{focus:1}}
+      ]},
+    {id:"t6", h:"Local Paper Feature", t:"The town paper wants to run a story on the area's most promising young player.",
+      c:[
+        {l:"Do the interview", e:{fame:6}},
+        {l:"Stay out of the spotlight", e:{focus:2}}
+      ]},
+    {id:"t7", h:"Two-Sport Athlete", t:"Your school wants you on the basketball team too, but baseball season prep is just as important.",
+      c:[
+        {l:"Focus on baseball only", e:{focus:3}},
+        {l:"Play both, stay sharp all-around", e:{speed:3,health:-2}}
+      ]},
+    {id:"t8", h:"Travel Ball Invite", t:"An elite travel team from three hours away wants you for their summer roster.",
+      c:[
+        {l:"Make the drive every weekend", e:{fame:3,health:-2}},
+        {l:"Stick with the local summer league", e:{focus:2}}
+      ]},
+    {id:"t9", h:"Team Captain", t:"Your teammates vote you team captain for the season.",
+      c:[
+        {l:"Embrace the role", e:{fame:3,focus:2}},
+        {l:"Stay humble, lead by example", e:{focus:3}}
+      ]},
+    {id:"t10", h:"The Rivalry Game", t:"Your school's biggest rival is in town, and the whole town shows up.",
+      c:[
+        {l:"Play with extra fire", e:{power:3,focus:2,health:-2}},
+        {l:"Treat it like any other game", e:{focus:2}}
+      ]}
+  ];
+
+  var POOL_COLLEGE = [
+    {id:"c1", h:"Fall Ball", t:"College practices are longer, the competition is older, and nobody's holding your hand.",
+      c:[
+        {l:"Out-work the upperclassmen", e:{power:3,contact:3,health:-3}},
+        {l:"Learn the system before pushing hard", e:{focus:4}}
+      ]},
+    {id:"c2", h:"A Coach's Challenge", t:"Your college coach tells you flatly that your swing has a hole a good pitcher will find.", cat:"hitter",
+      c:[
+        {l:"Rebuild the swing from scratch", e:{contact:6,power:-2}},
+        {l:"Trust your natural approach", e:{power:3}}
+      ]},
+    {id:"c2p", h:"A Coach's Challenge", t:"Your college coach tells you flatly that your delivery has a tell a good hitter will pick up on.", cat:"pitcher",
+      c:[
+        {l:"Rebuild the delivery from scratch", e:{contact:6,power:-2}},
+        {l:"Trust your natural approach", e:{power:3}}
+      ]},
+    {id:"c3", h:"Campus Life", t:"Between classes, practice, and a social life, something has to give.",
+      c:[
+        {l:"Study hard, keep grades up", e:{focus:3,fame:-1}},
+        {l:"Live it up on campus", e:{fame:4,health:-2}}
+      ]},
+    {id:"c4", h:"Regional Tournament", t:"A strong showing here puts you firmly on pro scouts' radar.",
+      c:[
+        {l:"Go for the highlight-reel moment", e:{power:4,fame:3}},
+        {l:"Play smart, situational baseball", e:{contact:4,focus:2}}
+      ]},
+    {id:"c5", h:"An Injury Scare", t:"You tweak something in your throwing shoulder during a bullpen session.",
+      c:[
+        {l:"Rest it properly before returning", e:{health:6,fame:-1}},
+        {l:"Play through it, the draft is close", e:{health:-6,fame:2}}
+      ]},
+    {id:"c6", h:"Recruiting Class Rankings", t:"National recruiting analysts rank your incoming class, and you're near the top.",
+      c:[
+        {l:"Feel the pressure to perform", e:{fame:3,focus:-1}},
+        {l:"Ignore the hype completely", e:{focus:3}}
+      ]},
+    {id:"c7", h:"Extra Film Session", t:"An assistant coach wants extra film time to break down your mechanics frame by frame.",
+      c:[
+        {l:"Put in the extra hours", e:{contact:3,health:-2}},
+        {l:"Trust your natural instincts", e:{power:2}}
+      ]},
+    {id:"c8", h:"Summer Wood-Bat League", t:"A prestigious summer league invites you to play against the country's best amateur talent.",
+      c:[
+        {l:"Accept the invite", e:{fame:3,contact:2,health:-2}},
+        {l:"Rest up for fall ball instead", e:{health:3}}
+      ]}
+  ];
+
+  // shared pool used across minor league rungs (rookie / high-A / AA / AAA)
+  var POOL_MINORS = [
+    {id:"m1", h:"Bus Leagues", t:"Twelve-hour bus rides between small towns are the real minor league experience.",
+      c:[
+        {l:"Use the downtime to study video", e:{contact:3,focus:2}},
+        {l:"Sleep and save your energy", e:{health:4}}
+      ]},
+    {id:"m2", h:"A New Pitch (or a New Read)", t:"A veteran teammate offers to show you something they've picked up over the years.",
+      c:[
+        {l:"Take the lesson seriously", e:{power:3,contact:2}},
+        {l:"Politely decline and stick to your own game", e:{focus:2}}
+      ]},
+    {id:"m3", h:"Meal Money", t:"The per-diem barely covers gas station food, let alone a real meal.",
+      c:[
+        {l:"Spend on proper nutrition anyway", e:{health:4,bank:-3}},
+        {l:"Save every dollar you can", e:{bank:4,health:-2}}
+      ]},
+    {id:"m4", h:"A Cold Streak", t:"The pitching (or hitting) up here is sharper than anything you've faced.",
+      c:[
+        {l:"Overhaul your approach mid-season", e:{contact:4,focus:-1}},
+        {l:"Ride it out and trust your track record", e:{focus:3}}
+      ]},
+    {id:"m5", h:"Roommate Troubles", t:"You're sharing a cramped apartment with two other prospects, and it's grating on everyone.",
+      c:[
+        {l:"Smooth things over", e:{fame:2,focus:2}},
+        {l:"Keep your head down and stay out of it", e:{focus:1}}
+      ]},
+    {id:"m6", h:"Instructional Camp", t:"The organization runs an off-day camp focused on fundamentals.",
+      c:[
+        {l:"Work on defense and footwork", e:{glove:4,speed:2}},
+        {l:"Skip it, you need the rest", e:{health:3}}
+      ]},
+    {id:"m7", h:"A Front-Office Visit", t:"Team executives are in town to check on the farm system in person.",
+      c:[
+        {l:"Try to make an impression", e:{fame:3,focus:-1}},
+        {l:"Play your normal game", e:{focus:2}}
+      ]},
+    {id:"m8", h:"Homesickness", t:"It's been months since you've seen anyone from home, and it's starting to wear on you.",
+      c:[
+        {l:"Fly home for a quick visit", e:{health:4,bank:-4}},
+        {l:"Push through it", e:{focus:3,health:-2}}
+      ]}
+  ];
+
+  // Chaos events: fun, higher-drama moments with visible odds on each choice,
+  // built around real baseball superstitions, rules, and lore rather than
+  // generic sports-movie tropes. These appear alongside the regular pools.
+  var CHAOS_AMATEUR = [
+    {id:"ca1", h:"The Batting Glove Ritual", t:"A veteran teammate insists you re-tape your batting gloves his exact way before every at-bat, no exceptions.", cat:"hitter",
+      c:[
+        {l:"Adopt the ritual", outcomes:[
+          {prob:0.6, label:"It clicks", result:"Silly as it sounds, something about the routine settles you in — the hits start falling.", e:{contact:4}},
+          {prob:0.4, label:"Just superstition", result:"It's just superstition after all. Nothing changes.", e:{focus:-1}}
+        ]},
+        {l:"Do your own thing", e:{focus:1}}
+      ]},
+    {id:"ca1p", h:"The Mound Ritual", t:"A veteran teammate insists you rub the rosin bag his exact way before every pitch, no exceptions.", cat:"pitcher",
+      c:[
+        {l:"Adopt the ritual", outcomes:[
+          {prob:0.6, label:"It clicks", result:"Silly as it sounds, something about the routine settles you in — the command starts coming easy.", e:{contact:4}},
+          {prob:0.4, label:"Just superstition", result:"It's just superstition after all. Nothing changes.", e:{focus:-1}}
+        ]},
+        {l:"Do your own thing", e:{focus:1}}
+      ]},
+    {id:"ca2", h:"The Corked Bat Temptation", t:"An older teammate offers to hollow out your bat and cork it for extra pop before the biggest game of the year — strictly against the rules.", cat:"hitter",
+      c:[
+        {l:"Go through with it", outcomes:[
+          {prob:0.35, label:"Gets away with it", result:"Nobody ever finds out, and you have the game of your life.", e:{power:5,fame:3}},
+          {prob:0.65, label:"Caught, bat confiscated", result:"An umpire cracks the bat open in front of everyone. It's humiliating.", e:{fame:-6,focus:-3}}
+        ]},
+        {l:"Turn it down", e:{focus:2}}
+      ]},
+    {id:"ca2p", h:"The Foreign Substance Temptation", t:"An older teammate offers to doctor up a little extra grip on your fastball before the biggest game of the year — strictly against the rules.", cat:"pitcher",
+      c:[
+        {l:"Go through with it", outcomes:[
+          {prob:0.35, label:"Gets away with it", result:"Nobody ever finds out, and you have the game of your life.", e:{power:5,fame:3}},
+          {prob:0.65, label:"Caught, ejected", result:"An umpire finds it and tosses you in front of everyone. It's humiliating.", e:{fame:-6,focus:-3}}
+        ]},
+        {l:"Turn it down", e:{focus:2}}
+      ]},
+    {id:"ca3", h:"The Hidden Ball Trick", t:"Your infield coach shows you the old hidden ball trick and dares you to try it in a real game.", cat:"hitter",
+      c:[
+        {l:"Pull it off", outcomes:[
+          {prob:0.45, label:"It works, dugout erupts", result:"The runner strolls off the bag and you tag him out cold. The dugout goes wild.", e:{fame:5,focus:2}},
+          {prob:0.55, label:"Umpire calls time first", result:"The umpire calls time before you can sell it, and you look silly standing there with the ball.", e:{focus:-1}}
+        ]},
+        {l:"Play it straight", e:{focus:1}}
+      ]},
+    {id:"ca3p", h:"The Quick Pickoff", t:"Your pitching coach shows you a deceptive new pickoff move and dares you to try it in a real game.", cat:"pitcher",
+      c:[
+        {l:"Pull it off", outcomes:[
+          {prob:0.45, label:"It works, dugout erupts", result:"You freeze the runner and gun him down. The dugout goes wild.", e:{fame:5,focus:2}},
+          {prob:0.55, label:"Balk called", result:"The umpire flags it as a balk, and you look silly standing there.", e:{focus:-1}}
+        ]},
+        {l:"Play it straight", e:{focus:1}}
+      ]},
+    {id:"ca4", h:"Signing Day", t:"Cameras and family are gathered for the day you put pen to paper on your future — college letter or pro contract.",
+      c:[
+        {l:"Soak in the moment", outcomes:[
+          {prob:0.6, label:"Nails the moment", result:"You say all the right things, and the room remembers it.", e:{fame:4}},
+          {prob:0.4, label:"Stumbles through it", result:"You fumble your words in front of everyone. Awkward, but forgettable.", e:{fame:-2}}
+        ]},
+        {l:"Keep it brief and businesslike", e:{focus:1}}
+      ]},
+    {id:"ca5", h:"Rain Delay Tarp Slide", t:"A long rain delay has the whole team sliding across the infield tarp like a slip-and-slide.",
+      c:[
+        {l:"Join in", outcomes:[
+          {prob:0.6, label:"Harmless fun", result:"It's exactly the kind of dumb fun that makes a long delay bearable.", e:{fame:2}},
+          {prob:0.4, label:"Someone gets hurt", result:"Someone catches an awkward landing, and this time it's you.", e:{health:-4}}
+        ]},
+        {l:"Stay dry in the dugout", e:{}}
+      ]},
+    {id:"ca6", h:"The Scout's Blunt Question", t:"A scout with a stopwatch and a notepad asks you point-blank how you handle failure.",
+      c:[
+        {l:"Give an honest answer", outcomes:[
+          {prob:0.55, label:"Earns real respect", result:"The honesty lands better than any rehearsed answer could have.", e:{fame:3,focus:2}},
+          {prob:0.45, label:"Comes off rehearsed", result:"It comes out sounding scripted, and you can tell it didn't land.", e:{focus:-1}}
+        ]},
+        {l:"Deflect with a joke", e:{fame:1}}
+      ]},
+    {id:"ca7", h:"Fire Up the Dugout", t:"Down a few runs in a big game, your coach turns to you to say something before the last at-bats.",
+      c:[
+        {l:"Give the speech", outcomes:[
+          {prob:0.5, label:"The team responds", result:"Whatever you said, it works — the dugout comes alive.", e:{fame:3,focus:2}},
+          {prob:0.5, label:"Falls flat", result:"It falls flat, and the silence afterward is rough.", e:{focus:-2}}
+        ]},
+        {l:"Let your play do the talking", e:{focus:1}}
+      ]},
+    {id:"ca8", h:"The Radar Gun Game", t:"Word gets around that every scout in the section has a radar gun out for your next start or at-bat.",
+      c:[
+        {l:"Try to hit a new max", outcomes:[
+          {prob:0.45, label:"New career high, buzz spreads", result:"You hit a new career high and the radar guns start buzzing in the stands.", e:{power:3,fame:4}},
+          {prob:0.55, label:"Overthrow it, mechanics slip", result:"You overthrow trying to impress, and your mechanics fall apart for the day.", e:{focus:-2}}
+        ]},
+        {l:"Stick to your normal approach", e:{focus:2}}
+      ]},
+    {id:"ca9", h:"The Suicide Squeeze", t:"Runner on third, one out, and your coach flashes the suicide squeeze sign.", cat:"hitter",
+      c:[
+        {l:"Lay it down", outcomes:[
+          {prob:0.55, label:"Perfect bunt, run scores", result:"You drop it in perfectly and the run scores standing up.", e:{fame:4,contact:2}},
+          {prob:0.45, label:"Popped up, runner hung out to dry", result:"You pop it foul-tip high and the runner's dead at the plate.", e:{focus:-2}}
+        ]},
+        {l:"Swing away instead", e:{focus:1}}
+      ]},
+    {id:"ca9p", h:"Reading the Squeeze", t:"You spot the runner breaking early from third — is it a suicide squeeze coming?", cat:"pitcher",
+      c:[
+        {l:"Call for the pitchout", outcomes:[
+          {prob:0.5, label:"Reads it right, easy out", result:"You call for the pitchout and the catcher guns him down without a throw.", e:{fame:4,focus:2}},
+          {prob:0.5, label:"Guesses wrong, run scores", result:"You guess wrong and the run scores free and easy.", e:{focus:-2}}
+        ]},
+        {l:"Just pitch to the batter", e:{focus:1}}
+      ]},
+    {id:"ca10", h:"Senior Night", t:"Your school honors the graduating seniors before the last home game of the year.",
+      c:[
+        {l:"Soak it in with family", e:{fame:3}},
+        {l:"Stay focused on the game plan", e:{focus:2}}
+      ]},
+    {id:"ca11", h:"The Recruiting Letter Pile", t:"A stack of recruiting letters shows up in the mail, and one envelope stands out.",
+      c:[
+        {l:"Open the flashiest one first", outcomes:[
+          {prob:0.5, label:"A dream offer", result:"It's a dream offer from a program you've always wanted to play for.", e:{fame:4,bank:2}},
+          {prob:0.5, label:"Just a form letter", result:"It's just a generic form letter. Anticlimactic.", e:{focus:-1}}
+        ]},
+        {l:"Open them in the order they arrived", e:{focus:2}}
+      ]}
+  ];
+
+  var CHAOS_PRO = [
+    {id:"cp1", h:"No-Hitter Silence", t:"You're six innings into a no-hitter, and per baseball's oldest superstition, nobody in the dugout will speak to you.", cat:"pitcher",
+      c:[
+        {l:"Keep grinding through it", outcomes:[
+          {prob:0.42, label:"Finishes the no-hitter", result:"You finish it. The dugout erupts the moment the last out is recorded — a moment you'll never forget.", e:{fame:10,focus:3}},
+          {prob:0.58, label:"Breaks up late, still gem", result:"It breaks up in the eighth, but it's still one of the best outings of your life.", e:{fame:2,focus:1}}
+        ]},
+        {l:"Try to stay loose, don't think about it", outcomes:[
+          {prob:0.35, label:"Stays sharp late", result:"Staying loose keeps you sharp, and you finish the game strong either way.", e:{fame:3,focus:2}},
+          {prob:0.65, label:"Loses the edge", result:"You lose the edge that had you locked in, and the outing fades in the late innings.", e:{focus:-1}}
+        ]}
+      ]},
+    {id:"cp2", h:"Sign-Stealing Whispers", t:"Rumors are swirling around the league that your team has been decoding signs from the dugout.",
+      c:[
+        {l:"Speak out publicly", outcomes:[
+          {prob:0.4, label:"Praised for integrity", result:"League officials and fans alike praise you for being straight about it.", e:{fame:4}},
+          {prob:0.6, label:"Clubhouse turns on you", result:"The clubhouse doesn't appreciate you airing it out, and it shows.", e:{fame:-5,focus:-2}}
+        ]},
+        {l:"Stay quiet, let it blow over", e:{focus:1}}
+      ]},
+    {id:"cp3", h:"Pine Tar Check", t:"The opposing manager asks the umpire to inspect your bat for too much pine tar.", cat:"hitter",
+      c:[
+        {l:"Let them check", outcomes:[
+          {prob:0.65, label:"Passes clean, crowd boos them", result:"The bat's clean, and the home crowd boos the other dugout for even asking.", e:{fame:3}},
+          {prob:0.35, label:"Ruled illegal, embarrassing", result:"It's ruled just over the line, and the walk back to the dugout is a long one.", e:{fame:-4}}
+        ]},
+        {l:"Hand over a backup bat instead", e:{focus:1}}
+      ]},
+    {id:"cp4", h:"Salary Arbitration", t:"You and the front office couldn't agree on a number, and it's headed to a formal arbitration hearing.",
+      c:[
+        {l:"Make your case", outcomes:[
+          {prob:0.5, label:"You win the hearing", result:"The arbitrator sides with you. It's a great day for the bank account.", e:{bank:10}},
+          {prob:0.5, label:"You lose the hearing", result:"The arbitrator sides with the team, and it stings a little walking out of that room.", e:{bank:2,fame:-1}}
+        ]}
+      ]},
+    {id:"cp5", h:"Bench-Clearing Brawl", t:"A hard slide into second base sparks both benches emptying onto the field.",
+      c:[
+        {l:"Play peacemaker", outcomes:[
+          {prob:0.55, label:"Praised for cooling it down", result:"You're credited with keeping things from getting worse.", e:{fame:3,focus:2}},
+          {prob:0.45, label:"Get caught in the pile anyway", result:"You get swept up in it anyway and end up with a suspension.", e:{fame:-2,health:-4}}
+        ]},
+        {l:"Get right in the middle of it", outcomes:[
+          {prob:0.5, label:"Folk hero moment", result:"The clubhouse loves that you had their back — instant folk hero status.", e:{fame:5,health:-4}},
+          {prob:0.5, label:"Ejected and fined", result:"You're ejected, fined, and sore for a week.", e:{fame:-2,health:-5}}
+        ]}
+      ]},
+    {id:"cp6", h:"The Rally Cap", t:"Down two runs late, the whole dugout starts wearing their caps inside-out for luck.",
+      c:[
+        {l:"Join the rally cap", outcomes:[
+          {prob:0.5, label:"The rally works", result:"However silly it looks, the rally actually comes together.", e:{fame:4,focus:2}},
+          {prob:0.5, label:"No such luck", result:"No such luck tonight — but it's a fun story either way.", e:{focus:1}}
+        ]},
+        {l:"Stay serious, no gimmicks", e:{focus:1}}
+      ]},
+    {id:"cp7", h:"The Quotable Manager", t:"Your manager tells a reporter something bold about you without giving you a heads-up first.",
+      c:[
+        {l:"Lean into the hype", outcomes:[
+          {prob:0.5, label:"Raises your profile", result:"It raises your profile league-wide, and you enjoy the attention.", e:{fame:5}},
+          {prob:0.5, label:"Puts a target on your back", result:"It puts a target on your back, and opposing pitchers seem to notice.", e:{focus:-2,fame:-1}}
+        ]},
+        {l:"Downplay it to the press", e:{focus:1}}
+      ]},
+    {id:"cp8", h:"September Call-Ups", t:"Roster expansion brings a wave of wide-eyed rookies into the clubhouse, and a few gravitate toward you.",
+      c:[
+        {l:"Take them under your wing", outcomes:[
+          {prob:0.6, label:"Clubhouse chemistry surges", result:"The energy they bring rubs off on the whole roster.", e:{fame:3,focus:2}},
+          {prob:0.4, label:"Your own routine suffers", result:"Between the extra attention and the distractions, your own routine slips.", e:{focus:-2}}
+        ]},
+        {l:"Keep the focus on your own game", e:{focus:1}}
+      ]},
+    {id:"cp9", h:"Walk-Off Chance", t:"Bottom of the ninth, tie game, and it's your turn to hit.", cat:"hitter",
+      c:[
+        {l:"Try to be the hero", outcomes:[
+          {prob:0.45, label:"Walk-off magic", result:"You send everyone home happy with one swing. Pure pandemonium at home plate.", e:{fame:8,focus:2}},
+          {prob:0.55, label:"Long out, tough way to end it", result:"You get all of it, but it dies on the track. Tough way for the inning to end.", e:{focus:-1}}
+        ]},
+        {l:"Just try to put the ball in play", outcomes:[
+          {prob:0.5, label:"Modest single, gets it done", result:"Nothing flashy, but a modest single plates the winning run anyway.", e:{fame:4,focus:1}},
+          {prob:0.5, label:"Ground out, inning over", result:"A routine ground out ends the threat, and the game rolls to extras.", e:{focus:-1}}
+        ]}
+      ]},
+    {id:"cp10", h:"Groundskeeper's Favor", t:"Your team's grounds crew quietly offers to tilt the field conditions in your favor for the series.",
+      c:[
+        {l:"Take the favor", outcomes:[
+          {prob:0.4, label:"Boosts your numbers quietly", result:"Nobody notices, but the tailored conditions help your game all series.", e:{power:3,contact:2}},
+          {prob:0.6, label:"League office catches wind", result:"Word gets to the league office, and your team eats a formal warning.", e:{fame:-4}}
+        ]},
+        {l:"Turn it down, play it straight", e:{focus:1}}
+      ]},
+    {id:"cp11", h:"The Walk-Up Song", t:"You're overdue for a new walk-up song, and the DJ's shortlist is... a choice.",
+      c:[
+        {l:"Go bold and unexpected", outcomes:[
+          {prob:0.55, label:"Instant fan favorite", result:"It becomes an instant fan favorite, and the stadium sings along by midseason.", e:{fame:4}},
+          {prob:0.45, label:"Gets mocked mercilessly", result:"The broadcast crew mocks it mercilessly for a week straight.", e:{fame:-2}}
+        ]},
+        {l:"Play it safe with a classic", e:{}}
+      ]},
+    {id:"cp12", h:"The Quick Hook", t:"Down early, your manager comes out to get you after just three innings.", cat:"pitcher",
+      c:[
+        {l:"Argue to stay in", outcomes:[
+          {prob:0.4, label:"Manager relents", result:"Your manager relents and leaves you in — and you settle down from there.", e:{focus:3,fame:1}},
+          {prob:0.6, label:"Overruled anyway", result:"You're overruled anyway, and the walk to the dugout stings.", e:{fame:-3,focus:-2}}
+        ]},
+        {l:"Hand over the ball, no fuss", e:{focus:1}}
+      ]},
+    {id:"cp13", h:"Complete Game Push", t:"Protecting a slim lead in the ninth, you ask your manager to let you finish what you started.", cat:"pitcher",
+      c:[
+        {l:"Push to finish it", outcomes:[
+          {prob:0.5, label:"Complete game, crowd roars", result:"You finish it yourself, and the home crowd is on its feet for the last out.", e:{fame:7,focus:2}},
+          {prob:0.5, label:"Tiring arm costs you", result:"Your tiring arm costs you late, and the bullpen has to bail you out.", e:{fame:-2,health:-4}}
+        ]},
+        {l:"Hand it to the closer", e:{focus:1}}
+      ]},
+    {id:"cp14", h:"The Intentional Walk Call", t:"Your manager signals for an intentional walk to load the bases in a huge spot.", cat:"pitcher",
+      c:[
+        {l:"Trust the call", outcomes:[
+          {prob:0.55, label:"Strategy pays off", result:"The strategy pays off exactly like the manager drew it up.", e:{fame:4,focus:2}},
+          {prob:0.45, label:"Backfires badly", result:"It backfires badly, and it's your name in the box score either way.", e:{fame:-3}}
+        ]},
+        {l:"Shake it off, pitch to him instead", outcomes:[
+          {prob:0.5, label:"Bold move works", result:"The bold move works, and the dugout respects that you trusted your stuff.", e:{fame:5,focus:1}},
+          {prob:0.5, label:"Costly gamble", result:"It's a costly gamble, and the manager isn't thrilled about the shake-off.", e:{fame:-4}}
+        ]}
+      ]}
+  ];
+
+  var POOL_MLB = [
+    {id:"o1", h:"Offseason Training", t:"You've got a full offseason to get better before camp opens again.", once:false,
+      c:[
+        {l:"Hit the weight room hard", e:{power:4,health:-2}},
+        {l:"Focus on flexibility and recovery", e:{health:5}},
+        {l:"Work with a personal hitting/pitching coach", e:{contact:4,bank:-6}}
+      ]},
+    {id:"o3", h:"Nagging Injury", t:"Something's been bothering you all year and it's not getting better on its own.",
+      c:[
+        {l:"Shut it down and get it treated", e:{health:8,bank:-3}},
+        {l:"Play through the pain", e:{health:-9,fame:2}}
+      ]},
+    {id:"o4", h:"Endorsement Offer", t:"A local business wants your face on a billboard for a modest fee.",
+      c:[
+        {l:"Take the deal", e:{bank:6,fame:4}},
+        {l:"Pass, keep the focus on baseball", e:{focus:2}}
+      ]},
+    {id:"o5", h:"Trade Rumors", t:"Your name is floating around in trade rumors and the clubhouse has noticed.",
+      c:[
+        {l:"Ask for a trade to a contender", e:{fame:2,focus:1}, tradeRequest:true},
+        {l:"Publicly commit to the team", e:{fame:4}}
+      ]},
+    {id:"o6", h:"A Rival Series", t:"The team's biggest rival is in town for a nationally televised series.",
+      c:[
+        {l:"Play with a chip on your shoulder", e:{power:3,focus:2,health:-2}},
+        {l:"Stick to your normal routine", e:{focus:2}}
+      ]},
+    {id:"o7", h:"Community Day", t:"The team asks you to headline a youth clinic in the offseason.",
+      c:[
+        {l:"Show up and give it your all", e:{fame:5,health:-1}},
+        {l:"Send a signed jersey instead", e:{fame:1,bank:1}}
+      ]},
+    {id:"o8", h:"A Late-Night Story", t:"A tabloid runs an unflattering story about your off-field life.",
+      c:[
+        {l:"Address it head-on with the media", e:{fame:-2,focus:2}},
+        {l:"Say nothing and let it blow over", e:{fame:-4}}
+      ]},
+    {id:"o9", h:"Veteran Leadership", t:"Younger players in the clubhouse are starting to look to you for guidance.",
+      c:[
+        {l:"Take a rookie under your wing", e:{fame:3,focus:2}},
+        {l:"Keep the focus on your own game", e:{focus:2}}
+      ]},
+    {id:"o10", h:"New Training Tech", t:"The team's new analytics department wants to overhaul your offseason program.",
+      c:[
+        {l:"Buy fully into the new methods", e:{contact:2,power:2,glove:2}},
+        {l:"Stick with what's worked so far", e:{focus:2}}
+      ]}
+  ];
+
+  /* =========================================================
+     TEAMS & COLLEGES
+  ========================================================= */
+  // Real MLB franchises. Logo image URLs come from the league file the user
+  // supplied; if an image fails to load we fall back to a colored monogram.
+  var TEAMS = [
+    {name:"Atlanta Braves", abbr:"ATL", trait:"big-market", perk:"winNow", colors:["#CE1141","#13274F"], logo:"https://www.mlbstatic.com/team-logos/144.svg", logo2:"https://i.imgur.com/YzNRxqN.png"},
+    {name:"Baltimore Orioles", abbr:"BAL", trait:"small-market", perk:"playerDev", colors:["#ED4601","#27251F"], logo:"https://www.mlbstatic.com/team-logos/110.svg", logo2:"https://i.imgur.com/QtmNAXU.png"},
+    {name:"New York Mets", abbr:"NYM", trait:"big-market", perk:"deepPockets", colors:["#002D72","#FC5910"], logo:"https://www.mlbstatic.com/team-logos/121.svg", logo2:"https://i.imgur.com/hl0PZR6.png"},
+    {name:"Boston Red Sox", abbr:"BOS", trait:"big-market", perk:"hitterPark", colors:["#BD3039","#0C2340"], logo:"https://www.mlbstatic.com/team-logos/111.svg", logo2:"https://i.imgur.com/BXa5XOX.png"},
+    {name:"Chicago Cubs", abbr:"CCB", trait:"big-market", perk:"loyalFans", colors:["#0E3386","#CC3433"], logo:"https://www.mlbstatic.com/team-logos/112.svg", logo2:"https://i.imgur.com/nWkHWZ0.png"},
+    {name:"Cincinnati Reds", abbr:"CIN", trait:"small-market", perk:"hitterPark", colors:["#C6011F","#000000"], logo:"https://www.mlbstatic.com/team-logos/113.svg", logo2:"https://i.imgur.com/aQ3V3en.png"},
+    {name:"Cleveland Guardians", abbr:"CLE", trait:"small-market", perk:"playerDev", colors:["#00385D","#E50022"], logo:"https://www.mlbstatic.com/team-logos/114.svg", logo2:"https://i.imgur.com/SognLe8.png"},
+    {name:"Texas Rangers", abbr:"TEX", trait:"big-market", perk:"hitterPark", colors:["#003278","#C0111F"], logo:"https://www.mlbstatic.com/team-logos/140.svg", logo2:"https://upload.wikimedia.org/wikipedia/it/archive/d/d3/20160905123800%21Texas_Rangers_logo.png"},
+    {name:"Colorado Rockies", abbr:"COL", trait:"small-market", perk:"hitterPark", colors:["#333366","#C4CED4"], logo:"https://www.mlbstatic.com/team-logos/115.svg", logo2:"https://i.imgur.com/mCnIgD1.png"},
+    {name:"Detroit Tigers", abbr:"DET", trait:"small-market", perk:"pitcherPark", colors:["#0C2340","#FA4616"], logo:"https://www.mlbstatic.com/team-logos/116.svg", logo2:"https://i.imgur.com/XZw5k5b.png"},
+    {name:"Houston Astros", abbr:"HOU", trait:"big-market", perk:"winNow", colors:["#002D62","#EB6E1F"], logo:"https://www.mlbstatic.com/team-logos/117.svg", logo2:"https://i.imgur.com/eRHQfIO.png"},
+    {name:"Chicago White Sox", abbr:"CWS", trait:"big-market", perk:"pitcherPark", colors:["#27251F","#C4CED4"], logo:"https://www.mlbstatic.com/team-logos/145.svg", logo2:"https://i.imgur.com/fmIjMpD.png"},
+    {name:"Kansas City Royals", abbr:"KC", trait:"small-market", perk:"loyalFans", colors:["#004687","#BD9B41"], logo:"https://www.mlbstatic.com/team-logos/118.svg", logo2:"https://i.imgur.com/rflWcc5.png"},
+    {name:"Los Angeles Angels", abbr:"LAA", trait:"big-market", perk:"deepPockets", colors:["#003263","#BA0021"], logo:"https://www.mlbstatic.com/team-logos/108.svg", logo2:"https://i.imgur.com/ATDoGbD.png"},
+    {name:"Los Angeles Dodgers", abbr:"LAD", trait:"big-market", perk:"playerDev", colors:["#005A9C","#EF3E42"], logo:"https://www.mlbstatic.com/team-logos/119.svg", logo2:"https://i.imgur.com/xQrICHD.png"},
+    {name:"Miami Marlins", abbr:"MIA", trait:"big-market", perk:"pitcherPark", colors:["#00A3E0","#EF3340"], logo:"https://www.mlbstatic.com/team-logos/146.svg", logo2:"https://i.imgur.com/37QjW98.png"},
+    {name:"Milwaukee Brewers", abbr:"MIL", trait:"small-market", perk:"loyalFans", colors:["#FFC52F","#12284B"], logo:"https://www.mlbstatic.com/team-logos/158.svg", logo2:"https://i.imgur.com/oCi3i1d.png"},
+    {name:"Minnesota Twins", abbr:"MIN", trait:"small-market", perk:"playerDev", colors:["#002B5C","#D31145"], logo:"https://www.mlbstatic.com/team-logos/142.svg", logo2:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Minnesota_Twins_Insignia.svg/1200px-Minnesota_Twins_Insignia.svg.png"},
+    {name:"New York Yankees", abbr:"NYY", trait:"big-market", perk:"deepPockets", colors:["#000000","#FFFFFF"], logo:"https://www.mlbstatic.com/team-logos/147.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/new-york-yankees-logo-transparent.png"},
+    {name:"Oakland Athletics", abbr:"OAK", trait:"small-market", perk:"playerDev", colors:["#003831","#EFB21E"], logo:"https://www.mlbstatic.com/team-logos/133.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/oakland-athletics-logo-transparent.png"},
+    {name:"Philadelphia Phillies", abbr:"PHI", trait:"big-market", perk:"loyalFans", colors:["#E81828","#002D72"], logo:"https://www.mlbstatic.com/team-logos/143.svg", logo2:"https://i.imgur.com/UhKIUXO.png"},
+    {name:"Arizona Diamondbacks", abbr:"ARI", trait:"small-market", perk:"hitterPark", colors:["#A71930","#E3D4AD"], logo:"https://www.mlbstatic.com/team-logos/109.svg", logo2:"https://i.imgur.com/JTlIjKS.png"},
+    {name:"Pittsburgh Pirates", abbr:"PIT", trait:"small-market", perk:"playerDev", colors:["#27251F","#FDB827"], logo:"https://www.mlbstatic.com/team-logos/134.svg", logo2:"https://i.imgur.com/aENmzQK.png"},
+    {name:"San Diego Padres", abbr:"SD", trait:"big-market", perk:"pitcherPark", colors:["#2F241D","#FFC425"], logo:"https://www.mlbstatic.com/team-logos/135.svg", logo2:"https://i.imgur.com/bhkO5Dg.png"},
+    {name:"Seattle Mariners", abbr:"SEA", trait:"small-market", perk:"pitcherPark", colors:["#0C2C56","#005C5C"], logo:"https://www.mlbstatic.com/team-logos/136.svg", logo2:"https://i.imgur.com/IN4J0jV.png"},
+    {name:"San Francisco Giants", abbr:"SFG", trait:"big-market", perk:"pitcherPark", colors:["#FD5A1E","#27251F"], logo:"https://www.mlbstatic.com/team-logos/137.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/san-francisco-giants-logo-transparent.png"},
+    {name:"St. Louis Cardinals", abbr:"STL", trait:"small-market", perk:"loyalFans", colors:["#C41E3A","#0C2340"], logo:"https://www.mlbstatic.com/team-logos/138.svg", logo2:"https://i.imgur.com/aEOfFWH.png"},
+    {name:"Toronto Blue Jays", abbr:"TOR", trait:"big-market", perk:"deepPockets", colors:["#134AC0","#1D2D5C"], logo:"https://www.mlbstatic.com/team-logos/141.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/toronto-blue-jays-logo-transparent.png"},
+    {name:"Tampa Bay Rays", abbr:"TPA", trait:"small-market", perk:"playerDev", colors:["#092C5C","#8FBCE6"], logo:"https://www.mlbstatic.com/team-logos/139.svg", logo2:"https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Tampa_Bay_Rays.svg/1200px-Tampa_Bay_Rays.svg.png"},
+    {name:"Washington Nationals", abbr:"WAS", trait:"big-market", perk:"deepPockets", colors:["#AB0003","#14225A"], logo:"https://www.mlbstatic.com/team-logos/120.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/washington-nationals-logo-transparent.png"}
+  ];
+
+  var COLLEGES = [
+    {name:"Louisiana State University", tag:"Baseball powerhouse · elite competition", bonus:{power:4,contact:4,focus:-2}},
+    {name:"Vanderbilt University", tag:"Respected program · balanced development", bonus:{contact:3,focus:3}},
+    {name:"Dallas Baptist University", tag:"Mid-major program · player development focus", bonus:{health:5,focus:4,power:1}},
+    {name:"University of Florida", tag:"Baseball powerhouse · elite hitting development", bonus:{contact:5,focus:2}},
+    {name:"University of Texas", tag:"Baseball powerhouse · national spotlight", bonus:{power:3,contact:3,fame:2}},
+    {name:"Arizona State University", tag:"Historic program · athletic development", bonus:{power:3,speed:2}},
+    {name:"Wake Forest University", tag:"Pitching-focused development · demanding program", bonus:{arm:4,contact:3,focus:-1}},
+    {name:"Oregon State University", tag:"Defense and fundamentals · low-pressure program", bonus:{glove:3,focus:3,health:2}}
+  ];
+
+  function pickColleges(n){ return sampleN(COLLEGES, n); }
+
+  var INDY_TEAMS = ["Salt Flats Nine","Border Town Barons","Foothill Wranglers","Old Pier Sailors"];
+
+  // Real NPB (Japan) franchises — names and colors only, no logo artwork.
+  var NPB_TEAMS = [
+    {name:"Yomiuri Giants", abbr:"YOM", trait:"npb", league:"npb", colors:["#F97709","#000000"]},
+    {name:"Hanshin Tigers", abbr:"HAN", trait:"npb", league:"npb", colors:["#FFE201","#000000"]},
+    {name:"Fukuoka SoftBank Hawks", abbr:"SBH", trait:"npb", league:"npb", colors:["#FCC800","#000000"]},
+    {name:"Yokohama DeNA BayStars", abbr:"DeNA", trait:"npb", league:"npb", colors:["#0055A5","#FFFFFF"]},
+    {name:"Chiba Lotte Marines", abbr:"LOT", trait:"npb", league:"npb", colors:["#000000","#C0C0C0"]},
+    {name:"Hokkaido Nippon-Ham Fighters", abbr:"NIP", trait:"npb", league:"npb", colors:["#016299","#B5A160"]}
+  ];
+
+  function pickTeams(n){ return sampleN(TEAMS, n); }
+  function pickNpbTeam(){ return pick(NPB_TEAMS); }
+
+  // Team pros & cons — every club has one perk (mechanical upside) and one
+  // drawback, loosely based on real park factors and organizational reputations.
+  var PERKS = {
+    hitterPark:{pro:"Hitter-friendly ballpark (+Power each season)", con:"Pitching stats suffer here", e:{hitter:{power:2}, pitcher:{contact:-1}}},
+    pitcherPark:{pro:"Pitcher-friendly ballpark (+pitching each season)", con:"Home runs die at the warning track", e:{hitter:{power:-1}, pitcher:{contact:2}}},
+    playerDev:{pro:"Elite player development (+random tool each season)", con:"Patience means slower promotions", e:{any:{dev:true}}},
+    deepPockets:{pro:"Deep pockets (+Bank each season)", con:"Big payroll, big expectations", e:{any:{bank:2, fame:-1}}},
+    loyalFans:{pro:"Diehard fanbase (+Fame each season)", con:"They never forget a bad October", e:{any:{fame:2}}},
+    winNow:{pro:"Win-now roster (better playoff odds)", con:"Short leash for slumps", e:{any:{playoffBonus:0.08}}}
+  };
+
+  function teamPerk(team){
+    if(!team || !team.perk) return null;
+    return PERKS[team.perk];
+  }
+
+  function perkOfferHtml(team){
+    var p = teamPerk(team);
+    if(!p) return "";
+    return '<br><span style="font-size:11.5px;"><span class="tag up">+ '+p.pro+'</span> <span class="tag down">− '+p.con+'</span></span>';
+  }
+
+  function applySeasonPerk(){
+    var p = teamPerk(S.team);
+    if(!p) return 0;
+    var eff = p.e;
+    if(eff.any){
+      if(eff.any.bank) applyEffects({bank:eff.any.bank});
+      if(eff.any.fame) applyEffects({fame:eff.any.fame});
+      if(eff.any.dev){
+        var attr = pick(SKILL_ATTRS);
+        var o = {}; o[attr]=2; applyEffects(o);
+      }
+      return eff.any.playoffBonus || 0;
+    }
+    var catEff = eff[S.category];
+    if(catEff) applyEffects(catEff);
+    return 0;
+  }
+
+  function teamThresholdMod(trait){
+    if(trait==="big-market") return 3;
+    if(trait==="small-market") return -2;
+    return 0;
+  }
+  function teamSuccessMod(trait){
+    if(trait==="big-market") return 0.05;
+    if(trait==="small-market") return -0.02;
+    return 0;
+  }
+  function teamBadgeHtml(team, size){
+    size = size || 22;
+    if(team && team.logo){
+      var mono = "this.replaceWith(Object.assign(document.createElement('span'),{className:'team-badge',textContent:'"+team.abbr+"',style:'width:"+size+"px;height:"+size+"px;line-height:"+size+"px;font-size:"+Math.round(size*0.36)+"px;background:"+team.colors[0]+";color:"+team.colors[1]+";border-color:"+team.colors[1]+"'}))";
+      var onerr = team.logo2
+        ? "if(!this.dataset.alt){this.dataset.alt=1;this.src='"+team.logo2+"';}else{"+mono+"}"
+        : mono;
+      return '<img class="team-logo" src="'+team.logo+'" alt="'+escapeHtml(team.name)+'" '+
+        'style="width:'+size+'px;height:'+size+'px;" onerror="'+onerr+'">';
+    }
+    return '<span class="team-badge" style="width:'+size+'px;height:'+size+'px;line-height:'+size+'px;font-size:'+Math.round(size*0.36)+'px;background:'+team.colors[0]+';color:'+team.colors[1]+';border-color:'+team.colors[1]+';">'+team.abbr+'</span>';
+  }
+
+  /* =========================================================
+     STAGE STARTING ATTRIBUTES
+  ========================================================= */
+  function rollStartingAttrs(position){
+    var base = {power:ri(26,38),contact:ri(26,38),speed:ri(26,38),glove:ri(26,38),arm:ri(26,38),focus:ri(26,38)};
+    if(position==="Pitcher"){ base.power+=8; base.arm+=8; base.speed-=6; }
+    if(position==="Catcher"){ base.arm+=8; base.glove+=6; base.speed-=8; }
+    if(position==="First Base"){ base.power+=8; base.speed-=4; base.glove-=2; }
+    if(position==="Second Base"){ base.glove+=6; base.speed+=4; base.power-=4; }
+    if(position==="Third Base"){ base.arm+=6; base.power+=4; base.speed-=2; }
+    if(position==="Shortstop"){ base.glove+=8; base.speed+=6; base.arm+=4; base.power-=6; }
+    if(position==="Left Field"){ base.power+=6; base.arm-=2; }
+    if(position==="Center Field"){ base.speed+=8; base.glove+=4; base.power-=2; }
+    if(position==="Right Field"){ base.arm+=8; base.power+=4; }
+    for(var k in base){ base[k]=clamp(base[k],10,60); }
+    return base;
+  }
+
+  /* =========================================================
+     RENDERING
+  ========================================================= */
+  function fmtAvg(v){ return v.toFixed(3).replace(/^0/,""); }
+  function fmtEra(v){ return v.toFixed(2); }
+  function fmtWar(v){ return (v>=0?"+":"")+v.toFixed(1); }
+
+  function minorStatLine(){
+    var a = S.attrs;
+    if(S.category==="hitter"){
+      var eff = (a.contact*0.5+a.power*0.3+a.focus*0.2)/100;
+      var avg = clamp(0.230+eff*0.09+rand(-0.02,0.02),0.180,0.340);
+      var hr = Math.max(0,Math.round((a.power/100)*14*rand(0.5,1.3)));
+      return fmtAvg(avg)+" AVG, "+hr+" HR";
+    } else {
+      var eff = (a.power*0.35+a.contact*0.40+a.focus*0.25)/100;
+      var era = clamp(4.60-eff*2.1+rand(-0.3,0.3),2.20,6.50);
+      var wins = Math.max(0,Math.round(eff*8+rand(-1,1)));
+      return wins+" W, "+fmtEra(era)+" ERA";
+    }
+  }
+
+  function overall(){
+    var sum=0; for(var i=0;i<SKILL_ATTRS.length;i++) sum+=S.attrs[SKILL_ATTRS[i]];
+    return sum/SKILL_ATTRS.length;
+  }
+
+  var STAGE_LABELS = {
+    little_league:"Little League", high_school:"High School", crossroads:"The Crossroads",
+    college:"College Ball", draft:"Draft Day", low_minors:"Minor Leagues", high_minors:"Triple-A",
+    debut:"Call-Up", mlb:"Major Leagues", retired:"Retired"
+  };
+
+  function ovrTier(v){
+    if(v>=70) return "tier-gold";
+    if(v>=55) return "tier-bronze";
+    return "tier-grey";
+  }
+
+  function currentTeamColors(){
+    if(S.team && S.team.colors) return S.team.colors;
+    return ["#1B323C","#F5F1E6"];
+  }
+
+  function renderHero(){
+    var ov = Math.round(overall());
+    var badge = document.getElementById("ovr-badge");
+    badge.className = "ovr-badge "+ovrTier(ov);
+    badge.innerHTML = '<div class="ovr-label">OVR</div><div class="ovr-num">'+ov+'</div>';
+
+    var c = currentTeamColors();
+    var head = document.getElementById("team-header");
+    head.style.background = 'linear-gradient(100deg, '+c[0]+' 0%, '+c[0]+'CC 55%, rgba(20,20,24,0.92) 100%)';
+
+    var affiliation = S.team ? S.team.name : (S.college || STAGE_LABELS[S.stageKey] || "Free Agent");
+    var badgeMark = S.team ? teamBadgeHtml(S.team, 26) : "";
+    var money = S.attrs.bank>=1 ? ("$"+S.attrs.bank+"M") : "—";
+
+    head.innerHTML =
+      '<div class="th-chips">'+
+        '<span class="th-chip">'+(S.category==="pitcher"?"P":"POS")+'</span>'+
+        '<span class="th-chip pos">'+escapeHtml(S.position)+'</span>'+
+      '</div>'+
+      '<div class="th-name">'+badgeMark+'<span>'+escapeHtml(affiliation)+'</span></div>'+
+      '<div class="th-right">'+
+        '<div class="lbl">AGE</div><div class="val">'+S.age+'</div>'+
+        '<div class="lbl" style="margin-top:4px;">VALUE</div><div class="val">'+money+'</div>'+
+      '</div>';
+
+    var sh = document.getElementById("sh-stats");
+    if(sh) sh.textContent = S.category==="pitcher" ? "W-L / ERA / WAR" : "AVG / HR / RBI / WAR";
+  }
+
+  function tagHtml(effects){
+    if(!effects) return "";
+    var out = "";
+    for(var k in effects){
+      if(SKILL_ATTRS.indexOf(k)<0 && META_ATTRS.indexOf(k)<0) continue;
+      var v = effects[k];
+      var label = (SKILL_LABELS[k]||META_LABELS[k]||k);
+      out += '<span class="tag '+(v>=0?"up":"down")+'">'+label+' '+(v>=0?"+":"")+v+'</span>';
+    }
+    return out;
+  }
+
+  function oddsHtml(outcomes){
+    return outcomes.map(function(o,i){
+      var cls = i===0 ? "up" : "down";
+      return '<span class="tag '+cls+'">'+Math.round(o.prob*100)+'% '+o.label+'</span>';
+    }).join("");
+  }
+
+  // Rolls a chaos-event choice's outcomes (if any) and returns the effects to
+  // apply plus the narrative line to log. Plain (non-chaos) choices just pass
+  // their flat effects through untouched.
+  function rollChaosOutcome(choice){
+    if(!choice.outcomes) return {effects: choice.e, text: null};
+    var r = Math.random();
+    var cum = 0;
+    for(var i=0;i<choice.outcomes.length;i++){
+      cum += choice.outcomes[i].prob;
+      if(r <= cum || i===choice.outcomes.length-1){
+        return {effects: choice.outcomes[i].e, text: choice.outcomes[i].result};
+      }
+    }
+    return {effects: choice.outcomes[0].e, text: choice.outcomes[0].result};
+  }
+
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, function(c){
+      return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];
+    });
+  }
+
+  function renderLog(){
+    var el = document.getElementById("log-list");
+    var items = S.log.slice(-40);
+    var html = "";
+    for(var i=items.length-1;i>=0;i--){
+      var it = items[i];
+      html += '<div class="log-item'+(it.fresh?" fresh":"")+'">Age '+it.age+' — '+it.text+'</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  // Adds one row to the persistent, growing Career Path table (age / team /
+  // level / OVR / stat line), mirroring a season-by-season career sheet.
+  function addCareerRow(row){
+    S.careerRows.push(row);
+    renderCareerTable();
+  }
+
+  function renderCareerTable(){
+    var el = document.getElementById("career-sheet");
+    if(!el) return;
+    var html = "";
+    var lastAge = 16;
+
+    S.careerRows.forEach(function(row, i){
+      lastAge = Math.max(lastAge, row.age);
+      var cols = row.team && row.team.colors ? row.team.colors : ["#3A3A3A","#F5F1E6"];
+      var clubName = row.team ? row.team.name : (row.teamText || row.level);
+      if(row.team && row.level && row.level!=="MLB"){ clubName += "  ("+row.level+")"; }
+      var mark = row.team ? teamBadgeHtml(row.team,20) : '<span class="team-badge" style="width:20px;height:20px;line-height:20px;font-size:7px;background:#2C3A44;color:#C9C4B4;border-color:#C9C4B4;">'+(row.level==="College"?"NCAA":"HS")+'</span>';
+      var trophies = "";
+      if(row.trophy) trophies += " \uD83C\uDFC6";
+      (row.awards||[]).forEach(function(a){
+        if(/MVP|Cy Young/.test(a)) trophies += " \uD83E\uDD47";
+        else if(/All-Star/.test(a)) trophies += " \u2B50";
+        else if(/Rookie of the Year/.test(a)) trophies += " \uD83C\uDF1F";
+        else if(/Gold Glove/.test(a)) trophies += " \uD83E\uDDE4";
+        else if(/Silver Slugger/.test(a)) trophies += " \uD83C\uDFCF";
+      });
+      var isLast = (i===S.careerRows.length-1);
+
+      html += '<div class="cs-row'+(isLast?' current':'')+'">'+
+        '<div class="cs-age" style="background:'+cols[0]+';">'+row.age+'</div>'+
+        '<div class="cs-club">'+mark+'<span class="nm">'+escapeHtml(clubName)+trophies+'</span></div>'+
+        '<div class="cs-ovr '+ovrTier(row.ovr)+'">'+row.ovr+'</div>'+
+        '<div class="cs-stats">'+(row.stats||"—")+'</div>'+
+        '</div>';
+    });
+
+    // Future age rows — shows the whole career arc ahead of you
+    for(var a=lastAge+1; a<=40; a+=2){
+      html += '<div class="cs-row future">'+
+        '<div class="cs-age dim">'+a+'</div>'+
+        '<div class="cs-club"><span class="nm">—</span></div>'+
+        '<div class="cs-ovr"></div><div class="cs-stats"></div>'+
+        '</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  function renderTrophyCase(){
+    var el = document.getElementById("trophy-case");
+    if(!el) return;
+    var c = S.career;
+    var chips = [];
+    function chip(label, count){
+      if(count>0) chips.push(label+(count>1?" ×"+count:""));
+    }
+    chip("\uD83C\uDFC6 World Champion", c.championships);
+    chip("\uD83C\uDF1F MVP", c.mvps);
+    chip("\uD83C\uDF1F Cy Young", c.cyYoungs);
+    if(c.roy) chips.push("\u2B50 Rookie of the Year");
+    chip("\u2B50 All-Star", c.allStars);
+    chip("\uD83E\uDDE4 Gold Glove", c.goldGloves);
+    chip("\uD83D\uDD25 Silver Slugger", c.silverSluggers);
+    if(c.wbc==="accepted") chips.push("\uD83C\uDF0E World Baseball Classic");
+    if(chips.length===0){
+      el.innerHTML = '<span class="trophy-empty">No hardware yet — go earn some.</span>';
+    } else {
+      el.innerHTML = chips.map(function(ch){ return '<span class="trophy-chip">'+ch+'</span>'; }).join("");
+    }
+  }
+
+  /* =========================================================
+     EVENT CARD RENDERING & FLOW
+  ========================================================= */
+  var currentEvent = null;
+  var pendingContinuation = null;
+
+  function showOutcomeReveal(headline, resultText, effects, continuation){
+    pendingContinuation = continuation;
+    currentEvent = {
+      h: headline,
+      t: resultText,
+      c: [{l:"Continue", e: effects}],
+      _outcomeReveal: true
+    };
+    renderAll();
+  }
+
+  function pillHtml(cls, arrow, text, pct){
+    return '<span class="pill '+cls+'"><span class="pi">'+arrow+'</span>'+
+      '<span class="ptx">'+text+'</span>'+
+      (pct!=null?'<span class="ppc">'+pct+'%</span>':'')+'</span>';
+  }
+
+  // Builds one decision option in the reference layout: a label, then
+  // green (upside) and red (downside) pills with their odds.
+  function optionInnerHtml(choice){
+    var out = '<div class="d-opt-label">'+choice.l+'</div>';
+    if(choice.outcomes){
+      choice.outcomes.forEach(function(o,i){
+        out += pillHtml(i===0?"good":"bad", i===0?"\u2197":"\u2198", o.label, Math.round(o.prob*100));
+      });
+      return out;
+    }
+    var e = choice.e || {};
+    var ups = [], downs = [];
+    for(var k in e){
+      if(SKILL_ATTRS.indexOf(k)<0 && META_ATTRS.indexOf(k)<0) continue;
+      var lbl = (SKILL_LABELS[k]||META_LABELS[k]||k);
+      if(e[k]>=0) ups.push(lbl+" +"+e[k]); else downs.push(lbl+" "+e[k]);
+    }
+    if(ups.length) out += pillHtml("good","\u2197", ups.join(", "), null);
+    if(downs.length) out += pillHtml("bad","\u2198", downs.join(", "), null);
+    if(!ups.length && !downs.length) out += pillHtml("flat","\u2192","Nothing changes",null);
+    return out;
+  }
+
+  function renderEventCard(){
+    var el = document.getElementById("event-card");
+    if(!currentEvent){ el.innerHTML=""; return; }
+    var ev = currentEvent;
+    var html = '';
+    html += '<div class="d-title">'+(ev._outcomeReveal ? "\uD83C\uDFB2 "+ev.h : ev.h)+'</div>';
+    html += '<div class="d-sub">'+ev.t+'</div>';
+    html += '<div class="d-options">';
+    ev.c.forEach(function(choice, idx){
+      html += '<button class="d-opt choice-btn" data-idx="'+idx+'">'+optionInnerHtml(choice)+'</button>';
+    });
+    html += '</div>';
+    if(S.stageKey==="mlb" && S.age>=30 && !(currentEvent && currentEvent._interstitial)){
+      html += '<div class="retire-note">Feeling the years add up? <button id="btn-retire-now">Call it a career</button></div>';
+    }
+    el.innerHTML = html;
+
+    var btns = el.querySelectorAll(".choice-btn");
+    btns.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var idx = parseInt(this.getAttribute("data-idx"),10);
+        if(ev._outcomeReveal){
+          var cont = pendingContinuation;
+          pendingContinuation = null;
+          currentEvent = null;
+          if(cont) cont();
+          return;
+        }
+        resolveChoice(ev, idx);
+      });
+    });
+    var retireBtn = document.getElementById("btn-retire-now");
+    if(retireBtn){
+      retireBtn.addEventListener("click", function(){ goToRetirement(); });
+    }
+  }
+
+  function resolveChoice(ev, idx){
+    var choice = ev.c[idx];
+    var outcome = rollChaosOutcome(choice);
+    applyEffects(outcome.effects);
+    log(ev.h+" — "+choice.l+(outcome.text?(" → "+outcome.text):"")+".", true);
+    if(choice.outcomes){
+      showOutcomeReveal(ev.h, outcome.text, outcome.effects, advance);
+    } else {
+      advance();
+    }
+  }
+
+  /* =========================================================
+     STAGE QUEUE CONSTRUCTION
+  ========================================================= */
+  function categoryFilter(pool){
+    return pool.filter(function(e){ return !e.cat || e.cat===S.category; });
+  }
+
+  function pickFromPool(pool, n){
+    pool = categoryFilter(pool);
+    var avail = pool.filter(function(e){ return !S.usedEventIds[e.id]; });
+    if(avail.length < n) avail = pool.slice();
+    var chosen = sampleN(avail, Math.min(n, avail.length));
+    chosen.forEach(function(e){ S.usedEventIds[e.id]=true; });
+    return chosen;
+  }
+
+  function pickOneMixed(regularPool, chaosPool){
+    var useChaos = Math.random() < 0.45;
+    return pickFromPool(useChaos ? chaosPool : regularPool, 1);
+  }
+
+  function buildQueueFor(stageKey){
+    if(stageKey==="high_school"){
+      return pickOneMixed(POOL_TEEN, CHAOS_AMATEUR);
+    }
+    if(stageKey==="college"){
+      return pickOneMixed(POOL_COLLEGE, CHAOS_AMATEUR);
+    }
+    if(["low_minors","high_minors"].indexOf(stageKey)>=0){
+      return pickOneMixed(POOL_MINORS, CHAOS_PRO);
+    }
+    return [];
+  }
+
+  function ageForStage(stageKey){
+    var map = {little_league:11, high_school:16, college:19, low_minors:19, high_minors:21, debut:23};
+    return map[stageKey];
+  }
+
+  function enterStage(stageKey){
+    S.stageKey = stageKey;
+    S.progress = STAGE_FRACTIONS[stageKey] !== undefined ? STAGE_FRACTIONS[stageKey] : S.progress;
+    if(ageForStage(stageKey) && S.age < ageForStage(stageKey)) S.age = ageForStage(stageKey);
+
+    if(stageKey==="crossroads"){
+      currentEvent = crossroadsEvent();
+      renderAll();
+      return;
+    }
+    if(stageKey==="draft"){
+      currentEvent = draftEvent();
+      renderAll();
+      return;
+    }
+    if(stageKey==="debut"){
+      currentEvent = debutEvent();
+      renderAll();
+      return;
+    }
+    if(stageKey==="mlb"){
+      log("You've made it. Age "+S.age+" and you're officially a Major Leaguer.", true);
+      currentEvent = null;
+      S.stageEventIdx = 0;
+      playMlbOffseason();
+      return;
+    }
+    if(stageKey==="retired"){
+      showEndScreen();
+      return;
+    }
+
+    S.stageQueue = buildQueueFor(stageKey);
+    S.stageEventIdx = 0;
+    if(["low_minors","high_minors"].indexOf(stageKey)>=0){
+      log("You report to "+STAGE_LABELS[stageKey]+" with the "+(S.team?S.team.name:"organization")+".", true);
+      addCareerRow({age:S.age, team:S.team, level:STAGE_LABELS[stageKey], ovr:Math.round(overall()), stats:minorStatLine()});
+    } else if(stageKey==="high_school"){
+      addCareerRow({age:S.age, team:null, teamText:"—", level:"High School", ovr:Math.round(overall()), stats:"—"});
+    } else if(stageKey==="college"){
+      addCareerRow({age:S.age, team:null, teamText:S.college||"College", level:"College", ovr:Math.round(overall()), stats:"—"});
+    }
+    nextInQueue();
+  }
+
+  function nextInQueue(){
+    if(S.stageEventIdx < S.stageQueue.length){
+      var base = S.stageQueue[S.stageEventIdx];
+      currentEvent = {h:base.h, t:base.t, c:base.c};
+      S.stageEventIdx++;
+      renderAll();
+    } else {
+      finishStage();
+    }
+  }
+
+  var STAGE_ORDER = ["little_league","high_school","crossroads","low_minors","high_minors","debut","mlb"];
+
+  function finishStage(){
+    if(S.stageKey==="little_league"){ enterStage("high_school"); return; }
+    if(S.stageKey==="high_school"){ enterStage("crossroads"); return; }
+    if(S.stageKey==="college"){ enterStage("draft"); return; }
+    if(["low_minors","high_minors"].indexOf(S.stageKey)>=0){
+      handlePromotionCheck();
+      return;
+    }
+  }
+
+  function handlePromotionCheck(){
+    var order = ["low_minors","high_minors"];
+    var idx = order.indexOf(S.stageKey);
+    // Getting to The Show is the fun part — the minors are a short on-ramp,
+    // not a gauntlet. Only a rare washout at Triple-A, and only if you're cold.
+    var ov = overall();
+    var releaseChance = (S.stageKey==="high_minors" && ov < 34) ? 0.05 : 0;
+    if(Math.random() < releaseChance){
+      S.released = true;
+      S.minorsSeasons += 1;
+      S.releaseLevel = STAGE_LABELS[S.stageKey];
+      log("The "+(S.team?S.team.name:"organization")+" let you go after "+STAGE_LABELS[S.stageKey]+". The dream stalls here — but you played the game.", true);
+      enterStage("retired");
+      return;
+    }
+    S.age += 1;
+    S.minorsSeasons += 1;
+    if(S.team && S.team.trait==="small-market"){
+      var boostAttr = pick(SKILL_ATTRS);
+      applyEffects((function(){ var o={}; o[boostAttr]=2; return o; })());
+    }
+    if(idx < order.length-1){
+      log("Promoted out of "+STAGE_LABELS[S.stageKey]+"!", true);
+      enterStage(order[idx+1]);
+    } else {
+      log("The call finally comes. You're headed to the big leagues.", true);
+      enterStage("debut");
+    }
+  }
+
+  function crossroadsEvent(){
+    return {
+      h:"The Crossroads",
+      t:"High school is ending. Three paths lie ahead, and the one you choose will shape everything that follows.",
+      c:[
+        {l:"Sign with a college program", e:{focus:3}, action:"college_choice"},
+        {l:"Enter the pro draft straight out of high school", e:{fame:2}, action:"draft"},
+        {l:"Try out for an independent league team", e:{focus:2,bank:2}, action:"indy"}
+      ]
+    };
+  }
+
+  function collegeChoiceEvent(){
+    return {
+      h:"Choosing a Program",
+      t:"A few college programs have shown real interest. Where you go will shape how you develop over the next few years.",
+      c:pickColleges(3).map(function(col){
+        return {l:col.name+" — "+col.tag, e:col.bonus, collegePick:col};
+      })
+    };
+  }
+
+  function draftEvent(){
+    var offers = pickTeams(2);
+    var ov = overall();
+    var choices = offers.map(function(team){
+      var roundRoll = ov + rand(-8,8);
+      var round, level, bonus;
+      if(roundRoll>=46){ round="1st round"; level="high_minors"; bonus=ri(28,40); }
+      else if(roundRoll>=40){ round="3rd–5th round"; level="low_minors"; bonus=ri(14,26); }
+      else if(roundRoll>=34){ round="8th–15th round"; level="low_minors"; bonus=ri(6,13); }
+      else { round="a late round"; level="low_minors"; bonus=ri(2,6); }
+      var levelLabel = level==="high_minors" ? "Triple-A" : "the Minor Leagues";
+      var marketTag = team.trait==="big-market" ? "Big market" : "Small market";
+      return {
+        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+
+          '<br><span style="font-size:12px;opacity:0.75;">'+round+', straight to '+levelLabel+' · $'+bonus+'K bonus</span>'+
+          '<br><span style="font-size:12px;opacity:0.75;">6 years of team control before free agency</span>'+perkOfferHtml(team),
+        teamPick:{team:team, level:level, bonus:bonus}
+      };
+    });
+    if(S.draftWaitCount < 2){
+      choices.push({l:"Turn down these offers and wait for next year's draft", draftWait:true});
+    }
+    choices.push({l:"Walk away from professional baseball", walkAway:true});
+    return {
+      h:"Draft Day",
+      t:"The phone finally rings. A couple of organizations have called with an offer — the choice of who to sign with is yours.",
+      c:choices
+    };
+  }
+
+  function debutEvent(){
+    var name = S.name || "Rookie";
+    return {
+      h:"Called Up",
+      t:name+", the front office just told your manager: pack your bags, you're joining the big-league club tomorrow.",
+      c:[
+        {l:"Soak in the moment", e:{fame:4,focus:2}},
+        {l:"Treat it like any other game", e:{focus:3}}
+      ]
+    };
+  }
+
+  // override resolveChoice behavior for crossroads / college / draft specifically
+  var _origResolveChoice = resolveChoice;
+  resolveChoice = function(ev, idx){
+    var choice = ev.c[idx];
+
+    if(choice.collegePick){
+      applyEffects(choice.e);
+      S.wentToCollege = true;
+      S.college = choice.collegePick.name;
+      log("Committed to "+choice.collegePick.name+".", true);
+      currentEvent = null;
+      enterStage("college");
+      return;
+    }
+    if(choice.teamPick){
+      var teamPickInfo = choice.teamPick;
+      S.team = teamPickInfo.team;
+      S.teamHistory.push(teamPickInfo.team.name);
+      S.teamControlUntilAge = S.age + 6;
+      applyEffects({bank:teamPickInfo.bonus});
+      log("Signed with the "+teamPickInfo.team.name+" for a $"+teamPickInfo.bonus+"K bonus. You're under the organization's control for 6 years of service before free agency.", true);
+      currentEvent = null;
+      enterStage(teamPickInfo.level);
+      return;
+    }
+    if(choice.draftWait){
+      S.age += 1;
+      S.draftWaitCount += 1;
+      log("You turn down this year's offers and wait it out.", true);
+      currentEvent = null;
+      enterStage("draft");
+      return;
+    }
+    if(choice.walkAway){
+      log("You walk away from professional baseball before ever signing.", true);
+      S.released = true;
+      S.walkedAway = true;
+      S.releaseLevel = "the Draft";
+      enterStage("retired");
+      return;
+    }
+
+    var outcome = rollChaosOutcome(choice);
+    applyEffects(outcome.effects);
+    log(ev.h+" — "+choice.l+(outcome.text?(" → "+outcome.text):"")+".", true);
+
+    function proceedAfterChoice(){
+      if(choice.action==="college_choice"){
+        currentEvent = collegeChoiceEvent();
+        renderAll();
+        return;
+      }
+      if(choice.action==="draft"){
+        currentEvent = null;
+        enterStage("draft");
+        return;
+      }
+      if(choice.action==="indy"){
+        var indyTeam = {name:pick(INDY_TEAMS)+" (Independent)", abbr:"IND", trait:"independent", colors:["#3A3A3A","#F5F1E6"]};
+        S.team = indyTeam;
+        S.teamHistory.push(indyTeam.name);
+        currentEvent = null;
+        enterStage("low_minors");
+        return;
+      }
+      advance();
+    }
+
+    if(choice.outcomes){
+      showOutcomeReveal(ev.h, outcome.text, outcome.effects, proceedAfterChoice);
+    } else {
+      proceedAfterChoice();
+    }
+  };
+
+  function advance(){
+    if(S.stageKey==="mlb"){
+      // handled by playMlbOffseason flow
+      return;
+    }
+    if(S.stageKey==="crossroads" || S.stageKey==="debut" || S.stageKey==="draft"){
+      // handled via action / fallthrough below
+      if(S.stageKey==="debut"){ enterStage("mlb"); return; }
+      return;
+    }
+    nextInQueue();
+  }
+
+  /* =========================================================
+     MLB LOOP
+  ========================================================= */
+  function contractEvent(){
+    var ov = overall();
+    var annual = Math.max(1, Math.round(1 + ov*0.35));
+    var years = ri(3,6);
+    var total = annual*years;
+    var proveItAnnual = Math.max(1, Math.round(annual*0.45));
+    return {
+      h:"Contract Talks",
+      t:"Your agent lays out two paths forward with the front office.",
+      c:[
+        {l:"Sign the extension — $"+total+"M over "+years+" years", e:{bank:12,fame:-1}},
+        {l:"Bet on yourself — 1-year, $"+proveItAnnual+"M prove-it deal", e:{bank:4,focus:3,fame:1}}
+      ]
+    };
+  }
+
+  function demotionEvent(){
+    return {
+      h:"Sent Down",
+      t:"The results weren't there this year, and the organization wants you refining things in Triple-A before another shot.",
+      c:[
+        {l:"Get back to work", e:{focus:3,health:2}}
+      ]
+    };
+  }
+
+  function wbcEvent(){
+    return {
+      h:"World Baseball Classic",
+      t:"Your play has earned a call-up to represent your country in the World Baseball Classic.",
+      c:[
+        {l:"Accept the honor", wbcChoice:"accepted", outcomes:[
+          {prob:0.65, label:"A career highlight", result:"You help your country make a deep run — a memory that outlasts any stat line.", e:{fame:7,focus:2}},
+          {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the regular season.", e:{fame:3,health:-6}}
+        ]},
+        {l:"Decline, focus on your club season", wbcChoice:"declined", e:{focus:2}}
+      ]
+    };
+  }
+
+  function freeAgencyEvent(){
+    var offers = sampleN(TEAMS.filter(function(t){ return !S.team || t.name!==S.team.name; }), 3);
+    var ov = overall();
+    var choices = offers.map(function(team){
+      var annual = Math.max(2, Math.round(1 + ov*0.4 + rand(-3,3)));
+      var years = ri(2,5);
+      var marketTag = team.trait==="big-market" ? "Big market" : "Small market";
+      return {
+        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+
+          '<br><span style="font-size:12px;opacity:0.75;">$'+annual+'M/yr × '+years+' years</span>'+perkOfferHtml(team),
+        faPick:{team:team, bank:Math.round(annual*0.8)}
+      };
+    });
+    if(Math.random() < 0.4){
+      var npb = pickNpbTeam();
+      var npbAnnual = Math.max(3, Math.round(2 + ov*0.35));
+      choices.push({
+        l:teamBadgeHtml(npb)+' Sign in Japan with the '+npb.name+' <span class="tag">NPB</span>'+
+          '<br><span style="font-size:12px;opacity:0.75;">$'+npbAnnual+'M/yr · a new chapter overseas</span>',
+        faPick:{team:npb, bank:Math.round(npbAnnual*0.9), npb:true}
+      });
+    }
+    if(S.team){
+      choices.push({l:"Stay with the "+S.team.name, faStay:true});
+    }
+    return {
+      h:"Free Agency",
+      t:"You've hit the open market. Every offer on the table is yours to take — or leave.",
+      c:choices
+    };
+  }
+
+  function offseasonPlanEvent(){
+    var choices = [
+      {l:"Train harder than ever", e:{power:3,contact:3,health:-4}},
+      {l:"Winter ball in the Mexican Pacific League", e:{contact:4,fame:2,health:-2}},
+      {l:"Rest and recover", e:{health:6}}
+    ];
+    if(S.age <= 26){
+      choices.splice(2, 0, {l:"Arizona Fall League — sharpen against top prospects", e:{contact:3,focus:3,health:-2}});
+    }
+    return {
+      h:"Offseason Plan",
+      t:"The season's over. How do you spend the winter?",
+      c:choices
+    };
+  }
+
+  function playMlbOffseason(){
+    // Free agency: after 6 years of service, every 3rd year
+    if(S.serviceYears>=4 && (S.serviceYears-4)%2===0 && S.faOfferedAtSeason!==S.seasonsPlayed){
+      S.faOfferedAtSeason = S.seasonsPlayed;
+      currentEvent = freeAgencyEvent();
+      currentEvent._afterOffseason = true;
+      renderAll();
+      return;
+    }
+    // Contract talks: only while under team control
+    if(S.serviceYears<4 && S.seasonsPlayed>0 && S.seasonsPlayed%3===0 && S.contractOfferedAtSeason!==S.seasonsPlayed){
+      S.contractOfferedAtSeason = S.seasonsPlayed;
+      currentEvent = contractEvent();
+      currentEvent._afterOffseason = true;
+      renderAll();
+      return;
+    }
+    var roll = Math.random();
+    if(roll < 0.4){
+      currentEvent = offseasonPlanEvent();
+      currentEvent._afterOffseason = true;
+      renderAll();
+      return;
+    }
+    var useChaos = roll < 0.75;
+    var srcPool = categoryFilter(useChaos ? CHAOS_PRO : POOL_MLB);
+    var avail = srcPool.filter(function(e){ return !S.usedEventIds[e.id]; });
+    if(avail.length===0){ avail = srcPool.slice(); srcPool.forEach(function(e){ delete S.usedEventIds[e.id]; }); }
+    var ev = pick(avail);
+    S.usedEventIds[ev.id] = true;
+    currentEvent = {h:ev.h, t:ev.t, c:ev.c.map(function(c){ return {l:c.l, e:c.e, outcomes:c.outcomes, mlb:true, tradeRequest:c.tradeRequest}; })};
+    currentEvent._afterOffseason = true;
+    renderAll();
+  }
+
+  // wrap resolveChoice once more for the mlb offseason -> season sim flow
+  var _resolveChoiceBeforeMlb = resolveChoice;
+  resolveChoice = function(ev, idx){
+    var choice = ev.c[idx];
+    if(S.stageKey==="mlb" && ev._interstitial){
+      var outcomeI = rollChaosOutcome(choice);
+      applyEffects(outcomeI.effects);
+      log(ev.h+" — "+choice.l+(outcomeI.text?(" → "+outcomeI.text):"")+".", true);
+      if(choice.wbcChoice){ S.career.wbc = choice.wbcChoice; }
+      function proceedInterstitial(){
+        currentEvent = null;
+        playMlbOffseason();
+      }
+      if(choice.outcomes){
+        showOutcomeReveal(ev.h, outcomeI.text, outcomeI.effects, proceedInterstitial);
+      } else {
+        proceedInterstitial();
+      }
+      return;
+    }
+    if(S.stageKey==="mlb" && ev._afterOffseason){
+      if(choice.faPick){
+        var fa = choice.faPick;
+        S.team = fa.team;
+        S.teamHistory.push(fa.team.name);
+        applyEffects({bank:fa.bank, fame:fa.npb?3:1});
+        var faMsg = fa.npb
+          ? "You sign with the "+fa.team.name+" — taking your game to Japan."
+          : "You sign with the "+fa.team.name+" in free agency.";
+        log(faMsg, true);
+        showOutcomeReveal("Free Agency", faMsg, {}, function(){ simulateSeason(); });
+        return;
+      }
+      if(choice.faStay){
+        log("You re-sign and stay with the "+S.team.name+".", true);
+        applyEffects({fame:2});
+        simulateSeason();
+        return;
+      }
+      var outcome = rollChaosOutcome(choice);
+      applyEffects(outcome.effects);
+      log(ev.h+" — "+choice.l+(outcome.text?(" → "+outcome.text):"")+".", true);
+
+      if(choice.tradeRequest){
+        var traded = Math.random() < 0.6 && S.team;
+        var tradeMsg;
+        if(traded){
+          var newTeam = pick(TEAMS.filter(function(t){ return t.name!==S.team.name; }));
+          S.team = newTeam;
+          S.teamHistory.push(newTeam.name);
+          tradeMsg = "The front office grants your wish — you're traded to the "+newTeam.name+".";
+        } else {
+          tradeMsg = "The front office hears you out, but no deal comes together before the deadline.";
+        }
+        log(tradeMsg, true);
+        showOutcomeReveal("Trade Rumors", tradeMsg, {}, function(){ simulateSeason(); });
+        return;
+      }
+
+      if(choice.outcomes){
+        showOutcomeReveal(ev.h, outcome.text, outcome.effects, function(){ simulateSeason(); });
+      } else {
+        simulateSeason();
+      }
+      return;
+    }
+    _resolveChoiceBeforeMlb(ev, idx);
+  };
+
+  function ageCurve(age){
+    var m;
+    if(age<=28) m = 0.80 + (age-19)*0.028;
+    else m = 1.05 - (age-28)*0.045;
+    return clamp(m, 0.30, 1.06);
+  }
+
+  function simulateSeason(){
+    var age = S.age;
+    var mult = ageCurve(age);
+    var a = S.attrs;
+    S.awardsThisSeason = [];
+    var recap, tableStats, war;
+    var finalSeasonScore;
+
+    if(S.category==="hitter"){
+      var ability = (a.contact*0.5 + a.power*0.3 + a.focus*0.2)/100;
+      var eff = ability*mult;
+      var paFrac = 0.5 + a.health/200;
+      var pa = Math.round(clamp(560*paFrac, 150, 640));
+      var ab = Math.round(pa*0.89);
+      var avg = clamp(0.190 + eff*0.150 + rand(-0.018,0.018), 0.150, 0.390);
+      var hits = Math.round(avg*ab);
+      var hr = Math.max(0, Math.round((a.power/100)*38*mult*(0.6+Math.random()*0.8)*(pa/560)));
+      var rbi = Math.max(0, Math.round(hr*2.2 + (a.contact/100)*45*(pa/560) + rand(-5,5)));
+      var runs = Math.max(0, Math.round((a.contact/100)*70*mult*(pa/560) + (a.speed/100)*20*mult*(pa/560) + rand(-5,5)));
+      var sb = Math.max(0, Math.round((a.speed/100)*40*mult*(pa/560)*rand(0.5,1.1)));
+
+      S.career.hr += hr; S.career.rbi += rbi; S.career.sb += sb;
+      S.career.pa += pa; S.career.hitSum += avg*pa; S.career.hits += hits; S.career.runs += runs;
+
+      var seasonScore = avg*300 + hr*3 + rbi*1 + sb*1.2;
+      finalSeasonScore = seasonScore;
+      war = clamp((seasonScore-130)/26, -2, 11);
+      S.career.warSum += war;
+      recap = fmtAvg(avg)+" AVG, "+hr+" HR, "+rbi+" RBI, "+runs+" R, "+hits+" H, "+sb+" SB, "+fmtWar(war)+" WAR";
+      tableStats = fmtAvg(avg)+" AVG, "+hr+" HR, "+rbi+" RBI, "+fmtWar(war)+" WAR";
+      evaluateAwards(seasonScore, "hitter");
+    } else {
+      var pAbility = (a.power*0.35 + a.contact*0.40 + a.focus*0.25)/100;
+      var pEff = pAbility*mult;
+      var ipFrac = 0.5 + a.health/200;
+      var ip = Math.round(clamp(195*ipFrac, 40, 225));
+      var era = clamp(5.60 - pEff*3.6 + rand(-0.35,0.35), 1.60, 6.80);
+      var wins = Math.max(0, Math.round(pEff*17*(ip/195) + rand(-2,2)));
+      var so = Math.max(0, Math.round((a.power/100)*230*mult*(ip/195) + rand(-15,15)));
+      var lossRatio = clamp(1.8 - pEff*1.3, 0.4, 1.8);
+      var losses = Math.max(0, Math.round(wins * lossRatio));
+
+      S.career.wins += wins; S.career.losses += losses; S.career.so += so; S.career.ip += ip;
+      S.career.eraSum += era*ip;
+
+      var pSeasonScore = Math.max(0,(5.2-era))*40 + wins*4 + so*0.3;
+      finalSeasonScore = pSeasonScore;
+      war = clamp((pSeasonScore-90)/21, -2, 11);
+      S.career.warSum += war;
+      recap = wins+"-"+losses+" W-L, "+fmtEra(era)+" ERA, "+ip+" IP, "+so+" SO, "+fmtWar(war)+" WAR";
+      tableStats = wins+"-"+losses+", "+fmtEra(era)+" ERA, "+fmtWar(war)+" WAR";
+      evaluateAwards(pSeasonScore, "pitcher");
+    }
+
+    S.seasonsPlayed += 1;
+    S.serviceYears += 1;
+
+    // team success
+    var perkPlayoffBonus = applySeasonPerk();
+    var teamMod = (S.team ? teamSuccessMod(S.team.trait) : 0) + perkPlayoffBonus;
+    var teamChance = clamp(0.25 + (overall()-50)/200 + teamMod, 0.05, 0.85);
+    var madePlayoffs = Math.random() < teamChance;
+    var wonChamp = false;
+    if(madePlayoffs){
+      S.career.playoffs += 1;
+      wonChamp = Math.random() < 0.32;
+      if(wonChamp) S.career.championships += 1;
+    }
+
+    var awardsText = S.awardsThisSeason.length ? " ("+S.awardsThisSeason.join(", ")+")" : "";
+    var teamText = wonChamp ? " The "+(S.team?S.team.name:"team")+" win the championship!" : (madePlayoffs ? " The "+(S.team?S.team.name:"team")+" make the playoffs." : "");
+    log("Season "+S.seasonsPlayed+", age "+age+": "+recap+awardsText+"."+teamText, true);
+    addCareerRow({age:age, team:S.team, level:(S.team&&S.team.league==="npb")?"NPB":"MLB",
+      ovr:Math.round(overall()), stats:tableStats, trophy:wonChamp,
+      awards:S.awardsThisSeason.slice()});
+
+    S.age += 1;
+    S.progress = clamp(0.75 + Math.min(0.23, S.seasonsPlayed*0.018), 0.75, 0.98);
+
+    if(S.age >= 42){
+      goToRetirement();
+      return;
+    }
+
+    var lowThresh = S.category==="hitter" ? 65 : 50;
+    if(finalSeasonScore < lowThresh && Math.random() < 0.22){
+      S.career.demotions += 1;
+      currentEvent = demotionEvent();
+      currentEvent._interstitial = true;
+      renderAll();
+      return;
+    }
+    if(S.career.allStars>=1 && !S.wbcOffered && Math.random() < 0.5){
+      S.wbcOffered = true;
+      currentEvent = wbcEvent();
+      currentEvent._interstitial = true;
+      renderAll();
+      return;
+    }
+
+    currentEvent = null;
+    playMlbOffseason();
+  }
+
+  function evaluateAwards(score, cat){
+    var isFirst = S.seasonsPlayed===0;
+    if(isFirst){
+      var royThresh = cat==="hitter" ? 130 : 75;
+      if(score >= royThresh && !S.career.roy){
+        S.career.roy = true;
+        S.awardsThisSeason.push("Rookie of the Year");
+        S.attrs.fame = clamp(S.attrs.fame+6,0,100);
+      }
+    }
+    var allStarThresh = cat==="hitter" ? 160 : 95;
+    if(score >= allStarThresh){
+      S.career.allStars += 1;
+      S.awardsThisSeason.push("All-Star");
+      S.attrs.fame = clamp(S.attrs.fame+4,0,100);
+    }
+    var eliteThresh = cat==="hitter" ? 230 : 150;
+    if(score >= eliteThresh){
+      var chance = clamp((score-eliteThresh)/100, 0, 0.6);
+      if(Math.random() < chance){
+        if(cat==="hitter"){ S.career.mvps += 1; S.awardsThisSeason.push("MVP"); }
+        else { S.career.cyYoungs += 1; S.awardsThisSeason.push("Cy Young"); }
+        S.attrs.fame = clamp(S.attrs.fame+8,0,100);
+      }
+    }
+    if(S.attrs.glove >= 78 && Math.random() < 0.4){
+      S.career.goldGloves += 1;
+      S.awardsThisSeason.push("Gold Glove");
+    }
+    if(cat==="hitter" && score >= 190){
+      S.career.silverSluggers += 1;
+      S.awardsThisSeason.push("Silver Slugger");
+    }
+  }
+
+  function goToRetirement(){
+    log("You decide it's time to hang up the cleats, at age "+S.age+".", true);
+    enterStage("retired");
+  }
+
+  /* =========================================================
+     END SCREEN / LEGACY
+  ========================================================= */
+  function computeLegacy(){
+    var c = S.career;
+    var raw;
+    if(S.category==="hitter"){
+      var avgFinal = c.pa>0 ? c.hitSum/c.pa : 0;
+      raw = c.hr*0.4 + c.rbi*0.15 + avgFinal*150 + c.sb*0.2;
+    } else {
+      var eraFinal = c.ip>0 ? c.eraSum/c.ip : 5.0;
+      raw = c.wins*1.2 + c.so*0.05 + Math.max(0,(5.0-eraFinal))*15;
+    }
+    var accolades = c.allStars*4 + c.mvps*15 + c.cyYoungs*15 + c.goldGloves*3 + c.silverSluggers*3 + c.championships*10 + (c.roy?8:0);
+    var longevity = S.seasonsPlayed*1.5;
+    var fameBonus = S.attrs.fame*0.15;
+    raw = raw + accolades + longevity + fameBonus;
+    var score = clamp(Math.round(raw/LEGACY_DIVISOR), 0, 100);
+    if(S.released) score = clamp(score, 2, 12);
+    return score;
+  }
+
+  function tierFor(score, released, walkedAway){
+    if(walkedAway){
+      return {title:"A Road Not Taken", blurb:"You turned down the offers on the table and walked away before ever signing. Maybe it wasn't the right moment — or the right team never came calling."};
+    }
+    if(released){
+      return {title:"The Road Ends Here", blurb:"Not every story reaches the big leagues, and yours didn't — but you laced up, you competed, and you gave it everything you had. That's more than most ever try."};
+    }
+    if(score>=85) return {title:"Inner-Circle Legend", blurb:"First-ballot Hall of Famer. Kids will grow up wanting to play like you did."};
+    if(score>=70) return {title:"Hall of Famer", blurb:"Cooperstown calls your name. A career that will be remembered for generations."};
+    if(score>=50) return {title:"All-Star Caliber", blurb:"A career fans in your city will never forget, even if the bronze bust never comes."};
+    if(score>=30) return {title:"Solid Big Leaguer", blurb:"Dependable, respected, a professional's professional. Not every legend makes the highlight reel."};
+    if(score>=15) return {title:"Journeyman", blurb:"You bounced from team to team, but you made it, and that's no small thing."};
+    return {title:"Cup of Coffee", blurb:"Brief, but real — you can always say you played in the Show."};
+  }
+
+  function showEndScreen(){
+    document.getElementById("screen-game").classList.add("hidden");
+    document.getElementById("screen-end").classList.remove("hidden");
+    var score = computeLegacy();
+    var tier = tierFor(score, S.released, S.walkedAway);
+    var c = S.career;
+    var el = document.getElementById("legacy-card");
+
+    var statsHtml = "";
+    if(S.college) statsHtml += statRow("College", S.college);
+    if(!S.released){
+      if(S.category==="hitter"){
+        var avgFinal = c.pa>0 ? c.hitSum/c.pa : 0;
+        statsHtml += statRow("Career AVG", fmtAvg(avgFinal));
+        statsHtml += statRow("Home Runs", c.hr);
+        statsHtml += statRow("RBI", c.rbi);
+        statsHtml += statRow("Hits", c.hits);
+        statsHtml += statRow("Runs", c.runs);
+        statsHtml += statRow("Stolen Bases", c.sb);
+      } else {
+        var eraFinal = c.ip>0 ? c.eraSum/c.ip : 0;
+        statsHtml += statRow("Career ERA", fmtEra(eraFinal));
+        statsHtml += statRow("Record", c.wins+"-"+c.losses);
+        statsHtml += statRow("Strikeouts", c.so);
+        statsHtml += statRow("Innings Pitched", c.ip);
+      }
+      statsHtml += statRow("Career WAR", c.warSum.toFixed(1));
+      statsHtml += statRow("Seasons Played", S.seasonsPlayed);
+      statsHtml += statRow("Playoff Trips", c.playoffs);
+      statsHtml += statRow("Championships", c.championships);
+      statsHtml += statRow("All-Star Selections", c.allStars);
+      if(c.wbc==="accepted") statsHtml += statRow("World Baseball Classic", "Represented your country");
+      if(c.demotions>0) statsHtml += statRow("Trips to the Minors", c.demotions);
+      if(S.teamHistory.length) statsHtml += statRow("Organization"+(S.teamHistory.length>1?"s":""), S.teamHistory.join(", "));
+    } else if(!S.walkedAway) {
+      statsHtml += statRow("Highest Level Reached", S.releaseLevel||"Minors");
+      statsHtml += statRow("Seasons in the Minors", S.minorsSeasons);
+      if(S.teamHistory.length) statsHtml += statRow("Organization"+(S.teamHistory.length>1?"s":""), S.teamHistory.join(", "));
+    } else {
+      statsHtml += statRow("Draft Offers", "Turned down");
+      statsHtml += statRow("Age at the Time", S.age);
+    }
+
+    var awards = [];
+    if(c.roy) awards.push("Rookie of the Year");
+    for(var i=0;i<c.mvps;i++) awards.push("MVP");
+    for(var i2=0;i2<c.cyYoungs;i2++) awards.push("Cy Young");
+    for(var i3=0;i3<c.goldGloves;i3++) awards.push("Gold Glove");
+    for(var i4=0;i4<c.silverSluggers;i4++) awards.push("Silver Slugger");
+    for(var i5=0;i5<c.championships;i5++) awards.push("World Champion");
+    var awardsHtml = awards.map(function(a){ return '<span class="award-chip">'+a+'</span>'; }).join("");
+
+    var html = '';
+    html += '<div class="event-eyebrow label">'+escapeHtml(S.name||"Player")+"'s Career, "+STAGE_LABELS[S.released ? "retired" : "retired"]+'</div>';
+    html += '<div class="legacy-tier">'+tier.title+'</div>';
+    html += '<div class="legacy-blurb">'+tier.blurb+'</div>';
+    if(!S.released){
+      html += '<div class="legacy-score-wrap"><div class="legacy-score">'+score+'</div><div class="legacy-score-label label">Legacy Score</div></div>';
+    }
+    html += '<div class="stat-table">'+statsHtml+'</div>';
+    if(awardsHtml) html += '<div class="awards-wrap">'+awardsHtml+'</div>';
+    html += '<button class="cta" id="btn-again">Start a New Career</button>';
+    el.innerHTML = html;
+
+    function statRow(label,val){
+      return '<div class="stat-row"><span>'+label+'</span><span>'+val+'</span></div>';
+    }
+
+    document.getElementById("btn-again").addEventListener("click", function(){
+      document.getElementById("screen-end").classList.add("hidden");
+      document.getElementById("screen-start").classList.remove("hidden");
+    });
+  }
+
+  /* =========================================================
+     MASTER RENDER
+  ========================================================= */
+  function renderAll(){
+    renderHero();
+    renderEventCard();
+    renderLog();
+    renderCareerTable();
+    renderTrophyCase();
+  }
+
+  /* =========================================================
+     START SCREEN WIRING
+  ========================================================= */
+  var selectedPosition = "Shortstop";
+  function wireStartScreen(){
+    var opts = document.querySelectorAll(".pos-opt");
+    opts.forEach(function(o){
+      if(o.getAttribute("data-pos")===selectedPosition) o.classList.add("active");
+      o.addEventListener("click", function(){
+        opts.forEach(function(x){ x.classList.remove("active"); });
+        this.classList.add("active");
+        selectedPosition = this.getAttribute("data-pos");
+      });
+    });
+    document.getElementById("btn-start").addEventListener("click", startGame);
+  }
+
+  function startGame(){
+    var name = document.getElementById("inp-name").value.trim();
+    var hometown = document.getElementById("inp-hometown").value.trim();
+    S = newState();
+    S.name = name || "Rookie";
+    S.hometown = hometown;
+    S.position = selectedPosition;
+    S.category = POSITION_FLAVOR[selectedPosition].cat;
+    S.attrs = Object.assign(S.attrs, rollStartingAttrs(selectedPosition));
+    S.attrs.health = 85; S.attrs.fame = 5; S.attrs.bank = 8;
+    log("Age 16, and it's your first varsity practice — this is where it all begins.", true);
+
+    document.getElementById("screen-start").classList.add("hidden");
+    document.getElementById("screen-game").classList.remove("hidden");
+    document.getElementById("screen-end").classList.add("hidden");
+
+    enterStage("high_school");
+  }
+
+  wireStartScreen();
+})();
+</script>
+</body>
+</html>
