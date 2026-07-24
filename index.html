@@ -493,7 +493,62 @@
   .trophy-case{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
   .team-logo{object-fit:contain;vertical-align:middle;flex-shrink:0;}
   .th-name .team-logo{filter:drop-shadow(0 2px 5px rgba(0,0,0,0.55));}
-  .cs-awards{letter-spacing:1px;}
+  .cs-awards{letter-spacing:1px;font-size:14px;line-height:1;}
+  .org-logos{display:inline-flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:230px;}
+  .rev-body{margin-bottom:16px;}
+  .rev-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(245,241,230,0.07);}
+  .rev-k{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--chalk-dim);white-space:nowrap;}
+  .rev-v{font-size:13.5px;color:var(--chalk);text-align:right;}
+  .rev-awards{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .rev-miles{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+  .rev-mile{background:rgba(242,169,59,0.10);border-left:3px solid var(--amber);border-radius:6px;padding:7px 11px;font-size:13px;color:var(--chalk);}
+  .rev-ps{margin-top:13px;padding:9px 12px;border-radius:8px;background:rgba(245,241,230,0.06);font-size:13px;color:var(--chalk);}
+  .rev-ps.rev-dim{color:var(--chalk-dim);}
+  .rev-champ{margin-top:13px;padding:11px 13px;border-radius:8px;background:rgba(242,169,59,0.18);border:1px solid rgba(242,169,59,0.45);font-size:14px;color:var(--amber);font-weight:600;}
+  .cs-lvl{
+    font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:0.8px;
+    text-transform:uppercase;color:var(--chalk-dim);
+    background:rgba(245,241,230,0.08);border-radius:4px;padding:2px 6px;white-space:nowrap;
+  }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:600px){
+    .app{padding:12px 10px 40px;}
+    .hero-row{gap:9px;margin-bottom:14px;}
+    .ovr-badge{width:74px;min-width:74px;border-radius:13px;}
+    .ovr-badge .ovr-num{font-size:34px;}
+    .ovr-badge .ovr-label{font-size:9px;}
+    .team-header{padding:10px 12px;border-radius:13px;}
+    .th-name{font-size:17px;gap:7px;}
+    .th-name .team-logo{width:22px !important;height:22px !important;}
+    .th-chips{margin-bottom:5px;gap:5px;}
+    .th-chip{font-size:9.5px;padding:2px 8px;}
+    .th-right{right:10px;top:10px;}
+    .th-right .val{font-size:16px;}
+    .th-right .lbl{font-size:8.5px;}
+
+    .sheet-head .sh-stats{display:none;}
+    .sh-age{width:34px;}
+    .sh-ovr{width:38px;}
+
+    .cs-row{flex-wrap:wrap;gap:7px;padding:7px 9px;row-gap:3px;}
+    .cs-age{width:34px;min-width:34px;height:28px;font-size:14px;border-radius:7px;}
+    .cs-ovr{width:38px;min-width:38px;height:24px;font-size:13px;}
+    .cs-club{gap:6px;}
+    /* stats get their own full-width line so nothing is ever cut off */
+    .cs-stats{
+      width:100%;order:5;text-align:left;font-size:12px;
+      padding-left:41px;white-space:normal;color:var(--chalk-dim);
+    }
+    .cs-row.future .cs-stats{display:none;}
+
+    .decision-wrap{padding:16px 14px;border-radius:13px;}
+    .d-title{font-size:19px;}
+    .d-sub{font-size:13px;}
+    .d-options{grid-template-columns:1fr;gap:8px;}
+    .d-opt{padding:12px 11px;}
+    .pill{font-size:11.5px;padding:6px 10px;}
+  }
 
   .decision-wrap{
     background:rgba(245,241,230,0.045);
@@ -624,6 +679,11 @@
   var META_ATTRS = ["health","fame","bank"];
   var META_LABELS = {health:"Health",fame:"Fame",bank:"Bank"};
   var LEGACY_DIVISOR = 4.7;
+  // Real positional WAR adjustments — up the defensive spectrum earns credit
+  var POS_WAR_ADJ = {
+    "Catcher":0.9, "Shortstop":0.7, "Center Field":0.5, "Second Base":0.3,
+    "Third Base":0.2, "Right Field":-0.2, "Left Field":-0.3, "First Base":-0.6
+  };
 
   var POSITION_FLAVOR = {
     Pitcher:{cat:"pitcher", desc:"the mound"},
@@ -1191,36 +1251,36 @@
   // Real MLB franchises. Logo image URLs come from the league file the user
   // supplied; if an image fails to load we fall back to a colored monogram.
   var TEAMS = [
-    {name:"Atlanta Braves", abbr:"ATL", trait:"big-market", perk:"winNow", colors:["#CE1141","#13274F"], logo:"https://www.mlbstatic.com/team-logos/144.svg", logo2:"https://i.imgur.com/YzNRxqN.png"},
-    {name:"Baltimore Orioles", abbr:"BAL", trait:"small-market", perk:"playerDev", colors:["#ED4601","#27251F"], logo:"https://www.mlbstatic.com/team-logos/110.svg", logo2:"https://i.imgur.com/QtmNAXU.png"},
-    {name:"New York Mets", abbr:"NYM", trait:"big-market", perk:"deepPockets", colors:["#002D72","#FC5910"], logo:"https://www.mlbstatic.com/team-logos/121.svg", logo2:"https://i.imgur.com/hl0PZR6.png"},
-    {name:"Boston Red Sox", abbr:"BOS", trait:"big-market", perk:"hitterPark", colors:["#BD3039","#0C2340"], logo:"https://www.mlbstatic.com/team-logos/111.svg", logo2:"https://i.imgur.com/BXa5XOX.png"},
-    {name:"Chicago Cubs", abbr:"CCB", trait:"big-market", perk:"loyalFans", colors:["#0E3386","#CC3433"], logo:"https://www.mlbstatic.com/team-logos/112.svg", logo2:"https://i.imgur.com/nWkHWZ0.png"},
-    {name:"Cincinnati Reds", abbr:"CIN", trait:"small-market", perk:"hitterPark", colors:["#C6011F","#000000"], logo:"https://www.mlbstatic.com/team-logos/113.svg", logo2:"https://i.imgur.com/aQ3V3en.png"},
-    {name:"Cleveland Guardians", abbr:"CLE", trait:"small-market", perk:"playerDev", colors:["#00385D","#E50022"], logo:"https://www.mlbstatic.com/team-logos/114.svg", logo2:"https://i.imgur.com/SognLe8.png"},
-    {name:"Texas Rangers", abbr:"TEX", trait:"big-market", perk:"hitterPark", colors:["#003278","#C0111F"], logo:"https://www.mlbstatic.com/team-logos/140.svg", logo2:"https://upload.wikimedia.org/wikipedia/it/archive/d/d3/20160905123800%21Texas_Rangers_logo.png"},
-    {name:"Colorado Rockies", abbr:"COL", trait:"small-market", perk:"hitterPark", colors:["#333366","#C4CED4"], logo:"https://www.mlbstatic.com/team-logos/115.svg", logo2:"https://i.imgur.com/mCnIgD1.png"},
-    {name:"Detroit Tigers", abbr:"DET", trait:"small-market", perk:"pitcherPark", colors:["#0C2340","#FA4616"], logo:"https://www.mlbstatic.com/team-logos/116.svg", logo2:"https://i.imgur.com/XZw5k5b.png"},
-    {name:"Houston Astros", abbr:"HOU", trait:"big-market", perk:"winNow", colors:["#002D62","#EB6E1F"], logo:"https://www.mlbstatic.com/team-logos/117.svg", logo2:"https://i.imgur.com/eRHQfIO.png"},
-    {name:"Chicago White Sox", abbr:"CWS", trait:"big-market", perk:"pitcherPark", colors:["#27251F","#C4CED4"], logo:"https://www.mlbstatic.com/team-logos/145.svg", logo2:"https://i.imgur.com/fmIjMpD.png"},
-    {name:"Kansas City Royals", abbr:"KC", trait:"small-market", perk:"loyalFans", colors:["#004687","#BD9B41"], logo:"https://www.mlbstatic.com/team-logos/118.svg", logo2:"https://i.imgur.com/rflWcc5.png"},
-    {name:"Los Angeles Angels", abbr:"LAA", trait:"big-market", perk:"deepPockets", colors:["#003263","#BA0021"], logo:"https://www.mlbstatic.com/team-logos/108.svg", logo2:"https://i.imgur.com/ATDoGbD.png"},
-    {name:"Los Angeles Dodgers", abbr:"LAD", trait:"big-market", perk:"playerDev", colors:["#005A9C","#EF3E42"], logo:"https://www.mlbstatic.com/team-logos/119.svg", logo2:"https://i.imgur.com/xQrICHD.png"},
-    {name:"Miami Marlins", abbr:"MIA", trait:"big-market", perk:"pitcherPark", colors:["#00A3E0","#EF3340"], logo:"https://www.mlbstatic.com/team-logos/146.svg", logo2:"https://i.imgur.com/37QjW98.png"},
-    {name:"Milwaukee Brewers", abbr:"MIL", trait:"small-market", perk:"loyalFans", colors:["#FFC52F","#12284B"], logo:"https://www.mlbstatic.com/team-logos/158.svg", logo2:"https://i.imgur.com/oCi3i1d.png"},
-    {name:"Minnesota Twins", abbr:"MIN", trait:"small-market", perk:"playerDev", colors:["#002B5C","#D31145"], logo:"https://www.mlbstatic.com/team-logos/142.svg", logo2:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Minnesota_Twins_Insignia.svg/1200px-Minnesota_Twins_Insignia.svg.png"},
-    {name:"New York Yankees", abbr:"NYY", trait:"big-market", perk:"deepPockets", colors:["#000000","#FFFFFF"], logo:"https://www.mlbstatic.com/team-logos/147.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/new-york-yankees-logo-transparent.png"},
-    {name:"Oakland Athletics", abbr:"OAK", trait:"small-market", perk:"playerDev", colors:["#003831","#EFB21E"], logo:"https://www.mlbstatic.com/team-logos/133.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/oakland-athletics-logo-transparent.png"},
-    {name:"Philadelphia Phillies", abbr:"PHI", trait:"big-market", perk:"loyalFans", colors:["#E81828","#002D72"], logo:"https://www.mlbstatic.com/team-logos/143.svg", logo2:"https://i.imgur.com/UhKIUXO.png"},
-    {name:"Arizona Diamondbacks", abbr:"ARI", trait:"small-market", perk:"hitterPark", colors:["#A71930","#E3D4AD"], logo:"https://www.mlbstatic.com/team-logos/109.svg", logo2:"https://i.imgur.com/JTlIjKS.png"},
-    {name:"Pittsburgh Pirates", abbr:"PIT", trait:"small-market", perk:"playerDev", colors:["#27251F","#FDB827"], logo:"https://www.mlbstatic.com/team-logos/134.svg", logo2:"https://i.imgur.com/aENmzQK.png"},
-    {name:"San Diego Padres", abbr:"SD", trait:"big-market", perk:"pitcherPark", colors:["#2F241D","#FFC425"], logo:"https://www.mlbstatic.com/team-logos/135.svg", logo2:"https://i.imgur.com/bhkO5Dg.png"},
-    {name:"Seattle Mariners", abbr:"SEA", trait:"small-market", perk:"pitcherPark", colors:["#0C2C56","#005C5C"], logo:"https://www.mlbstatic.com/team-logos/136.svg", logo2:"https://i.imgur.com/IN4J0jV.png"},
-    {name:"San Francisco Giants", abbr:"SFG", trait:"big-market", perk:"pitcherPark", colors:["#FD5A1E","#27251F"], logo:"https://www.mlbstatic.com/team-logos/137.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/san-francisco-giants-logo-transparent.png"},
-    {name:"St. Louis Cardinals", abbr:"STL", trait:"small-market", perk:"loyalFans", colors:["#C41E3A","#0C2340"], logo:"https://www.mlbstatic.com/team-logos/138.svg", logo2:"https://i.imgur.com/aEOfFWH.png"},
-    {name:"Toronto Blue Jays", abbr:"TOR", trait:"big-market", perk:"deepPockets", colors:["#134AC0","#1D2D5C"], logo:"https://www.mlbstatic.com/team-logos/141.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/toronto-blue-jays-logo-transparent.png"},
-    {name:"Tampa Bay Rays", abbr:"TPA", trait:"small-market", perk:"playerDev", colors:["#092C5C","#8FBCE6"], logo:"https://www.mlbstatic.com/team-logos/139.svg", logo2:"https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Tampa_Bay_Rays.svg/1200px-Tampa_Bay_Rays.svg.png"},
-    {name:"Washington Nationals", abbr:"WAS", trait:"big-market", perk:"deepPockets", colors:["#AB0003","#14225A"], logo:"https://www.mlbstatic.com/team-logos/120.svg", logo2:"https://cdn.freebiesupply.com/images/large/2x/washington-nationals-logo-transparent.png"}
+    {name:"Atlanta Braves", abbr:"ATL", trait:"big-market", perk:"winNow", colors:["#CE1141","#13274F"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/atl.png","https://www.mlbstatic.com/team-logos/144.svg","https://i.imgur.com/YzNRxqN.png"]},
+    {name:"Baltimore Orioles", abbr:"BAL", trait:"small-market", perk:"playerDev", colors:["#ED4601","#27251F"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/bal.png","https://www.mlbstatic.com/team-logos/110.svg","https://i.imgur.com/QtmNAXU.png"]},
+    {name:"New York Mets", abbr:"NYM", trait:"big-market", perk:"deepPockets", colors:["#002D72","#FC5910"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/nym.png","https://www.mlbstatic.com/team-logos/121.svg","https://i.imgur.com/hl0PZR6.png"]},
+    {name:"Boston Red Sox", abbr:"BOS", trait:"big-market", perk:"hitterPark", colors:["#BD3039","#0C2340"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/bos.png","https://www.mlbstatic.com/team-logos/111.svg","https://i.imgur.com/BXa5XOX.png"]},
+    {name:"Chicago Cubs", abbr:"CCB", trait:"big-market", perk:"loyalFans", colors:["#0E3386","#CC3433"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/chc.png","https://www.mlbstatic.com/team-logos/112.svg","https://i.imgur.com/nWkHWZ0.png"]},
+    {name:"Cincinnati Reds", abbr:"CIN", trait:"small-market", perk:"hitterPark", colors:["#C6011F","#000000"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/cin.png","https://www.mlbstatic.com/team-logos/113.svg","https://i.imgur.com/aQ3V3en.png"]},
+    {name:"Cleveland Guardians", abbr:"CLE", trait:"small-market", perk:"playerDev", colors:["#00385D","#E50022"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/cle.png","https://www.mlbstatic.com/team-logos/114.svg","https://i.imgur.com/SognLe8.png"]},
+    {name:"Texas Rangers", abbr:"TEX", trait:"big-market", perk:"hitterPark", colors:["#003278","#C0111F"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/tex.png","https://www.mlbstatic.com/team-logos/140.svg","https://upload.wikimedia.org/wikipedia/it/archive/d/d3/20160905123800%21Texas_Rangers_logo.png"]},
+    {name:"Colorado Rockies", abbr:"COL", trait:"small-market", perk:"hitterPark", colors:["#333366","#C4CED4"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/col.png","https://www.mlbstatic.com/team-logos/115.svg","https://i.imgur.com/mCnIgD1.png"]},
+    {name:"Detroit Tigers", abbr:"DET", trait:"small-market", perk:"pitcherPark", colors:["#0C2340","#FA4616"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/det.png","https://www.mlbstatic.com/team-logos/116.svg","https://i.imgur.com/XZw5k5b.png"]},
+    {name:"Houston Astros", abbr:"HOU", trait:"big-market", perk:"winNow", colors:["#002D62","#EB6E1F"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/hou.png","https://www.mlbstatic.com/team-logos/117.svg","https://i.imgur.com/eRHQfIO.png"]},
+    {name:"Chicago White Sox", abbr:"CWS", trait:"big-market", perk:"pitcherPark", colors:["#27251F","#C4CED4"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/chw.png","https://www.mlbstatic.com/team-logos/145.svg","https://i.imgur.com/fmIjMpD.png"]},
+    {name:"Kansas City Royals", abbr:"KC", trait:"small-market", perk:"loyalFans", colors:["#004687","#BD9B41"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/kc.png","https://www.mlbstatic.com/team-logos/118.svg","https://i.imgur.com/rflWcc5.png"]},
+    {name:"Los Angeles Angels", abbr:"LAA", trait:"big-market", perk:"deepPockets", colors:["#003263","#BA0021"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/laa.png","https://www.mlbstatic.com/team-logos/108.svg","https://i.imgur.com/ATDoGbD.png"]},
+    {name:"Los Angeles Dodgers", abbr:"LAD", trait:"big-market", perk:"playerDev", colors:["#005A9C","#EF3E42"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/lad.png","https://www.mlbstatic.com/team-logos/119.svg","https://i.imgur.com/xQrICHD.png"]},
+    {name:"Miami Marlins", abbr:"MIA", trait:"big-market", perk:"pitcherPark", colors:["#00A3E0","#EF3340"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/mia.png","https://www.mlbstatic.com/team-logos/146.svg","https://i.imgur.com/37QjW98.png"]},
+    {name:"Milwaukee Brewers", abbr:"MIL", trait:"small-market", perk:"loyalFans", colors:["#FFC52F","#12284B"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/mil.png","https://www.mlbstatic.com/team-logos/158.svg","https://i.imgur.com/oCi3i1d.png"]},
+    {name:"Minnesota Twins", abbr:"MIN", trait:"small-market", perk:"playerDev", colors:["#002B5C","#D31145"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/min.png","https://www.mlbstatic.com/team-logos/142.svg","https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Minnesota_Twins_Insignia.svg/1200px-Minnesota_Twins_Insignia.svg.png"]},
+    {name:"New York Yankees", abbr:"NYY", trait:"big-market", perk:"deepPockets", colors:["#000000","#FFFFFF"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/nyy.png","https://www.mlbstatic.com/team-logos/147.svg","https://cdn.freebiesupply.com/images/large/2x/new-york-yankees-logo-transparent.png"]},
+    {name:"Oakland Athletics", abbr:"OAK", trait:"small-market", perk:"playerDev", colors:["#003831","#EFB21E"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/oak.png","https://www.mlbstatic.com/team-logos/133.svg","https://cdn.freebiesupply.com/images/large/2x/oakland-athletics-logo-transparent.png"]},
+    {name:"Philadelphia Phillies", abbr:"PHI", trait:"big-market", perk:"loyalFans", colors:["#E81828","#002D72"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/phi.png","https://www.mlbstatic.com/team-logos/143.svg","https://i.imgur.com/UhKIUXO.png"]},
+    {name:"Arizona Diamondbacks", abbr:"ARI", trait:"small-market", perk:"hitterPark", colors:["#A71930","#E3D4AD"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/ari.png","https://www.mlbstatic.com/team-logos/109.svg","https://i.imgur.com/JTlIjKS.png"]},
+    {name:"Pittsburgh Pirates", abbr:"PIT", trait:"small-market", perk:"playerDev", colors:["#27251F","#FDB827"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/pit.png","https://www.mlbstatic.com/team-logos/134.svg","https://i.imgur.com/aENmzQK.png"]},
+    {name:"San Diego Padres", abbr:"SD", trait:"big-market", perk:"pitcherPark", colors:["#2F241D","#FFC425"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/sd.png","https://www.mlbstatic.com/team-logos/135.svg","https://i.imgur.com/bhkO5Dg.png"]},
+    {name:"Seattle Mariners", abbr:"SEA", trait:"small-market", perk:"pitcherPark", colors:["#0C2C56","#005C5C"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/sea.png","https://www.mlbstatic.com/team-logos/136.svg","https://i.imgur.com/IN4J0jV.png"]},
+    {name:"San Francisco Giants", abbr:"SFG", trait:"big-market", perk:"pitcherPark", colors:["#FD5A1E","#27251F"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/sf.png","https://www.mlbstatic.com/team-logos/137.svg","https://cdn.freebiesupply.com/images/large/2x/san-francisco-giants-logo-transparent.png"]},
+    {name:"St. Louis Cardinals", abbr:"STL", trait:"small-market", perk:"loyalFans", colors:["#C41E3A","#0C2340"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/stl.png","https://www.mlbstatic.com/team-logos/138.svg","https://i.imgur.com/aEOfFWH.png"]},
+    {name:"Toronto Blue Jays", abbr:"TOR", trait:"big-market", perk:"deepPockets", colors:["#134AC0","#1D2D5C"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/tor.png","https://www.mlbstatic.com/team-logos/141.svg","https://cdn.freebiesupply.com/images/large/2x/toronto-blue-jays-logo-transparent.png"]},
+    {name:"Tampa Bay Rays", abbr:"TPA", trait:"small-market", perk:"playerDev", colors:["#092C5C","#8FBCE6"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/tb.png","https://www.mlbstatic.com/team-logos/139.svg","https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Tampa_Bay_Rays.svg/1200px-Tampa_Bay_Rays.svg.png"]},
+    {name:"Washington Nationals", abbr:"WAS", trait:"big-market", perk:"deepPockets", colors:["#AB0003","#14225A"], logos:["https://a.espncdn.com/i/teamlogos/mlb/500/wsh.png","https://www.mlbstatic.com/team-logos/120.svg","https://cdn.freebiesupply.com/images/large/2x/washington-nationals-logo-transparent.png"]}
   ];
 
   var COLLEGES = [
@@ -1303,16 +1363,37 @@
   }
   function teamBadgeHtml(team, size){
     size = size || 22;
-    if(team && team.logo){
-      var mono = "this.replaceWith(Object.assign(document.createElement('span'),{className:'team-badge',textContent:'"+team.abbr+"',style:'width:"+size+"px;height:"+size+"px;line-height:"+size+"px;font-size:"+Math.round(size*0.36)+"px;background:"+team.colors[0]+";color:"+team.colors[1]+";border-color:"+team.colors[1]+"'}))";
-      var onerr = team.logo2
-        ? "if(!this.dataset.alt){this.dataset.alt=1;this.src='"+team.logo2+"';}else{"+mono+"}"
-        : mono;
-      return '<img class="team-logo" src="'+team.logo+'" alt="'+escapeHtml(team.name)+'" '+
-        'style="width:'+size+'px;height:'+size+'px;" onerror="'+onerr+'">';
+    if(team && team.logos && team.logos.length){
+      var srcs = team.logos.filter(function(u){ return !!u; });
+      return '<img class="team-logo" src="'+srcs[0]+'" alt="'+escapeHtml(team.name)+'" '+
+        'title="'+escapeHtml(team.name)+'" '+
+        'data-srcs=\''+JSON.stringify(srcs.slice(1))+'\' '+
+        'data-mono=\''+JSON.stringify({a:team.abbr,c:team.colors})+'\' '+
+        'style="width:'+size+'px;height:'+size+'px;" onerror="logoFallback(this,'+size+')">';
     }
     return '<span class="team-badge" style="width:'+size+'px;height:'+size+'px;line-height:'+size+'px;font-size:'+Math.round(size*0.36)+'px;background:'+team.colors[0]+';color:'+team.colors[1]+';border-color:'+team.colors[1]+';">'+team.abbr+'</span>';
   }
+
+  // Walks the logo source chain, then falls back to a colored monogram.
+  window.logoFallback = function(img, size){
+    var rest = [];
+    try { rest = JSON.parse(img.getAttribute("data-srcs")||"[]"); } catch(e){}
+    if(rest.length){
+      var next = rest.shift();
+      img.setAttribute("data-srcs", JSON.stringify(rest));
+      img.src = next;
+      return;
+    }
+    var m = {a:"?",c:["#3A3A3A","#F5F1E6"]};
+    try { m = JSON.parse(img.getAttribute("data-mono")); } catch(e){}
+    var sp = document.createElement("span");
+    sp.className = "team-badge";
+    sp.textContent = m.a;
+    sp.style.cssText = "width:"+size+"px;height:"+size+"px;line-height:"+size+"px;font-size:"+
+      Math.round(size*0.36)+"px;background:"+m.c[0]+";color:"+m.c[1]+";border-color:"+m.c[1];
+    img.replaceWith(sp);
+  };
+
 
   /* =========================================================
      STAGE STARTING ATTRIBUTES
@@ -1474,7 +1555,7 @@
       lastAge = Math.max(lastAge, row.age);
       var cols = row.team && row.team.colors ? row.team.colors : ["#3A3A3A","#F5F1E6"];
       var clubName = row.team ? row.team.name : (row.teamText || row.level);
-      if(row.team && row.level && row.level!=="MLB"){ clubName += "  ("+row.level+")"; }
+      var lvlTag = (row.level && row.level!=="MLB") ? '<span class="cs-lvl">'+row.level+'</span>' : "";
       var mark = row.team ? teamBadgeHtml(row.team,20) : '<span class="team-badge" style="width:20px;height:20px;line-height:20px;font-size:7px;background:#2C3A44;color:#C9C4B4;border-color:#C9C4B4;">'+(row.level==="College"?"NCAA":"HS")+'</span>';
       var trophies = "";
       if(row.trophy) trophies += " \uD83C\uDFC6";
@@ -1489,7 +1570,8 @@
 
       html += '<div class="cs-row'+(isLast?' current':'')+'">'+
         '<div class="cs-age" style="background:'+cols[0]+';">'+row.age+'</div>'+
-        '<div class="cs-club">'+mark+'<span class="nm">'+escapeHtml(clubName)+trophies+'</span></div>'+
+        '<div class="cs-club" title="'+escapeHtml(clubName)+'">'+mark+lvlTag+
+          (trophies?'<span class="cs-awards">'+trophies+'</span>':'')+'</div>'+
         '<div class="cs-ovr '+ovrTier(row.ovr)+'">'+row.ovr+'</div>'+
         '<div class="cs-stats">'+(row.stats||"—")+'</div>'+
         '</div>';
@@ -1581,7 +1663,8 @@
     var ev = currentEvent;
     var html = '';
     html += '<div class="d-title">'+(ev._outcomeReveal ? "\uD83C\uDFB2 "+ev.h : ev.h)+'</div>';
-    html += '<div class="d-sub">'+ev.t+'</div>';
+    if(ev.body){ html += '<div class="rev-body">'+ev.body+'</div>'; }
+    else { html += '<div class="d-sub">'+ev.t+'</div>'; }
     html += '<div class="d-options">';
     ev.c.forEach(function(choice, idx){
       html += '<button class="d-opt choice-btn" data-idx="'+idx+'">'+optionInnerHtml(choice)+'</button>';
@@ -1596,6 +1679,11 @@
     btns.forEach(function(btn){
       btn.addEventListener("click", function(){
         var idx = parseInt(this.getAttribute("data-idx"),10);
+        if(ev._review){
+          currentEvent = null;
+          afterSeason();
+          return;
+        }
         if(ev._outcomeReveal){
           var cont = pendingContinuation;
           pendingContinuation = null;
@@ -1748,6 +1836,7 @@
     }
     S.age += 1;
     S.minorsSeasons += 1;
+    developPlayer();
     if(S.team && S.team.trait==="small-market"){
       var boostAttr = pick(SKILL_ATTRS);
       applyEffects((function(){ var o={}; o[boostAttr]=2; return o; })());
@@ -1842,7 +1931,7 @@
     if(choice.teamPick){
       var teamPickInfo = choice.teamPick;
       S.team = teamPickInfo.team;
-      S.teamHistory.push(teamPickInfo.team.name);
+      S.teamHistory.push(teamPickInfo.team);
       S.teamControlUntilAge = S.age + 6;
       applyEffects({bank:teamPickInfo.bonus});
       log("Signed with the "+teamPickInfo.team.name+" for a $"+teamPickInfo.bonus+"K bonus. You're under the organization's control for 6 years of service before free agency.", true);
@@ -1885,7 +1974,7 @@
       if(choice.action==="indy"){
         var indyTeam = {name:pick(INDY_TEAMS)+" (Independent)", abbr:"IND", trait:"independent", colors:["#3A3A3A","#F5F1E6"]};
         S.team = indyTeam;
-        S.teamHistory.push(indyTeam.name);
+        S.teamHistory.push(indyTeam);
         currentEvent = null;
         enterStage("low_minors");
         return;
@@ -1942,10 +2031,15 @@
     };
   }
 
+  var WBC_COUNTRIES = ["the United States","the Dominican Republic","Venezuela","Puerto Rico",
+    "Japan","Mexico","Colombia","Canada","Cuba","the Netherlands","South Korea","Panama"];
+
   function wbcEvent(){
+    var country = pick(WBC_COUNTRIES);
+    S.wbcCountry = country;
     return {
       h:"World Baseball Classic",
-      t:"Your play has earned a call-up to represent your country in the World Baseball Classic.",
+      t:"The Classic is here. "+country.charAt(0).toUpperCase()+country.slice(1)+" wants you on the roster \u2014 but it means reporting early and playing meaningful games before your club season starts.",
       c:[
         {l:"Accept the honor", wbcChoice:"accepted", outcomes:[
           {prob:0.65, label:"A career highlight", result:"You help your country make a deep run — a memory that outlasts any stat line.", e:{fame:7,focus:2}},
@@ -2063,7 +2157,7 @@
       if(choice.faPick){
         var fa = choice.faPick;
         S.team = fa.team;
-        S.teamHistory.push(fa.team.name);
+        S.teamHistory.push(fa.team);
         applyEffects({bank:fa.bank, fame:fa.npb?3:1});
         var faMsg = fa.npb
           ? "You sign with the "+fa.team.name+" — taking your game to Japan."
@@ -2088,7 +2182,7 @@
         if(traded){
           var newTeam = pick(TEAMS.filter(function(t){ return t.name!==S.team.name; }));
           S.team = newTeam;
-          S.teamHistory.push(newTeam.name);
+          S.teamHistory.push(newTeam);
           tradeMsg = "The front office grants your wish — you're traded to the "+newTeam.name+".";
         } else {
           tradeMsg = "The front office hears you out, but no deal comes together before the deadline.";
@@ -2108,6 +2202,31 @@
     _resolveChoiceBeforeMlb(ev, idx);
   };
 
+  // Real development arc: prospects improve fast into their mid-20s, hold a
+  // peak plateau through ~30, then decline. This is what takes a 45-OVR
+  // draftee to a 75-OVR star and makes MLB-shaped stat lines possible.
+  function developPlayer(){
+    var focusF = 0.6 + S.attrs.focus/150;
+    var healthF = 0.7 + S.attrs.health/200;
+    var gain;
+    if(S.age <= 23)      gain =  4.6;
+    else if(S.age <= 26) gain =  3.2;
+    else if(S.age <= 29) gain =  1.2;
+    else if(S.age <= 32) gain = -0.4;
+    else if(S.age <= 35) gain = -1.4;
+    else                 gain = -2.4;
+    gain = gain * focusF * healthF;
+
+    SKILL_ATTRS.forEach(function(k){
+      var d = gain * (0.55 + Math.random()*0.9);
+      // speed fades earliest, power holds longest — as it does in real careers
+      if(k==="speed" && S.age>27) d -= 0.9;
+      if(k==="power" && S.age>32) d += 0.5;
+      S.attrs[k] = clamp(S.attrs[k] + d, 5, 99);
+    });
+    if(S.age > 30) S.attrs.health = clamp(S.attrs.health - rand(0.5,2.2), 5, 100);
+  }
+
   function ageCurve(age){
     var m;
     if(age<=28) m = 0.80 + (age-19)*0.028;
@@ -2116,6 +2235,7 @@
   }
 
   function simulateSeason(){
+    developPlayer();
     var age = S.age;
     var mult = ageCurve(age);
     var a = S.attrs;
@@ -2124,69 +2244,117 @@
     var finalSeasonScore;
 
     if(S.category==="hitter"){
-      var ability = (a.contact*0.5 + a.power*0.3 + a.focus*0.2)/100;
-      var eff = ability*mult;
-      var paFrac = 0.5 + a.health/200;
-      var pa = Math.round(clamp(560*paFrac, 150, 640));
-      var ab = Math.round(pa*0.89);
-      var avg = clamp(0.190 + eff*0.150 + rand(-0.018,0.018), 0.150, 0.390);
+      // Calibrated to real MLB: league-avg ~.248 / 20 HR / 2.0 WAR,
+      // All-Star ~.290 / 30 HR / 4-5 WAR, MVP ~.330 / 45 HR / 8+ WAR.
+      var ability = (a.contact*0.45 + a.power*0.25 + a.focus*0.30)/100;
+      var eff = clamp(ability*mult, 0, 1.15);
+      var paFrac = 0.55 + a.health/220;
+      var pa = Math.round(clamp(660*paFrac*rand(0.84,1.05), 170, 700));
+      var ab = Math.round(pa*0.895);
+      var avg = clamp(0.215 + eff*0.115 + rand(-0.016,0.016), 0.180, 0.360);
       var hits = Math.round(avg*ab);
-      var hr = Math.max(0, Math.round((a.power/100)*38*mult*(0.6+Math.random()*0.8)*(pa/560)));
-      var rbi = Math.max(0, Math.round(hr*2.2 + (a.contact/100)*45*(pa/560) + rand(-5,5)));
-      var runs = Math.max(0, Math.round((a.contact/100)*70*mult*(pa/560) + (a.speed/100)*20*mult*(pa/560) + rand(-5,5)));
-      var sb = Math.max(0, Math.round((a.speed/100)*40*mult*(pa/560)*rand(0.5,1.1)));
+      var pw = a.power/100;
+      var hr = Math.max(0, Math.round(pw*pw*58*mult*(0.75+Math.random()*0.5)*(pa/650)));
+      // Real run/RBI relationships rather than free-floating numbers
+      var runs = Math.max(0, Math.round(hits*0.40 + hr*0.55 + (a.speed/100)*22*(pa/650) + rand(-6,6)));
+      var rbi  = Math.max(0, Math.round(hits*0.30 + hr*1.60 + rand(-6,6)));
+      var sb = Math.max(0, Math.round(Math.pow(a.speed/100,2)*45*mult*(pa/650)*rand(0.5,1.15)));
 
       S.career.hr += hr; S.career.rbi += rbi; S.career.sb += sb;
       S.career.pa += pa; S.career.hitSum += avg*pa; S.career.hits += hits; S.career.runs += runs;
 
-      var seasonScore = avg*300 + hr*3 + rbi*1 + sb*1.2;
-      finalSeasonScore = seasonScore;
-      war = clamp((seasonScore-130)/26, -2, 11);
+      // WAR built from real components: rate, power, speed, position, defense
+      var posAdj = POS_WAR_ADJ[S.position] || 0;
+      war = ((avg-0.240)*45) + ((hr-12)*0.11) + (sb*0.015) + posAdj + (a.glove/100-0.5)*1.2;
+      war = clamp(war*(pa/650), -2.5, 12.5);
       S.career.warSum += war;
+
+      finalSeasonScore = war;
       recap = fmtAvg(avg)+" AVG, "+hr+" HR, "+rbi+" RBI, "+runs+" R, "+hits+" H, "+sb+" SB, "+fmtWar(war)+" WAR";
-      tableStats = fmtAvg(avg)+" AVG, "+hr+" HR, "+rbi+" RBI, "+fmtWar(war)+" WAR";
-      evaluateAwards(seasonScore, "hitter");
+      tableStats = fmtAvg(avg)+" \u2022 "+hr+" HR \u2022 "+rbi+" RBI \u2022 "+fmtWar(war)+" WAR";
+      evaluateAwards(war, "hitter", {avg:avg, hr:hr, rbi:rbi});
     } else {
-      var pAbility = (a.power*0.35 + a.contact*0.40 + a.focus*0.25)/100;
-      var pEff = pAbility*mult;
-      var ipFrac = 0.5 + a.health/200;
-      var ip = Math.round(clamp(195*ipFrac, 40, 225));
-      var era = clamp(5.60 - pEff*3.6 + rand(-0.35,0.35), 1.60, 6.80);
-      var wins = Math.max(0, Math.round(pEff*17*(ip/195) + rand(-2,2)));
-      var so = Math.max(0, Math.round((a.power/100)*230*mult*(ip/195) + rand(-15,15)));
-      var lossRatio = clamp(1.8 - pEff*1.3, 0.4, 1.8);
-      var losses = Math.max(0, Math.round(wins * lossRatio));
+      // Calibrated to real MLB: league-avg ~4.00 ERA / 2.0 WAR,
+      // All-Star ~3.20 / 4-5 WAR, Cy Young ~2.60 / 7+ WAR.
+      var pAbility = (a.arm*0.30 + a.power*0.25 + a.focus*0.30 + a.contact*0.15)/100;
+      var pEff = clamp(pAbility*mult, 0, 1.15);
+      var ipFrac = 0.55 + a.health/220;
+      var ip = Math.round(clamp(215*ipFrac*rand(0.82,1.06), 55, 250));
+      var era = clamp(5.30 - pEff*3.0 + rand(-0.30,0.30), 1.85, 6.50);
+      var starts = Math.max(1, Math.round(ip/6.2));
+      var decisions = Math.round(starts*0.80);
+      var winPct = clamp(0.42 + (4.30-era)*0.20, 0.25, 0.72);
+      var wins = Math.max(0, Math.round(decisions*winPct + rand(-1.5,1.5)));
+      var losses = Math.max(0, decisions - wins);
+      var so = Math.max(0, Math.round((ip/9) * (5.0 + (a.power/100)*5.2) + rand(-14,14)));
 
       S.career.wins += wins; S.career.losses += losses; S.career.so += so; S.career.ip += ip;
       S.career.eraSum += era*ip;
 
-      var pSeasonScore = Math.max(0,(5.2-era))*40 + wins*4 + so*0.3;
-      finalSeasonScore = pSeasonScore;
-      war = clamp((pSeasonScore-90)/21, -2, 11);
+      // Pitcher WAR anchored to runs saved vs. replacement over innings pitched
+      war = clamp((4.30-era)*(ip/9)*0.20, -2.5, 12.5);
       S.career.warSum += war;
-      recap = wins+"-"+losses+" W-L, "+fmtEra(era)+" ERA, "+ip+" IP, "+so+" SO, "+fmtWar(war)+" WAR";
-      tableStats = wins+"-"+losses+", "+fmtEra(era)+" ERA, "+fmtWar(war)+" WAR";
-      evaluateAwards(pSeasonScore, "pitcher");
+
+      finalSeasonScore = war;
+      recap = wins+"-"+losses+", "+fmtEra(era)+" ERA, "+ip+" IP, "+so+" SO, "+fmtWar(war)+" WAR";
+      tableStats = wins+"-"+losses+" \u2022 "+fmtEra(era)+" ERA \u2022 "+fmtWar(war)+" WAR";
+      evaluateAwards(war, "pitcher", {era:era, wins:wins, so:so});
     }
+
+    var prev = {hits:S.career.hits-((S.category==="hitter")?hits:0),
+                hr:S.career.hr-((S.category==="hitter")?hr:0),
+                rbi:S.career.rbi-((S.category==="hitter")?rbi:0),
+                wins:S.career.wins-((S.category==="pitcher")?wins:0),
+                so:S.career.so-((S.category==="pitcher")?so:0)};
 
     S.seasonsPlayed += 1;
     S.serviceYears += 1;
 
-    // team success
+    // ---- team record & pennant race ----
     var perkPlayoffBonus = applySeasonPerk();
     var teamMod = (S.team ? teamSuccessMod(S.team.trait) : 0) + perkPlayoffBonus;
-    var teamChance = clamp(0.25 + (overall()-50)/200 + teamMod, 0.05, 0.85);
-    var madePlayoffs = Math.random() < teamChance;
-    var wonChamp = false;
+    var teamQual = clamp(0.5 + teamMod*2 + (war-2)*0.018 + rand(-0.10,0.10), 0.12, 0.88);
+    var teamWins = Math.round(clamp(81 + (teamQual-0.5)*118, 54, 108));
+    var teamLosses = 162 - teamWins;
+    S.lastRecord = teamWins+"-"+teamLosses;
+
+    var madePlayoffs = teamWins >= 89 || (teamWins >= 85 && Math.random() < 0.55);
+    var wonChamp = false, psResult = null;
     if(madePlayoffs){
       S.career.playoffs += 1;
-      wonChamp = Math.random() < 0.32;
-      if(wonChamp) S.career.championships += 1;
+      var r = Math.random() + (teamWins-90)*0.006;
+      if(r < 0.28) psResult = "Lost in the Wild Card round";
+      else if(r < 0.54) psResult = "Lost the Division Series";
+      else if(r < 0.75) psResult = "Lost the League Championship Series";
+      else if(r < 0.88) psResult = "Lost the World Series";
+      else { psResult = "WON THE WORLD SERIES"; wonChamp = true; S.career.championships += 1; }
     }
 
+    // ---- milestones & single-season feats ----
+    var miles = [];
+    if(S.category==="hitter"){
+      if(prev.hits===0 && hits>0) miles.push("\uD83C\uDFAF First career hit");
+      [500,1000,1500,2000,2500,3000].forEach(function(n){ if(prev.hits<n && S.career.hits>=n) miles.push("\uD83D\uDCA5 "+n.toLocaleString()+" career hits"); });
+      [100,200,300,400,500,600].forEach(function(n){ if(prev.hr<n && S.career.hr>=n) miles.push("\uD83D\uDCA3 "+n+" career home runs"); });
+      [1000,1500,2000].forEach(function(n){ if(prev.rbi<n && S.career.rbi>=n) miles.push("\uD83D\uDD25 "+n.toLocaleString()+" career RBI"); });
+      if(hr>=50) miles.push("\uD83D\uDE80 "+hr+"-homer season");
+      else if(hr>=40) miles.push("\uD83D\uDCAA 40-homer season");
+      if(avg>=0.330) miles.push("\uD83C\uDFC5 Batting title contender at "+fmtAvg(avg));
+      if(hr>=40 && sb>=40) miles.push("\u26A1 40/40 club");
+      if(hits>=200) miles.push("\uD83E\uDE93 200-hit season");
+    } else {
+      [100,200,300].forEach(function(n){ if(prev.wins<n && S.career.wins>=n) miles.push("\uD83D\uDCA5 "+n+" career wins"); });
+      [1000,2000,3000].forEach(function(n){ if(prev.so<n && S.career.so>=n) miles.push("\uD83D\uDD25 "+n.toLocaleString()+" career strikeouts"); });
+      if(wins>=20) miles.push("\uD83D\uDCAA "+wins+"-win season");
+      if(era<=2.50) miles.push("\uD83C\uDFC5 Sub-2.50 ERA season");
+      if(so>=300) miles.push("\uD83D\uDE80 300-strikeout season");
+      if(era<=3.20 && ip>=200 && Math.random()<0.10) miles.push("\uD83D\uDEAB Threw a no-hitter");
+    }
+    if(S.seasonsPlayed===1) miles.unshift("\uD83C\uDF1F Opening Day roster \u2014 you're a big leaguer");
+
     var awardsText = S.awardsThisSeason.length ? " ("+S.awardsThisSeason.join(", ")+")" : "";
-    var teamText = wonChamp ? " The "+(S.team?S.team.name:"team")+" win the championship!" : (madePlayoffs ? " The "+(S.team?S.team.name:"team")+" make the playoffs." : "");
-    log("Season "+S.seasonsPlayed+", age "+age+": "+recap+awardsText+"."+teamText, true);
+    log("Season "+S.seasonsPlayed+", age "+age+": "+S.lastRecord+" team record. "+recap+awardsText+"."+
+        (psResult?" "+psResult+".":""), true);
     addCareerRow({age:age, team:S.team, level:(S.team&&S.team.league==="npb")?"NPB":"MLB",
       ovr:Math.round(overall()), stats:tableStats, trophy:wonChamp,
       awards:S.awardsThisSeason.slice()});
@@ -2194,65 +2362,87 @@
     S.age += 1;
     S.progress = clamp(0.75 + Math.min(0.23, S.seasonsPlayed*0.018), 0.75, 0.98);
 
-    if(S.age >= 42){
-      goToRetirement();
-      return;
-    }
+    S.pendingReview = {
+      age:age, record:S.lastRecord, teamWins:teamWins, recap:recap,
+      awards:S.awardsThisSeason.slice(), miles:miles,
+      psResult:psResult, wonChamp:wonChamp, madePlayoffs:madePlayoffs, war:war
+    };
+    showSeasonReview();
+  }
 
-    var lowThresh = S.category==="hitter" ? 65 : 50;
-    if(finalSeasonScore < lowThresh && Math.random() < 0.22){
-      S.career.demotions += 1;
-      currentEvent = demotionEvent();
-      currentEvent._interstitial = true;
-      renderAll();
-      return;
+  // The year-in-review beat: team record, your line, awards, milestones,
+  // and how October went — the payoff moment for the season you just played.
+  function showSeasonReview(){
+    var R = S.pendingReview; S.pendingReview = null;
+    if(!R){ afterSeason(); return; }
+    var body = '<div class="rev-line"><span class="rev-k">'+(S.team?S.team.name:"Team")+'</span>'+
+               '<span class="rev-v">'+R.record+'</span></div>'+
+               '<div class="rev-line"><span class="rev-k">Your season</span>'+
+               '<span class="rev-v">'+R.recap+'</span></div>';
+    if(R.awards.length) body += '<div class="rev-awards">'+R.awards.map(function(a){
+        return '<span class="trophy-chip">'+a+'</span>'; }).join("")+'</div>';
+    if(R.miles.length) body += '<div class="rev-miles">'+R.miles.map(function(m){
+        return '<div class="rev-mile">'+m+'</div>'; }).join("")+'</div>';
+    if(R.psResult){
+      var cls = R.wonChamp ? "rev-champ" : "rev-ps";
+      body += '<div class="'+cls+'">'+(R.wonChamp?"\uD83C\uDFC6 "+R.psResult+" \u2014 parade down the canyon of heroes":R.psResult)+'</div>';
+    } else {
+      body += '<div class="rev-ps rev-dim">Season over \u2014 no October baseball this year.</div>';
     }
-    if(S.career.allStars>=1 && !S.wbcOffered && Math.random() < 0.5){
-      S.wbcOffered = true;
+    currentEvent = {
+      h:"Season "+S.seasonsPlayed+" \u2014 Age "+R.age,
+      t:"", body:body,
+      c:[{l:"Continue", e:{}}],
+      _review:true
+    };
+    renderAll();
+  }
+
+  function afterSeason(){
+    if(S.age >= 42){ goToRetirement(); return; }
+    // World Baseball Classic runs every 4 years, as it really does
+    if(S.seasonsPlayed>0 && S.seasonsPlayed%4===0 && S.lastWbcSeason!==S.seasonsPlayed){
+      S.lastWbcSeason = S.seasonsPlayed;
       currentEvent = wbcEvent();
       currentEvent._interstitial = true;
       renderAll();
       return;
     }
-
     currentEvent = null;
     playMlbOffseason();
   }
 
-  function evaluateAwards(score, cat){
-    var isFirst = S.seasonsPlayed===0;
-    if(isFirst){
-      var royThresh = cat==="hitter" ? 130 : 75;
-      if(score >= royThresh && !S.career.roy){
-        S.career.roy = true;
-        S.awardsThisSeason.push("Rookie of the Year");
-        S.attrs.fame = clamp(S.attrs.fame+6,0,100);
-      }
+  // Awards keyed to real WAR thresholds: ~3.5 WAR is an All-Star season,
+  // ~7 WAR is an MVP/Cy Young season, which mirrors actual voting outcomes.
+  function evaluateAwards(war, cat, line){
+    if(S.seasonsPlayed===0 && war >= 3.0 && !S.career.roy){
+      S.career.roy = true;
+      S.awardsThisSeason.push("Rookie of the Year");
+      S.attrs.fame = clamp(S.attrs.fame+6,0,100);
     }
-    var allStarThresh = cat==="hitter" ? 160 : 95;
-    if(score >= allStarThresh){
+    if(war >= 3.5){
       S.career.allStars += 1;
       S.awardsThisSeason.push("All-Star");
       S.attrs.fame = clamp(S.attrs.fame+4,0,100);
     }
-    var eliteThresh = cat==="hitter" ? 230 : 150;
-    if(score >= eliteThresh){
-      var chance = clamp((score-eliteThresh)/100, 0, 0.6);
+    if(war >= 6.5){
+      var chance = clamp((war-6.5)/4.5, 0.10, 0.75);
       if(Math.random() < chance){
         if(cat==="hitter"){ S.career.mvps += 1; S.awardsThisSeason.push("MVP"); }
         else { S.career.cyYoungs += 1; S.awardsThisSeason.push("Cy Young"); }
         S.attrs.fame = clamp(S.attrs.fame+8,0,100);
       }
     }
-    if(S.attrs.glove >= 78 && Math.random() < 0.4){
+    if(S.attrs.glove >= 76 && war >= 2.5 && Math.random() < 0.35){
       S.career.goldGloves += 1;
       S.awardsThisSeason.push("Gold Glove");
     }
-    if(cat==="hitter" && score >= 190){
+    if(cat==="hitter" && line && (line.hr >= 30 || line.avg >= 0.305) && war >= 3.0){
       S.career.silverSluggers += 1;
       S.awardsThisSeason.push("Silver Slugger");
     }
   }
+
 
   function goToRetirement(){
     log("You decide it's time to hang up the cleats, at age "+S.age+".", true);
@@ -2262,21 +2452,33 @@
   /* =========================================================
      END SCREEN / LEGACY
   ========================================================= */
-  function computeLegacy(){
+  // Hall-of-Fame case built on the same currency analysts actually use:
+  // career WAR, plus the milestone counting stats that have historically
+  // been automatic (3000 H, 500 HR, 300 W, 3000 K). For reference, the
+  // average HOF position player is ~69 career WAR; the average HOF
+  // starting pitcher is ~73. Inner-circle guys clear 100.
+  function hofCase(){
     var c = S.career;
-    var raw;
+    var v = c.warSum;
     if(S.category==="hitter"){
-      var avgFinal = c.pa>0 ? c.hitSum/c.pa : 0;
-      raw = c.hr*0.4 + c.rbi*0.15 + avgFinal*150 + c.sb*0.2;
+      if(c.hits >= 3000) v += 12;
+      else if(c.hits >= 2500) v += 5;
+      if(c.hr >= 500) v += 10;
+      else if(c.hr >= 400) v += 4;
+      if(c.rbi >= 1500) v += 4;
     } else {
-      var eraFinal = c.ip>0 ? c.eraSum/c.ip : 5.0;
-      raw = c.wins*1.2 + c.so*0.05 + Math.max(0,(5.0-eraFinal))*15;
+      if(c.wins >= 300) v += 14;
+      else if(c.wins >= 250) v += 6;
+      if(c.so >= 3000) v += 10;
+      else if(c.so >= 2500) v += 4;
     }
-    var accolades = c.allStars*4 + c.mvps*15 + c.cyYoungs*15 + c.goldGloves*3 + c.silverSluggers*3 + c.championships*10 + (c.roy?8:0);
-    var longevity = S.seasonsPlayed*1.5;
-    var fameBonus = S.attrs.fame*0.15;
-    raw = raw + accolades + longevity + fameBonus;
-    var score = clamp(Math.round(raw/LEGACY_DIVISOR), 0, 100);
+    v += c.mvps*5 + c.cyYoungs*5 + c.championships*2 + c.allStars*0.6
+       + c.goldGloves*0.8 + c.silverSluggers*0.8 + (c.roy?2:0);
+    return v;
+  }
+
+  function computeLegacy(){
+    var score = clamp(Math.round(hofCase()*0.92), 0, 100);
     if(S.released) score = clamp(score, 2, 12);
     return score;
   }
@@ -2288,12 +2490,27 @@
     if(released){
       return {title:"The Road Ends Here", blurb:"Not every story reaches the big leagues, and yours didn't — but you laced up, you competed, and you gave it everything you had. That's more than most ever try."};
     }
-    if(score>=85) return {title:"Inner-Circle Legend", blurb:"First-ballot Hall of Famer. Kids will grow up wanting to play like you did."};
-    if(score>=70) return {title:"Hall of Famer", blurb:"Cooperstown calls your name. A career that will be remembered for generations."};
-    if(score>=50) return {title:"All-Star Caliber", blurb:"A career fans in your city will never forget, even if the bronze bust never comes."};
-    if(score>=30) return {title:"Solid Big Leaguer", blurb:"Dependable, respected, a professional's professional. Not every legend makes the highlight reel."};
-    if(score>=15) return {title:"Journeyman", blurb:"You bounced from team to team, but you made it, and that's no small thing."};
+    var v = hofCase();
+    if(v>=105) return {title:"Inner-Circle Legend", blurb:"Mays, Aaron, Mantle territory. Unanimous first ballot, and the argument starts at where you rank all-time."};
+    if(v>=75)  return {title:"First-Ballot Hall of Famer", blurb:"Comfortably above the Cooperstown line. Your plaque was never in doubt."};
+    if(v>=58)  return {title:"Hall of Famer", blurb:"You cleared the bar. Maybe not on the first ballot, but the bronze bust is yours."};
+    if(v>=42)  return {title:"Hall of Very Good", blurb:"You'll linger on the ballot for years and spark a great argument every winter — the kind of career the small hall keeps out and the big hall lets in."};
+    if(v>=26)  return {title:"Quality Everyday Player", blurb:"A decade-plus of real big-league value. Every contender wanted a guy like you."};
+    if(v>=12)  return {title:"Solid Big Leaguer", blurb:"You carved out a genuine career in the best league on earth. Most who sign never get close."};
+    if(v>=4)   return {title:"Journeyman", blurb:"You bounced around, filled a roster spot, and got your name in the box score. That's more than most ever manage."};
     return {title:"Cup of Coffee", blurb:"Brief, but real — you can always say you played in the Show."};
+  }
+
+
+  // Organizations shown as crests rather than a long comma-separated string
+  function orgLogosHtml(){
+    var seen = {}, out = "";
+    S.teamHistory.forEach(function(t){
+      if(!t || typeof t === "string" || seen[t.name]) return;
+      seen[t.name] = 1;
+      out += teamBadgeHtml(t, 26);
+    });
+    return '<span class="org-logos">'+(out||"\u2014")+'</span>';
   }
 
   function showEndScreen(){
@@ -2329,11 +2546,11 @@
       statsHtml += statRow("All-Star Selections", c.allStars);
       if(c.wbc==="accepted") statsHtml += statRow("World Baseball Classic", "Represented your country");
       if(c.demotions>0) statsHtml += statRow("Trips to the Minors", c.demotions);
-      if(S.teamHistory.length) statsHtml += statRow("Organization"+(S.teamHistory.length>1?"s":""), S.teamHistory.join(", "));
+      if(S.teamHistory.length) statsHtml += statRow("Organizations", orgLogosHtml());
     } else if(!S.walkedAway) {
       statsHtml += statRow("Highest Level Reached", S.releaseLevel||"Minors");
       statsHtml += statRow("Seasons in the Minors", S.minorsSeasons);
-      if(S.teamHistory.length) statsHtml += statRow("Organization"+(S.teamHistory.length>1?"s":""), S.teamHistory.join(", "));
+      if(S.teamHistory.length) statsHtml += statRow("Organizations", orgLogosHtml());
     } else {
       statsHtml += statRow("Draft Offers", "Turned down");
       statsHtml += statRow("Age at the Time", S.age);
