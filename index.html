@@ -437,20 +437,28 @@
   .tier-bronze{background:linear-gradient(160deg,#C97B32,#9A5A1E);color:#fff;}
   .tier-gold{background:linear-gradient(160deg,#F5C518,#D79E06);color:#3A2A00;}
   .team-header{
-    flex:1;border-radius:16px;padding:14px 18px;
-    display:flex;flex-direction:column;justify-content:center;
-    position:relative;overflow:hidden;
+    flex:1;min-width:0;border-radius:16px;padding:13px 16px;
+    display:flex;align-items:center;gap:12px;overflow:hidden;
   }
+  .th-main{flex:1;min-width:0;}
   .th-chips{display:flex;gap:7px;margin-bottom:7px;}
   .th-chip{
     font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1px;
     padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.14);color:#fff;
   }
   .th-chip.pos{background:#6D3BF5;}
-  .th-name{display:flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-size:25px;font-weight:600;color:#fff;line-height:1.1;}
-  .th-right{position:absolute;right:16px;top:14px;text-align:right;font-family:'Oswald',sans-serif;}
+  .th-chip.rep-good{background:rgba(35,150,90,0.55);}
+  .th-chip.rep-bad{background:rgba(200,45,80,0.55);}
+  .th-chip.rep-flat{background:rgba(255,255,255,0.14);}
+  .th-name{display:flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-size:23px;font-weight:600;color:#fff;line-height:1.15;min-width:0;}
+  .th-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .th-right{
+    flex-shrink:0;text-align:right;font-family:'Oswald',sans-serif;
+    display:flex;flex-direction:column;gap:6px;
+    padding-left:12px;border-left:1px solid rgba(255,255,255,0.16);
+  }
   .th-right .lbl{font-size:10px;letter-spacing:1.4px;color:rgba(255,255,255,0.55);}
-  .th-right .val{font-size:23px;font-weight:600;color:#fff;line-height:1.1;}
+  .th-right .val{font-size:20px;font-weight:600;color:#fff;line-height:1.05;}
 
   .sheet-head{
     display:flex;align-items:center;gap:10px;
@@ -523,7 +531,7 @@
     .th-name .team-logo{width:22px !important;height:22px !important;}
     .th-chips{margin-bottom:5px;gap:5px;}
     .th-chip{font-size:9.5px;padding:2px 8px;}
-    .th-right{right:10px;top:10px;}
+    .th-right{padding-left:9px;gap:4px;}
     .th-right .val{font-size:16px;}
     .th-right .lbl{font-size:8.5px;}
 
@@ -715,8 +723,10 @@
       team:null, teamHistory:[], draftWaitCount:0, teamControlUntilAge:null,
       attrs:{power:0,contact:0,speed:0,glove:0,arm:0,focus:0,health:80,fame:5,bank:10},
       seasonsPlayed:0, minorsSeasons:0, serviceYears:0,
+      rep:0, wbcCountry:null, wbcSwitchUsed:false, lastRecord:null, lastWbcSeason:-1,
+      pitcherRole:"SP",
       contractOfferedAtSeason:-1, wbcOffered:false,
-      career:{ hr:0, rbi:0, sb:0, pa:0, hitSum:0, hits:0, runs:0, wins:0, losses:0, so:0, ip:0, eraSum:0,
+      career:{ hr:0, rbi:0, sb:0, pa:0, hitSum:0, hits:0, runs:0, wins:0, losses:0, saves:0, holds:0, so:0, ip:0, eraSum:0,
         warSum:0, allStars:0, mvps:0, cyYoungs:0, goldGloves:0, silverSluggers:0, roy:false,
         championships:0, playoffs:0, wbc:null, demotions:0 },
       log:[],
@@ -1183,6 +1193,43 @@
         ]},
         {l:"Hand it to the closer", e:{focus:1}}
       ]},
+    {id:"cp15", h:"Rivalry Series Ejection", t:"Your rival's crowd has been on you all series, and the umpire just missed an obvious call.",
+      c:[
+        {l:"Let the umpire hear it", outcomes:[
+          {prob:0.5, label:"Clubhouse loves the fire", result:"You get tossed, but your teammates love that you stood up for them.", e:{fame:4,rep:6}},
+          {prob:0.5, label:"Suspended, fined", result:"A suspension and a fine, and the league sends a warning letter.", e:{fame:-3}}
+        ]},
+        {l:"Bite your tongue", e:{focus:2}}
+      ]},
+    {id:"cp16", h:"Kid in the Stands", t:"A young fan in a wheelchair has held the same handmade sign with your number on it for three straight homestands.",
+      c:[
+        {l:"Give him your game bat and jersey after the final out", e:{fame:5,focus:1}},
+        {l:"Have the clubhouse send an autographed ball", e:{fame:1}}
+      ]},
+    {id:"cp17", h:"Players' Union Vote", t:"With a labor fight brewing, the union asks you to be a public voice for the players.",
+      c:[
+        {l:"Speak for the players", outcomes:[
+          {prob:0.55, label:"Respected leaguewide", result:"Players around the league back you, and you become a real voice in the game.", e:{fame:5,focus:2}},
+          {prob:0.45, label:"Owners blacklist you quietly", result:"Ownership takes note, and a few front offices quietly cool on you.", e:{fame:-3,bank:-3}}
+        ]},
+        {l:"Stay out of it", e:{}}
+      ]},
+    {id:"cp18", h:"Milestone Ball Negotiation", t:"A fan caught your milestone home run ball and wants a small fortune to give it back.",
+      c:[
+        {l:"Pay whatever it takes", e:{bank:-8,fame:3}},
+        {l:"Offer signed memorabilia instead", outcomes:[
+          {prob:0.6, label:"He agrees, everyone smiles", result:"He takes the trade and the photo op plays great.", e:{fame:3}},
+          {prob:0.4, label:"He auctions it off", result:"He auctions it instead, and the story runs for a week.", e:{fame:-2}}
+        ]}
+      ]},
+    {id:"cp19", h:"Pitch Clock Adjustment", t:"The league tightens the pitch clock again and your whole routine is built around the old timing.",
+      c:[
+        {l:"Rebuild your timing around it", e:{focus:4,health:-1}},
+        {l:"Fight through it your way", outcomes:[
+          {prob:0.5, label:"You adapt on instinct", result:"You never change a thing and it stops mattering by May.", e:{focus:2}},
+          {prob:0.5, label:"Violations pile up", result:"The violations pile up and it costs you at the plate.", e:{focus:-3}}
+        ]}
+      ]},
     {id:"cp14", h:"The Intentional Walk Call", t:"Your manager signals for an intentional walk to load the bases in a huge spot.", cat:"pitcher",
       c:[
         {l:"Trust the call", outcomes:[
@@ -1310,6 +1357,28 @@
 
   function pickTeams(n){ return sampleN(TEAMS, n); }
   function pickNpbTeam(){ return pick(NPB_TEAMS); }
+
+  // Real MLB rivalries — sign with the enemy and the old fanbase turns
+  var RIVALS = {
+    NYY:["BOS","NYM","TPA"], BOS:["NYY","TPA","BAL"], NYM:["PHI","ATL","NYY"],
+    PHI:["NYM","ATL","WAS"], ATL:["NYM","PHI","WAS"], WAS:["ATL","PHI","NYM"],
+    CCB:["STL","MIL","CWS"], STL:["CCB","MIL","CIN"], MIL:["CCB","STL","CIN"],
+    CIN:["STL","CCB","PIT"], PIT:["CIN","CCB","STL"], CWS:["CCB","CLE","MIN"],
+    CLE:["CWS","DET","MIN"], DET:["CLE","CWS","MIN"], MIN:["CWS","CLE","DET"],
+    KC:["STL","CWS","DET"], LAD:["SFG","SD","LAA"], SFG:["LAD","SD","OAK"],
+    SD:["LAD","SFG","ARI"], ARI:["LAD","SD","COL"], COL:["LAD","ARI","SD"],
+    LAA:["LAD","OAK","SEA"], OAK:["SFG","SEA","LAA"], SEA:["OAK","TEX","LAA"],
+    TEX:["HOU","SEA","OAK"], HOU:["TEX","SEA","OAK"], TOR:["NYY","BOS","BAL"],
+    BAL:["NYY","BOS","TOR"], TPA:["NYY","BOS","TOR"], MIA:["ATL","NYM","PHI"]
+  };
+  function areRivals(a,b){
+    if(!a||!b) return false;
+    return (RIVALS[a.abbr]||[]).indexOf(b.abbr) >= 0;
+  }
+  function adjustRep(n, why){
+    S.rep = clamp(S.rep + n, -100, 100);
+    if(why) log(why, true);
+  }
 
   // Team pros & cons — every club has one perk (mechanical upside) and one
   // drawback, loosely based on real park factors and organizational reputations.
@@ -1446,6 +1515,46 @@
     debut:"Call-Up", mlb:"Major Leagues", retired:"Retired"
   };
 
+  // Where you actually sit on the depth chart, shown on the header
+  function squadRole(){
+    var ov = overall();
+    if(S.stageKey!=="mlb"){
+      if(ov>=52) return "Top Prospect";
+      if(ov>=42) return "Prospect";
+      return "Org Depth";
+    }
+    if(S.category==="pitcher"){
+      if(S.pitcherRole==="RP"){
+        if(ov>=68) return "Closer";
+        if(ov>=58) return "Setup Man";
+        if(ov>=48) return "Middle Relief";
+        return "Long Relief";
+      }
+      if(ov>=78) return "Staff Ace";
+      if(ov>=68) return "No. 2 Starter";
+      if(ov>=58) return "Mid-Rotation";
+      if(ov>=48) return "Back-End Starter";
+      return "Swingman";
+    }
+    if(ov>=78) return "Franchise Cornerstone";
+    if(ov>=68) return "Middle-of-Order Bat";
+    if(ov>=58) return "Everyday Starter";
+    if(ov>=48) return "Platoon Bat";
+    return "Bench Bat";
+  }
+
+  // Reputation with the fanbase, moved by choices and by who you sign with
+  function repLabel(){
+    var r = S.rep;
+    if(r>=45) return {t:"Beloved Icon", c:"good"};
+    if(r>=22) return {t:"Fan Favorite", c:"good"};
+    if(r>=8)  return {t:"Well Liked", c:"good"};
+    if(r>-8)  return {t:"Just Another Guy", c:"flat"};
+    if(r>-22) return {t:"Polarizing", c:"bad"};
+    if(r>-45) return {t:"Booed on the Road", c:"bad"};
+    return {t:"Public Villain", c:"bad"};
+  }
+
   function ovrTier(v){
     if(v>=70) return "tier-gold";
     if(v>=55) return "tier-bronze";
@@ -1472,14 +1581,17 @@
     var money = S.attrs.bank>=1 ? ("$"+S.attrs.bank+"M") : "—";
 
     head.innerHTML =
-      '<div class="th-chips">'+
-        '<span class="th-chip">'+(S.category==="pitcher"?"P":"POS")+'</span>'+
-        '<span class="th-chip pos">'+escapeHtml(S.position)+'</span>'+
+      '<div class="th-main">'+
+        '<div class="th-chips">'+
+          '<span class="th-chip pos">'+escapeHtml(S.position)+'</span>'+
+          '<span class="th-chip">'+squadRole()+'</span>'+
+          '<span class="th-chip rep-'+repLabel().c+'">'+repLabel().t+'</span>'+
+        '</div>'+
+        '<div class="th-name">'+badgeMark+'<span>'+escapeHtml(affiliation)+'</span></div>'+
       '</div>'+
-      '<div class="th-name">'+badgeMark+'<span>'+escapeHtml(affiliation)+'</span></div>'+
       '<div class="th-right">'+
-        '<div class="lbl">AGE</div><div class="val">'+S.age+'</div>'+
-        '<div class="lbl" style="margin-top:4px;">VALUE</div><div class="val">'+money+'</div>'+
+        '<div><div class="lbl">AGE</div><div class="val">'+S.age+'</div></div>'+
+        '<div><div class="lbl">VALUE</div><div class="val">'+money+'</div></div>'+
       '</div>';
 
     var sh = document.getElementById("sh-stats");
@@ -1679,6 +1791,10 @@
     btns.forEach(function(btn){
       btn.addEventListener("click", function(){
         var idx = parseInt(this.getAttribute("data-idx"),10);
+        if(ev._clutch){
+          clutchResolve(ev.c[idx]);
+          return;
+        }
         if(ev._review){
           currentEvent = null;
           afterSeason();
@@ -1904,6 +2020,16 @@
 
   function debutEvent(){
     var name = S.name || "Rookie";
+    if(S.category==="pitcher"){
+      return {
+        h:"Called Up",
+        t:name+", you're going to the big leagues \u2014 and the pitching coach wants to know where you see yourself.",
+        c:[
+          {l:"Break camp in the rotation", e:{fame:3,focus:2}, pitcherRole:"SP"},
+          {l:"Break camp in the bullpen", e:{fame:2,focus:3}, pitcherRole:"RP"}
+        ]
+      };
+    }
     return {
       h:"Called Up",
       t:name+", the front office just told your manager: pack your bags, you're joining the big-league club tomorrow.",
@@ -1958,6 +2084,10 @@
 
     var outcome = rollChaosOutcome(choice);
     applyEffects(outcome.effects);
+    if(choice.pitcherRole){
+      S.pitcherRole = choice.pitcherRole;
+      log("You'll open the season "+(choice.pitcherRole==="SP"?"in the rotation":"in the bullpen")+".", true);
+    }
     log(ev.h+" — "+choice.l+(outcome.text?(" → "+outcome.text):"")+".", true);
 
     function proceedAfterChoice(){
@@ -2035,30 +2165,52 @@
     "Japan","Mexico","Colombia","Canada","Cuba","the Netherlands","South Korea","Panama"];
 
   function wbcEvent(){
-    var country = pick(WBC_COUNTRIES);
-    S.wbcCountry = country;
+    if(!S.wbcCountry) S.wbcCountry = pick(WBC_COUNTRIES);
+    var country = S.wbcCountry;
+    var cap = country.charAt(0).toUpperCase()+country.slice(1);
+    var choices = [
+      {l:"Represent "+cap, wbcChoice:"accepted", outcomes:[
+        {prob:0.65, label:"A career highlight", result:"You help "+country+" make a deep run \u2014 a memory that outlasts any stat line.", e:{fame:7,focus:2}},
+        {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the regular season.", e:{fame:3,health:-6}}
+      ]},
+      {l:"Decline, focus on your club season", wbcChoice:"declined", e:{focus:2}}
+    ];
+    if(!S.wbcSwitchUsed){
+      var other = pick(WBC_COUNTRIES.filter(function(x){ return x!==country; }));
+      choices.splice(1, 0, {
+        l:"Switch allegiance to "+other.charAt(0).toUpperCase()+other.slice(1),
+        wbcSwitch:other,
+        outcomes:[
+          {prob:0.55, label:"Embraced by a new nation", result:"A new country adopts you as its own \u2014 and you'll never wear the other jersey again.", e:{fame:6}},
+          {prob:0.45, label:"Called a mercenary", result:"Back home they call it a betrayal, and it follows you.", e:{fame:-4}}
+        ]
+      });
+    }
     return {
       h:"World Baseball Classic",
-      t:"The Classic is here. "+country.charAt(0).toUpperCase()+country.slice(1)+" wants you on the roster \u2014 but it means reporting early and playing meaningful games before your club season starts.",
-      c:[
-        {l:"Accept the honor", wbcChoice:"accepted", outcomes:[
-          {prob:0.65, label:"A career highlight", result:"You help your country make a deep run — a memory that outlasts any stat line.", e:{fame:7,focus:2}},
-          {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the regular season.", e:{fame:3,health:-6}}
-        ]},
-        {l:"Decline, focus on your club season", wbcChoice:"declined", e:{focus:2}}
-      ]
+      t:"The Classic is here. "+cap+" wants you on the roster \u2014 it means reporting early and playing meaningful games before your club season starts."+
+        (S.wbcSwitchUsed?" You've already committed your allegiance for good.":" You can still change your allegiance once, and only once."),
+      c:choices
     };
   }
 
+
   function freeAgencyEvent(){
-    var offers = sampleN(TEAMS.filter(function(t){ return !S.team || t.name!==S.team.name; }), 3);
+    var pool = TEAMS.filter(function(t){ return !S.team || t.name!==S.team.name; });
+    var offers = sampleN(pool, 3);
+    // a rival is always circling a good player — make that a real temptation
+    if(S.team && !offers.some(function(t){ return areRivals(S.team, t); })){
+      var rivals = pool.filter(function(t){ return areRivals(S.team, t); });
+      if(rivals.length && Math.random() < 0.65) offers[0] = pick(rivals);
+    }
     var ov = overall();
     var choices = offers.map(function(team){
       var annual = Math.max(2, Math.round(1 + ov*0.4 + rand(-3,3)));
       var years = ri(2,5);
       var marketTag = team.trait==="big-market" ? "Big market" : "Small market";
+      var rivalTag = areRivals(S.team, team) ? ' <span class="tag down">\uD83D\uDD25 RIVAL</span>' : '';
       return {
-        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+
+        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+rivalTag+
           '<br><span style="font-size:12px;opacity:0.75;">$'+annual+'M/yr × '+years+' years</span>'+perkOfferHtml(team),
         faPick:{team:team, bank:Math.round(annual*0.8)}
       };
@@ -2116,13 +2268,17 @@
       return;
     }
     var roll = Math.random();
-    if(roll < 0.4){
+    if(roll < 0.20 && S.stageKey==="mlb"){
+      clutchStart();
+      return;
+    }
+    if(roll < 0.48){
       currentEvent = offseasonPlanEvent();
       currentEvent._afterOffseason = true;
       renderAll();
       return;
     }
-    var useChaos = roll < 0.75;
+    var useChaos = roll < 0.78;
     var srcPool = categoryFilter(useChaos ? CHAOS_PRO : POOL_MLB);
     var avail = srcPool.filter(function(e){ return !S.usedEventIds[e.id]; });
     if(avail.length===0){ avail = srcPool.slice(); srcPool.forEach(function(e){ delete S.usedEventIds[e.id]; }); }
@@ -2142,6 +2298,12 @@
       applyEffects(outcomeI.effects);
       log(ev.h+" — "+choice.l+(outcomeI.text?(" → "+outcomeI.text):"")+".", true);
       if(choice.wbcChoice){ S.career.wbc = choice.wbcChoice; }
+      if(choice.wbcSwitch){
+        S.wbcCountry = choice.wbcSwitch;
+        S.wbcSwitchUsed = true;
+        S.career.wbc = "accepted";
+        adjustRep(-6);
+      }
       function proceedInterstitial(){
         currentEvent = null;
         playMlbOffseason();
@@ -2156,12 +2318,20 @@
     if(S.stageKey==="mlb" && ev._afterOffseason){
       if(choice.faPick){
         var fa = choice.faPick;
+        var wasRival = areRivals(S.team, fa.team);
+        var oldName = S.team ? S.team.name : "";
         S.team = fa.team;
         S.teamHistory.push(fa.team);
         applyEffects({bank:fa.bank, fame:fa.npb?3:1});
         var faMsg = fa.npb
-          ? "You sign with the "+fa.team.name+" — taking your game to Japan."
+          ? "You sign with the "+fa.team.name+" \u2014 taking your game to Japan."
           : "You sign with the "+fa.team.name+" in free agency.";
+        if(wasRival){
+          adjustRep(-28);
+          faMsg += " \uD83D\uDD25 You crossed the rivalry \u2014 "+oldName+" fans will never forgive it. Expect boos every trip back.";
+        } else {
+          adjustRep(2);
+        }
         log(faMsg, true);
         showOutcomeReveal("Free Agency", faMsg, {}, function(){ simulateSeason(); });
         return;
@@ -2278,33 +2448,55 @@
       // All-Star ~3.20 / 4-5 WAR, Cy Young ~2.60 / 7+ WAR.
       var pAbility = (a.arm*0.30 + a.power*0.25 + a.focus*0.30 + a.contact*0.15)/100;
       var pEff = clamp(pAbility*mult, 0, 1.15);
+      var relief = (S.pitcherRole === "RP");
+      var role = squadRole();
       var ipFrac = 0.55 + a.health/220;
-      var ip = Math.round(clamp(215*ipFrac*rand(0.82,1.06), 55, 250));
-      var era = clamp(5.30 - pEff*3.0 + rand(-0.30,0.30), 1.85, 6.50);
-      var starts = Math.max(1, Math.round(ip/6.2));
-      var decisions = Math.round(starts*0.80);
-      var winPct = clamp(0.42 + (4.30-era)*0.20, 0.25, 0.72);
-      var wins = Math.max(0, Math.round(decisions*winPct + rand(-1.5,1.5)));
-      var losses = Math.max(0, decisions - wins);
-      var so = Math.max(0, Math.round((ip/9) * (5.0 + (a.power/100)*5.2) + rand(-14,14)));
+      var ip, era, wins, losses, saves = 0, holds = 0, so;
+
+      if(relief){
+        // Relief workloads and rate stats: closers throw ~65 IP, long men ~90,
+        // and bullpen ERAs run lower than rotation ERAs.
+        var baseIp = role==="Long Relief" ? 92 : (role==="Middle Relief" ? 74 : 66);
+        ip = Math.round(clamp(baseIp*ipFrac*rand(0.82,1.10), 25, 105));
+        era = clamp(4.90 - pEff*2.9 + rand(-0.35,0.35), 1.35, 6.40);
+        wins = Math.max(0, Math.round(rand(2,7)*(0.6+pEff*0.6)));
+        losses = Math.max(0, Math.round(rand(2,6)*(1.3-pEff*0.5)));
+        if(role==="Closer") saves = Math.max(0, Math.round(clamp(34*pEff + rand(-6,7), 8, 52)));
+        else if(role==="Setup Man") holds = Math.max(0, Math.round(clamp(26*pEff + rand(-5,6), 4, 38)));
+        else holds = Math.max(0, Math.round(clamp(12*pEff + rand(-4,5), 0, 22)));
+        so = Math.max(0, Math.round((ip/9) * (7.0 + (a.power/100)*5.5) + rand(-6,6)));
+      } else {
+        ip = Math.round(clamp(215*ipFrac*rand(0.82,1.06), 55, 250));
+        era = clamp(5.30 - pEff*3.0 + rand(-0.30,0.30), 1.85, 6.50);
+        var starts = Math.max(1, Math.round(ip/6.2));
+        var decisions = Math.round(starts*0.80);
+        var winPct = clamp(0.42 + (4.30-era)*0.20, 0.25, 0.72);
+        wins = Math.max(0, Math.round(decisions*winPct + rand(-1.5,1.5)));
+        losses = Math.max(0, decisions - wins);
+        so = Math.max(0, Math.round((ip/9) * (5.0 + (a.power/100)*5.2) + rand(-14,14)));
+      }
 
       S.career.wins += wins; S.career.losses += losses; S.career.so += so; S.career.ip += ip;
+      S.career.saves += saves; S.career.holds += holds;
       S.career.eraSum += era*ip;
 
-      // Pitcher WAR anchored to runs saved vs. replacement over innings pitched
-      war = clamp((4.30-era)*(ip/9)*0.20, -2.5, 12.5);
+      // Relievers earn less WAR per inning but a leverage bonus for saves
+      war = clamp((4.30-era)*(ip/9)*0.20 + (relief ? saves*0.035 : 0), -2.5, 12.5);
       S.career.warSum += war;
 
       finalSeasonScore = war;
-      recap = wins+"-"+losses+", "+fmtEra(era)+" ERA, "+ip+" IP, "+so+" SO, "+fmtWar(war)+" WAR";
-      tableStats = wins+"-"+losses+" \u2022 "+fmtEra(era)+" ERA \u2022 "+fmtWar(war)+" WAR";
-      evaluateAwards(war, "pitcher", {era:era, wins:wins, so:so});
+      var svTxt = saves>0 ? ", "+saves+" SV" : (holds>0 ? ", "+holds+" HLD" : "");
+      recap = wins+"-"+losses+svTxt+", "+fmtEra(era)+" ERA, "+ip+" IP, "+so+" SO, "+fmtWar(war)+" WAR";
+      tableStats = (saves>0 ? saves+" SV \u2022 " : (holds>0 ? holds+" HLD \u2022 " : wins+"-"+losses+" \u2022 "))+
+                   fmtEra(era)+" ERA \u2022 "+fmtWar(war)+" WAR";
+            evaluateAwards(war, "pitcher", {era:era, wins:wins, so:so});
     }
 
     var prev = {hits:S.career.hits-((S.category==="hitter")?hits:0),
                 hr:S.career.hr-((S.category==="hitter")?hr:0),
                 rbi:S.career.rbi-((S.category==="hitter")?rbi:0),
                 wins:S.career.wins-((S.category==="pitcher")?wins:0),
+                saves:S.career.saves-((S.category==="pitcher")?saves:0),
                 so:S.career.so-((S.category==="pitcher")?so:0)};
 
     S.seasonsPlayed += 1;
@@ -2345,6 +2537,8 @@
     } else {
       [100,200,300].forEach(function(n){ if(prev.wins<n && S.career.wins>=n) miles.push("\uD83D\uDCA5 "+n+" career wins"); });
       [1000,2000,3000].forEach(function(n){ if(prev.so<n && S.career.so>=n) miles.push("\uD83D\uDD25 "+n.toLocaleString()+" career strikeouts"); });
+      [100,200,300,400].forEach(function(n){ if(prev.saves<n && S.career.saves>=n) miles.push("\uD83D\uDD12 "+n+" career saves"); });
+      if(saves>=40) miles.push("\uD83D\uDD12 "+saves+"-save season");
       if(wins>=20) miles.push("\uD83D\uDCAA "+wins+"-win season");
       if(era<=2.50) miles.push("\uD83C\uDFC5 Sub-2.50 ERA season");
       if(so>=300) miles.push("\uD83D\uDE80 300-strikeout season");
@@ -2372,6 +2566,126 @@
 
   // The year-in-review beat: team record, your line, awards, milestones,
   // and how October went — the payoff moment for the season you just played.
+  /* =========================================================
+     CLUTCH MINI-GAME — an interactive at-bat / inning that
+     decides a real game, played pitch by pitch.
+  ========================================================= */
+  function clutchStart(){
+    S.clutch = {b:0, s:0, pitch:0, credit:0};
+    currentEvent = clutchEvent();
+    renderAll();
+  }
+
+  function countStr(){ return S.clutch.b+"-"+S.clutch.s; }
+
+  function clutchScene(){
+    if(S.category==="pitcher"){
+      return {h:"Bottom 9 \u2014 One-Run Lead",
+              t:"Two outs, bases loaded, and the tying run is ninety feet away. Count "+countStr()+"."};
+    }
+    return {h:"Bottom 9 \u2014 Tie Game",
+            t:"Two outs, runner on second, and the winning run is yours to drive in. Count "+countStr()+"."};
+  }
+
+  function clutchEvent(){
+    var sc = clutchScene();
+    var skill = S.category==="pitcher"
+      ? (S.attrs.arm*0.4 + S.attrs.focus*0.6)/100
+      : (S.attrs.contact*0.55 + S.attrs.focus*0.45)/100;
+    var edge = clamp((skill-0.45)*0.5, -0.12, 0.20);
+    var p, opts;
+    if(S.category==="pitcher"){
+      p = clamp(0.46+edge,0.22,0.78);
+      opts = [
+        {l:"Challenge him with the heater", outcomes:[
+          {prob:p,   label:"Swing and miss", res:"strike"},
+          {prob:1-p, label:"He squares it up", res:"contact"}
+        ]},
+        {l:"Bury the breaking ball", outcomes:[
+          {prob:clamp(0.42+edge,0.2,0.75),   label:"He chases, strike", res:"strike"},
+          {prob:1-clamp(0.42+edge,0.2,0.75), label:"He lays off, ball", res:"ball"}
+        ]},
+        {l:"Waste one off the plate", outcomes:[
+          {prob:0.32, label:"He chases anyway", res:"strike"},
+          {prob:0.68, label:"He takes it, ball", res:"ball"}
+        ]}
+      ];
+    } else {
+      p = clamp(0.40+edge,0.20,0.72);
+      opts = [
+        {l:"Sit dead-red on the fastball", outcomes:[
+          {prob:p,   label:"You get your pitch \u2014 contact", res:"contact", credit:3},
+          {prob:1-p, label:"Offspeed, way out in front", res:"strike"}
+        ]},
+        {l:"Look offspeed, stay back", outcomes:[
+          {prob:clamp(0.38+edge,0.2,0.70),   label:"You track it \u2014 contact", res:"contact", credit:3},
+          {prob:1-clamp(0.38+edge,0.2,0.70), label:"Heater right by you", res:"strike"}
+        ]},
+        {l:"Take, work the count", outcomes:[
+          {prob:0.55, label:"Ball \u2014 you're ahead", res:"ball"},
+          {prob:0.45, label:"Called strike", res:"strike"}
+        ]},
+        {l:"Choke up, just put it in play", outcomes:[
+          {prob:0.60, label:"You fight it off foul", res:"foul"},
+          {prob:0.40, label:"Weak contact", res:"contact", credit:0}
+        ]}
+      ];
+    }
+    return {h:sc.h, t:sc.t, c:opts, _clutch:true};
+  }
+
+  function clutchFinish(kind, credit){
+    var win, msg;
+    if(S.category==="pitcher"){
+      if(kind==="K"){ win=true;  msg="Strike three, swinging. You slam the door and the ballpark comes unglued \u2014 the save is yours."; }
+      else if(kind==="BB"){ win=false; msg="Ball four. You walk in the tying run, and the manager is already out of the dugout."; }
+      else if(credit>=1){ win=true;  msg="He puts it in play \u2014 but right at your shortstop. Game over, save secured."; }
+      else { win=false; msg="He finds the barrel and lines it into the gap. The tying run scores and the place deflates."; }
+    } else {
+      if(kind==="K"){ win=false; msg="Strike three. You never got the pitch you wanted, and the inning dies with you."; }
+      else if(kind==="BB"){ win=false; msg="Ball four. You take your base, but the moment passes to the guy behind you."; }
+      else if(credit>=3){ win=true;  msg="You drive it into the left-center gap and the winning run scores standing up. Walk-off."; }
+      else if(credit>=1){ win=true;  msg="A seeing-eye single through the right side \u2014 the runner never stops. You win it."; }
+      else { win=false; msg="You get under it. The ball dies on the warning track and the inning is over."; }
+    }
+    S.clutch = null;
+    if(win){
+      adjustRep(9);
+      S.career.clutchWins = (S.career.clutchWins||0)+1;
+      showOutcomeReveal("The Moment", msg, {fame:6, focus:2}, function(){ simulateSeason(); });
+    } else {
+      adjustRep(-3);
+      showOutcomeReveal("The Moment", msg, {focus:-1}, function(){ simulateSeason(); });
+    }
+  }
+
+  function clutchResolve(choice){
+    var roll = Math.random(), cum = 0, out = choice.outcomes[choice.outcomes.length-1];
+    for(var i=0;i<choice.outcomes.length;i++){
+      cum += choice.outcomes[i].prob;
+      if(roll <= cum){ out = choice.outcomes[i]; break; }
+    }
+    var K = S.clutch;
+    K.pitch += 1;
+
+    if(out.res==="strike") K.s += 1;
+    else if(out.res==="ball") K.b += 1;
+    else if(out.res==="foul"){ if(K.s < 2) K.s += 1; }
+
+    // Only ever end on a genuine terminal state, so the narration always
+    // matches the count the player is actually looking at.
+    if(out.res==="contact"){ clutchFinish("contact", out.credit||0); return; }
+    if(K.s >= 3){ clutchFinish("K", 0); return; }
+    if(K.b >= 4){ clutchFinish("BB", 0); return; }
+    if(K.pitch >= 8){ clutchFinish("contact", 1); return; }
+
+    showOutcomeReveal("Count "+countStr(), out.label+".", {}, function(){
+      currentEvent = clutchEvent();
+      renderAll();
+    });
+  }
+
+
   function showSeasonReview(){
     var R = S.pendingReview; S.pendingReview = null;
     if(!R){ afterSeason(); return; }
@@ -2420,13 +2734,15 @@
       S.awardsThisSeason.push("Rookie of the Year");
       S.attrs.fame = clamp(S.attrs.fame+6,0,100);
     }
-    if(war >= 3.5){
+    var asBar = (cat==="pitcher" && S.pitcherRole==="RP") ? 2.0 : 3.5;
+    if(war >= asBar){
       S.career.allStars += 1;
       S.awardsThisSeason.push("All-Star");
       S.attrs.fame = clamp(S.attrs.fame+4,0,100);
     }
-    if(war >= 6.5){
-      var chance = clamp((war-6.5)/4.5, 0.10, 0.75);
+    var eliteBar = (cat==="pitcher" && S.pitcherRole==="RP") ? 3.6 : 6.5;
+    if(war >= eliteBar){
+      var chance = clamp((war-eliteBar)/4.5, 0.10, 0.75);
       if(Math.random() < chance){
         if(cat==="hitter"){ S.career.mvps += 1; S.awardsThisSeason.push("MVP"); }
         else { S.career.cyYoungs += 1; S.awardsThisSeason.push("Cy Young"); }
@@ -2471,15 +2787,28 @@
       else if(c.wins >= 250) v += 6;
       if(c.so >= 3000) v += 10;
       else if(c.so >= 2500) v += 4;
+      if(c.saves >= 400) v += 14;
+      else if(c.saves >= 300) v += 8;
+      else if(c.saves >= 200) v += 4;
     }
     v += c.mvps*5 + c.cyYoungs*5 + c.championships*2 + c.allStars*0.6
        + c.goldGloves*0.8 + c.silverSluggers*0.8 + (c.roy?2:0);
     return v;
   }
 
+  // Piecewise curve so the tiers land where they should emotionally:
+  // Hall of Famer reads ~80, first ballot ~90, inner circle ~97+.
   function computeLegacy(){
-    var score = clamp(Math.round(hofCase()*0.92), 0, 100);
-    if(S.released) score = clamp(score, 2, 12);
+    var v = hofCase(), s;
+    if(v<=12)       s = v*2.9;
+    else if(v<=26)  s = 35 + (v-12)*0.79;
+    else if(v<=42)  s = 46 + (v-26)*1.06;
+    else if(v<=58)  s = 63 + (v-42)*1.06;
+    else if(v<=75)  s = 80 + (v-58)*0.59;
+    else if(v<=105) s = 90 + (v-75)*0.24;
+    else            s = 97 + (v-105)*0.10;
+    var score = clamp(Math.round(s), 0, 100);
+    if(S.released) score = clamp(score, 2, 20);
     return score;
   }
 
@@ -2536,6 +2865,8 @@
         var eraFinal = c.ip>0 ? c.eraSum/c.ip : 0;
         statsHtml += statRow("Career ERA", fmtEra(eraFinal));
         statsHtml += statRow("Record", c.wins+"-"+c.losses);
+        if(c.saves>0) statsHtml += statRow("Saves", c.saves);
+        if(c.holds>0) statsHtml += statRow("Holds", c.holds);
         statsHtml += statRow("Strikeouts", c.so);
         statsHtml += statRow("Innings Pitched", c.ip);
       }
