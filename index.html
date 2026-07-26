@@ -110,6 +110,16 @@
     font-size:15px;
   }
   .pos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .mode-opt{
+    background:var(--navy-light);border:1px solid rgba(245,241,230,0.15);
+    border-radius:var(--radius-btn);padding:10px 8px;text-align:center;cursor:pointer;
+  }
+  .mode-opt.selected{border-color:var(--amber);background:rgba(242,169,59,0.08);}
+  .mode-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;color:var(--chalk);}
+  .mode-opt.selected .mode-name{color:var(--amber);}
+  .mode-desc{font-size:10px;color:var(--chalk-dim);margin-top:3px;line-height:1.3;}
+
   .pos-opt{
     background:var(--navy-light);
     border:1px solid rgba(245,241,230,0.15);
@@ -365,6 +375,15 @@
   .log-item b{color:var(--amber);}
 
   /* ---------- END SCREEN ---------- */
+  .career-summary{
+    margin-top:18px;padding:16px 18px;border-radius:12px;
+    background:rgba(245,241,230,0.045);border-left:3px solid var(--amber);
+    font-size:14.5px;line-height:1.6;color:var(--chalk);
+  }
+  .share-row{display:flex;gap:10px;margin-top:14px;}
+  .cta-alt{flex:1;background:rgba(245,241,230,0.08);color:var(--chalk);border:1px solid rgba(245,241,230,0.16);}
+  .cta-alt:hover{background:rgba(242,169,59,0.12);border-color:var(--amber);}
+  @media (max-width:560px){ .share-row{flex-direction:column;} }
   .legacy-card{
     background:var(--navy);
     border:1px solid rgba(245,241,230,0.08);
@@ -450,6 +469,9 @@
   .th-chip.rep-good{background:rgba(35,150,90,0.55);}
   .th-chip.rep-bad{background:rgba(200,45,80,0.55);}
   .th-chip.rep-flat{background:rgba(255,255,255,0.14);}
+  .th-chip.streak-hot{background:rgba(230,90,20,0.55);}
+  .th-chip.streak-cold{background:rgba(60,110,160,0.5);}
+  .th-chip.nick{background:rgba(242,169,59,0.28);color:#F2A93B;font-style:italic;}
   .th-name{display:flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-size:23px;font-weight:600;color:#fff;line-height:1.15;min-width:0;}
   .th-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .th-right{
@@ -470,6 +492,56 @@
   .sh-ovr{width:46px;text-align:center;}
   .sh-stats{width:190px;text-align:right;}
   @media (max-width:560px){ .sh-stats{width:120px;} }
+
+  .progress-tracker{display:flex;align-items:center;gap:2px;margin:0 0 16px;overflow-x:auto;padding-bottom:2px;}
+  .pt-node{
+    flex:1;min-width:52px;text-align:center;font-family:'Oswald',sans-serif;
+    font-size:9.5px;letter-spacing:0.4px;color:var(--chalk-dim);white-space:nowrap;
+    position:relative;padding-top:14px;
+  }
+  .pt-node::before{
+    content:"";position:absolute;top:4px;left:0;right:0;height:3px;border-radius:2px;
+    background:rgba(245,241,230,0.12);
+  }
+  .pt-node.done::before{background:var(--amber);}
+  .pt-node.current::before{background:var(--amber);}
+  .pt-node.current{color:var(--amber);font-weight:600;}
+  .pt-node.done{color:var(--chalk);}
+  .pt-dot{
+    position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+    width:9px;height:9px;border-radius:50%;background:rgba(245,241,230,0.2);
+  }
+  .pt-node.done .pt-dot, .pt-node.current .pt-dot{background:var(--amber);}
+  .pt-node.current .pt-dot{box-shadow:0 0 0 4px rgba(242,169,59,0.25);}
+
+  .stat-toast-host{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    z-index:999;display:flex;flex-direction:column-reverse;gap:6px;align-items:center;
+    pointer-events:none;
+  }
+  .stat-toast{
+    display:flex;gap:6px;background:rgba(15,25,32,0.95);border:1px solid rgba(245,241,230,0.15);
+    border-radius:20px;padding:6px 10px;box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    animation:toastIn 0.2s ease-out;
+  }
+  .stat-toast.fade{opacity:0;transform:translateY(6px);transition:opacity 0.4s ease,transform 0.4s ease;}
+  @keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .toast-chip{font-family:'Oswald',sans-serif;font-size:11.5px;padding:2px 8px;border-radius:12px;}
+  .toast-chip.up{background:rgba(35,150,90,0.25);color:#5FE0A0;}
+  .toast-chip.down{background:rgba(200,45,80,0.22);color:#FF7A96;}
+
+  .info-tabs{display:none;}
+  .info-panel{display:block;}
+  @media (max-width:600px){
+    .info-tabs{display:flex;gap:6px;margin-bottom:10px;}
+    .info-tab{
+      flex:1;background:rgba(245,241,230,0.05);border:1px solid rgba(245,241,230,0.12);
+      color:var(--chalk-dim);border-radius:9px;padding:8px 4px;
+      font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:0.5px;
+    }
+    .info-tab.active{border-color:var(--amber);color:var(--amber);background:rgba(242,169,59,0.08);}
+    .info-panel.hidden{display:none;}
+  }
 
   .career-sheet{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
   .cs-row{
@@ -503,6 +575,16 @@
   .th-name .team-logo{filter:drop-shadow(0 2px 5px rgba(0,0,0,0.55));}
   .cs-awards{letter-spacing:1px;font-size:14px;line-height:1;}
   .org-logos{display:inline-flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:230px;}
+  .bunting{
+    display:flex;justify-content:center;margin:-20px -18px 14px;overflow:hidden;height:34px;
+  }
+  .bunting span{
+    width:0;height:0;margin:0 -2px;
+    border-left:19px solid transparent;border-right:19px solid transparent;border-top:30px solid;
+  }
+  .bunting span:nth-child(3n+1){border-top-color:#B31942;}
+  .bunting span:nth-child(3n+2){border-top-color:#F5F1E6;}
+  .bunting span:nth-child(3n+3){border-top-color:#0A3161;}
   .rev-body{margin-bottom:16px;}
   .rev-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(245,241,230,0.07);}
   .rev-k{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--chalk-dim);white-space:nowrap;}
@@ -550,7 +632,22 @@
     }
     .cs-row.future .cs-stats{display:none;}
 
-    .decision-wrap{padding:16px 14px;border-radius:13px;}
+    .ms-eyebrow{
+    font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;
+    margin-bottom:8px;opacity:0.85;
+  }
+  .decision-wrap.ms-draft{border:1px solid rgba(120,150,255,0.35);background:linear-gradient(160deg,rgba(30,45,90,0.35),rgba(245,241,230,0.045));}
+  .decision-wrap.ms-draft .ms-eyebrow{color:#8FA8FF;}
+  .decision-wrap.ms-debut{border:1px solid rgba(95,224,160,0.35);background:linear-gradient(160deg,rgba(20,70,50,0.35),rgba(245,241,230,0.045));}
+  .decision-wrap.ms-debut .ms-eyebrow{color:#5FE0A0;}
+  .decision-wrap.ms-fa{border:1px solid rgba(190,140,255,0.35);background:linear-gradient(160deg,rgba(60,30,90,0.35),rgba(245,241,230,0.045));}
+  .decision-wrap.ms-fa .ms-eyebrow{color:#C79BFF;}
+  .decision-wrap.ms-awards{border:1px solid rgba(242,169,59,0.4);background:linear-gradient(160deg,rgba(90,60,10,0.35),rgba(245,241,230,0.045));}
+  .decision-wrap.ms-awards .ms-eyebrow{color:var(--amber);}
+  .decision-wrap.ms-champ{border:1px solid rgba(242,169,59,0.55);background:linear-gradient(160deg,rgba(110,75,10,0.45),rgba(245,241,230,0.045));}
+  .decision-wrap.ms-champ .ms-eyebrow{color:var(--amber);}
+
+  .decision-wrap{padding:16px 14px;border-radius:13px;}
     .d-title{font-size:19px;}
     .d-sub{font-size:13px;}
     .d-options{grid-template-columns:1fr;gap:8px;}
@@ -635,6 +732,23 @@
           <div class="pos-opt" data-pos="Right Field">Right Field</div>
         </div>
       </div>
+      <div class="field-group">
+        <label>Career pace</label>
+        <div class="mode-grid" id="mode-grid">
+          <div class="mode-opt" data-mode="insane">
+            <div class="mode-name">Insane</div>
+            <div class="mode-desc">Every single season, full detail</div>
+          </div>
+          <div class="mode-opt selected" data-mode="standard">
+            <div class="mode-name">Standard</div>
+            <div class="mode-desc">Two years at a time</div>
+          </div>
+          <div class="mode-opt" data-mode="turbo">
+            <div class="mode-name">Turbo</div>
+            <div class="mode-desc">Four years at a time, fast sim</div>
+          </div>
+        </div>
+      </div>
       <button class="cta" id="btn-start">Step Up to the Plate</button>
       <div class="hint">You're 16, and varsity ball is where your shot at the pros begins.</div>
     </div>
@@ -650,22 +764,33 @@
       <div class="team-header" id="team-header"></div>
     </div>
 
-    <div class="sheet-head">
-      <span class="sh-age">AGE</span>
-      <span class="sh-club">CLUB</span>
-      <span class="sh-ovr">OVR</span>
-      <span class="sh-stats" id="sh-stats">STATS</span>
-    </div>
-    <div class="career-sheet" id="career-sheet"></div>
+    <div class="progress-tracker" id="progress-tracker"></div>
 
-    <div class="trophy-case" id="trophy-case"></div>
+    <div class="info-tabs" id="info-tabs">
+      <button class="info-tab active" data-tab="career">Career</button>
+      <button class="info-tab" data-tab="trophies">Trophies</button>
+      <button class="info-tab" data-tab="log">Log</button>
+    </div>
+
+    <div class="info-panel" data-panel="career">
+      <div class="sheet-head">
+        <span class="sh-age">AGE</span>
+        <span class="sh-club">CLUB</span>
+        <span class="sh-ovr">OVR</span>
+        <span class="sh-stats" id="sh-stats">STATS</span>
+      </div>
+      <div class="career-sheet" id="career-sheet"></div>
+    </div>
+
+    <div class="info-panel hidden" data-panel="trophies">
+      <div class="trophy-case" id="trophy-case"></div>
+    </div>
+
+    <div class="info-panel hidden" data-panel="log">
+      <div class="log-list" id="log-list"></div>
+    </div>
 
     <div class="decision-wrap" id="event-card"></div>
-
-    <details class="log-details">
-      <summary>Career log</summary>
-      <div class="log-list" id="log-list"></div>
-    </details>
   </div>
 
   <!-- ============ END SCREEN ============ -->
@@ -724,11 +849,13 @@
       attrs:{power:0,contact:0,speed:0,glove:0,arm:0,focus:0,health:80,fame:5,bank:10},
       seasonsPlayed:0, minorsSeasons:0, serviceYears:0,
       rep:0, wbcCountry:null, wbcSwitchUsed:false, lastRecord:null, lastWbcSeason:-1,
+      streak:0, nickname:null, contractExpectWar:0, gameMode:"standard", contractYearsLeft:0,
       pitcherRole:"SP",
       contractOfferedAtSeason:-1, wbcOffered:false,
       career:{ hr:0, rbi:0, sb:0, pa:0, hitSum:0, hits:0, runs:0, wins:0, losses:0, saves:0, holds:0, so:0, ip:0, eraSum:0,
         warSum:0, allStars:0, mvps:0, cyYoungs:0, goldGloves:0, silverSluggers:0, roy:false,
-        championships:0, playoffs:0, wbc:null, demotions:0 },
+        championships:0, playoffs:0, wbc:null, wbcFlags:[], demotions:0,
+        clutchWins:0, hotSeasons:0, coldSeasons:0, bestWar:0, best:{hr:0,avg:0,so:0,saves:0,wins:0}, nicknames:[] },
       log:[],
       careerRows:[],
       released:false,
@@ -1331,14 +1458,14 @@
   ];
 
   var COLLEGES = [
-    {name:"Louisiana State University", tag:"Baseball powerhouse · elite competition", bonus:{power:4,contact:4,focus:-2}},
-    {name:"Vanderbilt University", tag:"Respected program · balanced development", bonus:{contact:3,focus:3}},
-    {name:"Dallas Baptist University", tag:"Mid-major program · player development focus", bonus:{health:5,focus:4,power:1}},
-    {name:"University of Florida", tag:"Baseball powerhouse · elite hitting development", bonus:{contact:5,focus:2}},
-    {name:"University of Texas", tag:"Baseball powerhouse · national spotlight", bonus:{power:3,contact:3,fame:2}},
-    {name:"Arizona State University", tag:"Historic program · athletic development", bonus:{power:3,speed:2}},
-    {name:"Wake Forest University", tag:"Pitching-focused development · demanding program", bonus:{arm:4,contact:3,focus:-1}},
-    {name:"Oregon State University", tag:"Defense and fundamentals · low-pressure program", bonus:{glove:3,focus:3,health:2}}
+    {name:"Louisiana State University", abbr:"LSU", tag:"Baseball powerhouse · elite competition", bonus:{power:4,contact:4,focus:-2}, colors:["#461D7C","#FDD023"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/99.png"]},
+    {name:"Vanderbilt University", abbr:"VAN", tag:"Respected program · balanced development", bonus:{contact:3,focus:3}, colors:["#000000","#866D4B"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"]},
+    {name:"Dallas Baptist University", abbr:"DBU", tag:"Mid-major program · player development focus", bonus:{health:5,focus:4,power:1}, colors:["#00563F","#B7A369"], logos:[]},
+    {name:"University of Florida", abbr:"UF", tag:"Baseball powerhouse · elite hitting development", bonus:{contact:5,focus:2}, colors:["#0021A5","#FA4616"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/57.png"]},
+    {name:"University of Texas", abbr:"TEX", tag:"Baseball powerhouse · national spotlight", bonus:{power:3,contact:3,fame:2}, colors:["#BF5700","#FFFFFF"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"]},
+    {name:"Arizona State University", abbr:"ASU", tag:"Historic program · athletic development", bonus:{power:3,speed:2}, colors:["#8C1D40","#FFC627"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/9.png"]},
+    {name:"Wake Forest University", abbr:"WAKE", tag:"Pitching-focused development · demanding program", bonus:{arm:4,contact:3,focus:-1}, colors:["#9E7E38","#000000"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/154.png"]},
+    {name:"Oregon State University", abbr:"OSU", tag:"Defense and fundamentals · low-pressure program", bonus:{glove:3,focus:3,health:2}, colors:["#DC4405","#000000"], logos:["https://a.espncdn.com/i/teamlogos/ncaa/500/204.png"]}
   ];
 
   function pickColleges(n){ return sampleN(COLLEGES, n); }
@@ -1347,12 +1474,12 @@
 
   // Real NPB (Japan) franchises — names and colors only, no logo artwork.
   var NPB_TEAMS = [
-    {name:"Yomiuri Giants", abbr:"YOM", trait:"npb", league:"npb", colors:["#F97709","#000000"]},
-    {name:"Hanshin Tigers", abbr:"HAN", trait:"npb", league:"npb", colors:["#FFE201","#000000"]},
-    {name:"Fukuoka SoftBank Hawks", abbr:"SBH", trait:"npb", league:"npb", colors:["#FCC800","#000000"]},
-    {name:"Yokohama DeNA BayStars", abbr:"DeNA", trait:"npb", league:"npb", colors:["#0055A5","#FFFFFF"]},
-    {name:"Chiba Lotte Marines", abbr:"LOT", trait:"npb", league:"npb", colors:["#000000","#C0C0C0"]},
-    {name:"Hokkaido Nippon-Ham Fighters", abbr:"NIP", trait:"npb", league:"npb", colors:["#016299","#B5A160"]}
+    {name:"Yomiuri Giants", abbr:"YOM", trait:"npb", league:"npb", colors:["#F97709","#000000"], logos:[]},
+    {name:"Hanshin Tigers", abbr:"HAN", trait:"npb", league:"npb", colors:["#FFE201","#000000"], logos:[]},
+    {name:"Fukuoka SoftBank Hawks", abbr:"SBH", trait:"npb", league:"npb", colors:["#FCC800","#000000"], logos:[]},
+    {name:"Yokohama DeNA BayStars", abbr:"DeNA", trait:"npb", league:"npb", colors:["#0055A5","#FFFFFF"], logos:[]},
+    {name:"Chiba Lotte Marines", abbr:"LOT", trait:"npb", league:"npb", colors:["#000000","#C0C0C0"], logos:[]},
+    {name:"Hokkaido Nippon-Ham Fighters", abbr:"NIP", trait:"npb", league:"npb", colors:["#016299","#B5A160"], logos:[]}
   ];
 
   function pickTeams(n){ return sampleN(TEAMS, n); }
@@ -1555,6 +1682,57 @@
     return {t:"Public Villain", c:"bad"};
   }
 
+  // ===== NICKNAMES — earned by how you actually play =====
+  // Each: {id, name, when(career, state)->bool, desc}. First match sticks
+  // per criteria; a player can collect several across a career.
+  var NICKNAMES = [
+    {id:"kid", name:"The Kid", t:"Rookie of the Year", w:function(c,S){ return c.roy; }},
+    {id:"natural", name:"The Natural", t:"MVP or Cy Young", w:function(c,S){ return c.mvps+c.cyYoungs>=1; }},
+    {id:"goat", name:"The GOAT", t:"3+ MVPs or Cy Youngs", w:function(c,S){ return c.mvps+c.cyYoungs>=3; }},
+    {id:"cornerstone", name:"The Franchise", t:"12+ years, one org", w:function(c,S){ return S.seasonsPlayed>=12 && orgCountOf()===1; }},
+    {id:"journeyman", name:"The Journeyman", t:"6+ organizations", w:function(c,S){ return orgCountOf()>=6; }},
+    {id:"mercenary", name:"The Mercenary", t:"Signed with a rival", w:function(c,S){ return S._signedRival; }},
+    {id:"october", name:"Mr. October", t:"3+ championships", w:function(c,S){ return c.championships>=3; }},
+    {id:"ring", name:"Ringbearer", t:"Won a World Series", w:function(c,S){ return c.championships>=1; }},
+    {id:"cooler", name:"The Closer's Closer", t:"300+ career saves", w:function(c,S){ return c.saves>=300; }},
+    {id:"fireman", name:"The Fireman", t:"200+ saves", w:function(c,S){ return c.saves>=200 && c.saves<300; }},
+    {id:"ace", name:"The Ace", t:"250+ wins", w:function(c,S){ return c.wins>=250; }},
+    {id:"k", name:"Doctor K", t:"3000+ strikeouts", w:function(c,S){ return c.so>=3000; }},
+    {id:"heat", name:"The Heater", t:"300-K season", w:function(c,S){ return c.best.so>=300; }},
+    {id:"bambino", name:"The Bambino", t:"500+ home runs", w:function(c,S){ return c.hr>=500; }},
+    {id:"masher", name:"The Masher", t:"a 50-HR season", w:function(c,S){ return c.best.hr>=50; }},
+    {id:"slugger", name:"The Slugger", t:"400+ home runs", w:function(c,S){ return c.hr>=400 && c.hr<500; }},
+    {id:"hitmachine", name:"The Hit Machine", t:"3000+ hits", w:function(c,S){ return c.hits>=3000; }},
+    {id:"batchamp", name:"The Batting Champ", t:"a .350 season", w:function(c,S){ return c.best.avg>=0.350; }},
+    {id:"fivetool", name:"The Five-Tool Star", t:"a 30/30 caliber year", w:function(c,S){ return c.best.hr>=30 && c.sb>=100; }},
+    {id:"burner", name:"The Burner", t:"400+ stolen bases", w:function(c,S){ return c.sb>=400; }},
+    {id:"iron", name:"The Iron Man", t:"18+ seasons", w:function(c,S){ return S.seasonsPlayed>=18; }},
+    {id:"clutch", name:"Captain Clutch", t:"5+ walk-off / save wins", w:function(c,S){ return (c.clutchWins||0)>=5; }},
+    {id:"streaky", name:"The Streak", t:"5+ red-hot seasons", w:function(c,S){ return c.hotSeasons>=5; }},
+    {id:"icon", name:"The People's Champ", t:"beloved by the fans", w:function(c,S){ return S.rep>=45; }},
+    {id:"villain", name:"The Villain", t:"hated by the fans", w:function(c,S){ return S.rep<=-45; }},
+    {id:"allstar", name:"The Perennial", t:"10+ All-Star nods", w:function(c,S){ return c.allStars>=10; }},
+    {id:"glove", name:"The Wizard", t:"5+ Gold Gloves", w:function(c,S){ return c.goldGloves>=5; }},
+    {id:"prospect", name:"The Phenom", t:"an MVP/Cy before age 25", w:function(c,S){ return (c.mvps+c.cyYoungs>=1) && S.age<=25; }},
+    {id:"globe", name:"The Ambassador", t:"WBC for 2+ nations", w:function(c,S){ return (c.wbcFlags||[]).length>=2; }},
+    {id:"comeback", name:"The Comeback Kid", t:"survived a major setback", w:function(c,S){ return S._survivedSetback; }},
+    {id:"legend", name:"The Living Legend", t:"90+ WAR", w:function(c,S){ return c.warSum>=90; }}
+  ];
+
+  function orgCountOf(){ var s={}; S.teamHistory.forEach(function(t){ if(t&&typeof t!=="string") s[t.name]=1; }); return Object.keys(s).length||1; }
+
+  function checkNicknames(){
+    NICKNAMES.forEach(function(n){
+      if(S.career.nicknames.indexOf(n.name)>=0) return;
+      if(n.w(S.career, S)){
+        S.career.nicknames.push(n.name);
+        if(!S.nickname) S.nickname = n.name;   // headline nickname = first earned
+        S._newNick = n.name;
+        log("You've earned a nickname: \u201C"+n.name+"\u201D \u2014 "+n.t+".", true);
+      }
+    });
+  }
+
   function ovrTier(v){
     if(v>=70) return "tier-gold";
     if(v>=55) return "tier-bronze";
@@ -1577,7 +1755,7 @@
     head.style.background = 'linear-gradient(100deg, '+c[0]+' 0%, '+c[0]+'CC 55%, rgba(20,20,24,0.92) 100%)';
 
     var affiliation = S.team ? S.team.name : (S.college || STAGE_LABELS[S.stageKey] || "Free Agent");
-    var badgeMark = S.team ? teamBadgeHtml(S.team, 26) : "";
+    var badgeMark = S.team ? teamBadgeHtml(S.team, 26) : (S.collegeObj ? teamBadgeHtml(S.collegeObj, 26) : "");
     var money = S.attrs.bank>=1 ? ("$"+S.attrs.bank+"M") : "—";
 
     head.innerHTML =
@@ -1586,6 +1764,9 @@
           '<span class="th-chip pos">'+escapeHtml(S.position)+'</span>'+
           '<span class="th-chip">'+squadRole()+'</span>'+
           '<span class="th-chip rep-'+repLabel().c+'">'+repLabel().t+'</span>'+
+          (S.streak>=2?'<span class="th-chip streak-hot">\uD83D\uDD25 Hot Streak</span>':'')+
+          (S.streak<=-2?'<span class="th-chip streak-cold">\uD83E\uDDCA Cold Streak</span>':'')+
+          (S.nickname?'<span class="th-chip nick">\u201C'+S.nickname+'\u201D</span>':'')+
         '</div>'+
         '<div class="th-name">'+badgeMark+'<span>'+escapeHtml(affiliation)+'</span></div>'+
       '</div>'+
@@ -1596,6 +1777,29 @@
 
     var sh = document.getElementById("sh-stats");
     if(sh) sh.textContent = S.category==="pitcher" ? "W-L / ERA / WAR" : "AVG / HR / RBI / WAR";
+  }
+
+  function showStatToast(effects){
+    if(!effects) return;
+    var parts=[];
+    for(var k in effects){
+      if(SKILL_ATTRS.indexOf(k)<0 && META_ATTRS.indexOf(k)<0) continue;
+      var v=effects[k]; if(!v) continue;
+      var lbl=(SKILL_LABELS[k]||META_LABELS[k]||k);
+      parts.push('<span class="toast-chip '+(v>=0?"up":"down")+'">'+lbl+' '+(v>=0?"+":"")+v+'</span>');
+    }
+    if(!parts.length) return;
+    var host=document.getElementById("stat-toast-host");
+    if(!host){
+      host=document.createElement("div"); host.id="stat-toast-host"; host.className="stat-toast-host";
+      document.body.appendChild(host);
+    }
+    var toast=document.createElement("div");
+    toast.className="stat-toast";
+    toast.innerHTML=parts.join("");
+    host.appendChild(toast);
+    setTimeout(function(){ toast.classList.add("fade"); }, 1400);
+    setTimeout(function(){ toast.remove(); }, 1900);
   }
 
   function tagHtml(effects){
@@ -1769,11 +1973,22 @@
     return out;
   }
 
+  var MILESTONE_META = {
+    draft:{icon:"\u26BE", label:"DRAFT DAY", cls:"ms-draft"},
+    debut:{icon:"\uD83C\uDF1F", label:"CALL-UP", cls:"ms-debut"},
+    freeagency:{icon:"\uD83D\uDCBC", label:"FREE AGENCY", cls:"ms-fa"},
+    awards:{icon:"\uD83C\uDFC5", label:"SEASON AWARDS", cls:"ms-awards"},
+    champion:{icon:"\uD83C\uDFC6", label:"WORLD CHAMPIONS", cls:"ms-champ"}
+  };
+
   function renderEventCard(){
     var el = document.getElementById("event-card");
     if(!currentEvent){ el.innerHTML=""; return; }
     var ev = currentEvent;
+    var mm = ev._milestone ? MILESTONE_META[ev._milestone] : null;
+    el.className = "decision-wrap"+(mm?(" "+mm.cls):"");
     var html = '';
+    if(mm) html += '<div class="ms-eyebrow">'+mm.icon+' '+mm.label+'</div>';
     html += '<div class="d-title">'+(ev._outcomeReveal ? "\uD83C\uDFB2 "+ev.h : ev.h)+'</div>';
     if(ev.body){ html += '<div class="rev-body">'+ev.body+'</div>'; }
     else { html += '<div class="d-sub">'+ev.t+'</div>'; }
@@ -1824,6 +2039,7 @@
     if(choice.outcomes){
       showOutcomeReveal(ev.h, outcome.text, outcome.effects, advance);
     } else {
+      showStatToast(outcome.effects);
       advance();
     }
   }
@@ -1907,7 +2123,7 @@
     } else if(stageKey==="high_school"){
       addCareerRow({age:S.age, team:null, teamText:"—", level:"High School", ovr:Math.round(overall()), stats:"—"});
     } else if(stageKey==="college"){
-      addCareerRow({age:S.age, team:null, teamText:S.college||"College", level:"College", ovr:Math.round(overall()), stats:"—"});
+      addCareerRow({age:S.age, team:S.collegeObj||null, teamText:S.college||"College", level:"College", ovr:Math.round(overall()), stats:"—"});
     }
     nextInQueue();
   }
@@ -1983,7 +2199,7 @@
       h:"Choosing a Program",
       t:"A few college programs have shown real interest. Where you go will shape how you develop over the next few years.",
       c:pickColleges(3).map(function(col){
-        return {l:col.name+" — "+col.tag, e:col.bonus, collegePick:col};
+        return {l:teamBadgeHtml(col,20)+' '+col.name+' <span class="tag">'+col.tag+'</span>', e:col.bonus, collegePick:col};
       })
     };
   }
@@ -2014,7 +2230,7 @@
     return {
       h:"Draft Day",
       t:"The phone finally rings. A couple of organizations have called with an offer — the choice of who to sign with is yours.",
-      c:choices
+      c:choices, _milestone:"draft"
     };
   }
 
@@ -2027,7 +2243,7 @@
         c:[
           {l:"Break camp in the rotation", e:{fame:3,focus:2}, pitcherRole:"SP"},
           {l:"Break camp in the bullpen", e:{fame:2,focus:3}, pitcherRole:"RP"}
-        ]
+        ], _milestone:"debut"
       };
     }
     return {
@@ -2036,7 +2252,7 @@
       c:[
         {l:"Soak in the moment", e:{fame:4,focus:2}},
         {l:"Treat it like any other game", e:{focus:3}}
-      ]
+      ], _milestone:"debut"
     };
   }
 
@@ -2049,6 +2265,7 @@
       applyEffects(choice.e);
       S.wentToCollege = true;
       S.college = choice.collegePick.name;
+      S.collegeObj = choice.collegePick;
       log("Committed to "+choice.collegePick.name+".", true);
       currentEvent = null;
       enterStage("college");
@@ -2059,6 +2276,7 @@
       S.team = teamPickInfo.team;
       S.teamHistory.push(teamPickInfo.team);
       S.teamControlUntilAge = S.age + 6;
+      S.contractYearsLeft = 3; // rookie deal — extension talks don't start immediately
       applyEffects({bank:teamPickInfo.bonus});
       log("Signed with the "+teamPickInfo.team.name+" for a $"+teamPickInfo.bonus+"K bonus. You're under the organization's control for 6 years of service before free agency.", true);
       currentEvent = null;
@@ -2115,6 +2333,7 @@
     if(choice.outcomes){
       showOutcomeReveal(ev.h, outcome.text, outcome.effects, proceedAfterChoice);
     } else {
+      showStatToast(outcome.effects);
       proceedAfterChoice();
     }
   };
@@ -2145,8 +2364,8 @@
       h:"Contract Talks",
       t:"Your agent lays out two paths forward with the front office.",
       c:[
-        {l:"Sign the extension — $"+total+"M over "+years+" years", e:{bank:12,fame:-1}},
-        {l:"Bet on yourself — 1-year, $"+proveItAnnual+"M prove-it deal", e:{bank:4,focus:3,fame:1}}
+        {l:"Sign the extension — $"+total+"M over "+years+" years", e:{bank:12,fame:-1}, contractYears:years},
+        {l:"Bet on yourself — 1-year, $"+proveItAnnual+"M prove-it deal", e:{bank:4,focus:3,fame:1}, contractYears:1}
       ]
     };
   }
@@ -2164,35 +2383,80 @@
   var WBC_COUNTRIES = ["the United States","the Dominican Republic","Venezuela","Puerto Rico",
     "Japan","Mexico","Colombia","Canada","Cuba","the Netherlands","South Korea","Panama"];
 
+  var WBC_FLAGS = {
+    "the United States":"\uD83C\uDDFA\uD83C\uDDF8","the Dominican Republic":"\uD83C\uDDE9\uD83C\uDDF4",
+    "Venezuela":"\uD83C\uDDFB\uD83C\uDDEA","Puerto Rico":"\uD83C\uDDF5\uD83C\uDDF7",
+    "Japan":"\uD83C\uDDEF\uD83C\uDDF5","Mexico":"\uD83C\uDDF2\uD83C\uDDFD",
+    "Colombia":"\uD83C\uDDE8\uD83C\uDDF4","Canada":"\uD83C\uDDE8\uD83C\uDDE6",
+    "Cuba":"\uD83C\uDDE8\uD83C\uDDFA","the Netherlands":"\uD83C\uDDF3\uD83C\uDDF1",
+    "South Korea":"\uD83C\uDDF0\uD83C\uDDF7","Panama":"\uD83C\uDDF5\uD83C\uDDE6"
+  };
+  function wbcFlag(country){ return WBC_FLAGS[country] || "\uD83C\uDFF3"; }
+  function cap1(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
   function wbcEvent(){
-    if(!S.wbcCountry) S.wbcCountry = pick(WBC_COUNTRIES);
-    var country = S.wbcCountry;
-    var cap = country.charAt(0).toUpperCase()+country.slice(1);
+    var ov = overall();
+    var elite = ov >= 70;   // stars get to pick their nation outright
+
+    // First-time call: elite players elect a country; everyone else gets one
+    // nation knocking, with a second long-shot suitor if they're good.
+    if(!S.wbcCountry){
+      if(elite){
+        var picks = sampleN(WBC_COUNTRIES, 3);
+        return {
+          h:"World Baseball Classic",
+          t:"You've made a name for yourself, and multiple national teams are recruiting you for the Classic. Choose who you'll represent \u2014 it's for keeps.",
+          c:picks.map(function(ct){
+            return {l:wbcFlag(ct)+" Represent "+cap1(ct), wbcElect:ct, e:{fame:5,focus:1}};
+          }).concat([{l:"Skip the Classic this cycle", wbcChoice:"declined", e:{focus:2}}])
+        };
+      }
+      var suitor = pick(WBC_COUNTRIES);
+      var choices = [
+        {l:wbcFlag(suitor)+" Represent "+cap1(suitor), wbcElect:suitor, outcomes:[
+          {prob:0.65, label:"A career highlight", result:"You help "+suitor+" make a deep run \u2014 a memory that outlasts any stat line.", e:{fame:7,focus:2}},
+          {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the season.", e:{fame:3,health:-6}}
+        ]},
+        {l:"Decline, focus on your club season", wbcChoice:"declined", e:{focus:2}}
+      ];
+      if(ov >= 60){
+        var longshot = pick(WBC_COUNTRIES.filter(function(x){ return x!==suitor; }));
+        choices.splice(1, 0, {l:wbcFlag(longshot)+" Instead represent "+cap1(longshot), wbcElect:longshot, e:{fame:4}});
+      }
+      return {
+        h:"World Baseball Classic",
+        t:cap1(suitor)+" has come knocking for the Classic"+(ov>=60?", and you've got another suitor too":"")+". Reporting early means meaningful games before your club season \u2014 but the flag on your chest is yours to choose.",
+        c:choices
+      };
+    }
+
+    // Already committed: represent your nation again, with one lifetime switch
+    var country = S.wbcCountry, cap = cap1(country);
     var choices = [
-      {l:"Represent "+cap, wbcChoice:"accepted", outcomes:[
+      {l:wbcFlag(country)+" Represent "+cap+" again", wbcChoice:"accepted", outcomes:[
         {prob:0.65, label:"A career highlight", result:"You help "+country+" make a deep run \u2014 a memory that outlasts any stat line.", e:{fame:7,focus:2}},
-        {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the regular season.", e:{fame:3,health:-6}}
+        {prob:0.35, label:"Gassed for the season", result:"The tournament left you gassed heading into the season.", e:{fame:3,health:-6}}
       ]},
       {l:"Decline, focus on your club season", wbcChoice:"declined", e:{focus:2}}
     ];
     if(!S.wbcSwitchUsed){
       var other = pick(WBC_COUNTRIES.filter(function(x){ return x!==country; }));
       choices.splice(1, 0, {
-        l:"Switch allegiance to "+other.charAt(0).toUpperCase()+other.slice(1),
+        l:wbcFlag(other)+" Switch allegiance to "+cap1(other),
         wbcSwitch:other,
         outcomes:[
-          {prob:0.55, label:"Embraced by a new nation", result:"A new country adopts you as its own \u2014 and you'll never wear the other jersey again.", e:{fame:6}},
+          {prob:0.55, label:"Embraced by a new nation", result:"A new country adopts you as its own \u2014 you'll never wear the other jersey again.", e:{fame:6}},
           {prob:0.45, label:"Called a mercenary", result:"Back home they call it a betrayal, and it follows you.", e:{fame:-4}}
         ]
       });
     }
     return {
       h:"World Baseball Classic",
-      t:"The Classic is here. "+cap+" wants you on the roster \u2014 it means reporting early and playing meaningful games before your club season starts."+
-        (S.wbcSwitchUsed?" You've already committed your allegiance for good.":" You can still change your allegiance once, and only once."),
+      t:"The Classic is back. "+cap+" wants you again"+(S.wbcSwitchUsed?" \u2014 and your allegiance is committed for good.":", though you could still change your allegiance once."),
       c:choices
     };
   }
+
 
 
   function freeAgencyEvent(){
@@ -2209,28 +2473,32 @@
       var years = ri(2,5);
       var marketTag = team.trait==="big-market" ? "Big market" : "Small market";
       var rivalTag = areRivals(S.team, team) ? ' <span class="tag down">\uD83D\uDD25 RIVAL</span>' : '';
+      var bigDeal = annual >= 20;
+      var pressTag = bigDeal ? ' <span class="tag down">\uD83D\uDCE3 Expectations</span>' : '';
       return {
-        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+rivalTag+
+        l:teamBadgeHtml(team)+' Sign with the '+team.name+' <span class="tag">'+marketTag+'</span>'+rivalTag+pressTag+
           '<br><span style="font-size:12px;opacity:0.75;">$'+annual+'M/yr × '+years+' years</span>'+perkOfferHtml(team),
-        faPick:{team:team, bank:Math.round(annual*0.8)}
+        faPick:{team:team, bank:Math.round(annual*0.8), bigDeal:bigDeal, expectWar:bigDeal?4.5:0, years:years}
       };
     });
     if(Math.random() < 0.4){
       var npb = pickNpbTeam();
       var npbAnnual = Math.max(3, Math.round(2 + ov*0.35));
+      var npbYears = ri(2,4);
       choices.push({
         l:teamBadgeHtml(npb)+' Sign in Japan with the '+npb.name+' <span class="tag">NPB</span>'+
-          '<br><span style="font-size:12px;opacity:0.75;">$'+npbAnnual+'M/yr · a new chapter overseas</span>',
-        faPick:{team:npb, bank:Math.round(npbAnnual*0.9), npb:true}
+          '<br><span style="font-size:12px;opacity:0.75;">$'+npbAnnual+'M/yr \u00d7 '+npbYears+' years \u2014 a new chapter overseas</span>',
+        faPick:{team:npb, bank:Math.round(npbAnnual*0.9), npb:true, years:npbYears}
       });
     }
     if(S.team){
-      choices.push({l:"Stay with the "+S.team.name, faStay:true});
+      var stayYears = ri(2,4);
+      choices.push({l:"Stay with the "+S.team.name+" <br><span style=\"font-size:12px;opacity:0.75;\">"+stayYears+"-year extension</span>", faStay:true, stayYears:stayYears});
     }
     return {
       h:"Free Agency",
       t:"You've hit the open market. Every offer on the table is yours to take — or leave.",
-      c:choices
+      c:choices, _milestone:"freeagency"
     };
   }
 
@@ -2250,25 +2518,85 @@
     };
   }
 
+
+  // ===== RARE EVENTS — low frequency, high memorability =====
+  var RARE_EVENTS = [
+    {id:"r1", h:"Scary Injury Scare", t:"You go down awkwardly and the training staff rushes out. The initial read isn't good.",
+      c:[
+        {l:"Gamble on an aggressive rehab", outcomes:[
+          {prob:0.55, label:"Beats the timeline", result:"You beat every projection and come back stronger than before.", e:{health:8,focus:3}},
+          {prob:0.45, label:"Setback, lost time", result:"You push too hard, re-injure it, and lose real time.", e:{health:-16,focus:-3}}
+        ]},
+        {l:"Take the slow, safe road", e:{health:4,focus:-1}}
+      ], setback:true},
+    {id:"r2", h:"Deadline Blockbuster", t:"Your name is at the center of trade rumors as a contender comes calling with a real offer.",
+      c:[
+        {l:"Waive your no-trade rights", outcomes:[
+          {prob:0.6, label:"Straight into a pennant race", result:"You're on a real contender overnight \u2014 October suddenly feels close.", e:{fame:4}},
+          {prob:0.4, label:"Culture shock", result:"New city, new grind, and it takes a minute to find your footing.", e:{focus:-2}}
+        ]},
+        {l:"Ask to stay put", e:{focus:2}}
+      ], trade:true},
+    {id:"r3", h:"Hometown Return", t:"A trade sends you back to the city where it all started \u2014 the place you grew up idolizing this team.",
+      c:[{l:"Soak in the moment", e:{fame:8,focus:2}}], trade:true},
+    {id:"r4", h:"The Cover Athlete", t:"A major sports video game wants your face on next year's cover.",
+      c:[
+        {l:"Accept the cover", outcomes:[
+          {prob:0.5, label:"The curse is a myth", result:"You have a career year and the \u2018cover curse\u2019 talk dies instantly.", e:{fame:6,focus:2}},
+          {prob:0.5, label:"The curse strikes", result:"A rough, injury-shortened year has the curse talk everywhere.", e:{fame:2,health:-8}}
+        ]},
+        {l:"Pass on it", e:{focus:1}}
+      ]},
+    {id:"r5", h:"Perfect Game Bid", t:"Twenty-six up, twenty-six down. Three outs from perfection, and the whole dugout has gone silent.",
+      c:[{l:"Take the mound for the 27th", outcomes:[
+        {prob:0.35, label:"PERFECTION", result:"Twenty-seven up, twenty-seven down. A perfect game \u2014 one of the rarest feats in the sport, and it's yours.", e:{fame:15,focus:3}},
+        {prob:0.65, label:"So close", result:"A two-out single breaks it up. Still one of the great outings of your life.", e:{fame:4}}
+      ]}], cat:"pitcher"},
+    {id:"r6", h:"Record Watch", t:"Every broadcast this week is talking about the single-season record you're on pace to threaten.",
+      c:[{l:"Try to keep pushing", outcomes:[
+        {prob:0.4, label:"History", result:"You get there. The record books have a new name in them \u2014 yours.", e:{fame:14}},
+        {prob:0.6, label:"Falls just short", result:"You fall just short, but the chase itself is a season nobody forgets.", e:{fame:5}}
+      ]}]}
+  ];
+
+  function maybeRareEvent(){
+    var pool = RARE_EVENTS.filter(function(e){
+      if(e.cat && e.cat!==S.category) return false;
+      if(S.usedEventIds[e.id]) return false;
+      return true;
+    });
+    if(!pool.length || Math.random() > 0.05) return null;
+    var ev = pick(pool);
+    S.usedEventIds[ev.id] = true;
+    if(ev.setback) S._survivedSetback = true;
+    return {h:ev.h, t:ev.t, c:ev.c.map(function(c){ return {l:c.l, e:c.e, outcomes:c.outcomes, mlb:true}; })};
+  }
+
   function playMlbOffseason(){
     // Free agency: after 6 years of service, every 3rd year
-    if(S.serviceYears>=4 && (S.serviceYears-4)%2===0 && S.faOfferedAtSeason!==S.seasonsPlayed){
+    // Free agency only opens once your current contract has actually run out —
+    // years signed for now really do lock you in, not just a fixed schedule.
+    if(S.serviceYears>=6 && S.contractYearsLeft<=0 && S.faOfferedAtSeason!==S.seasonsPlayed){
       S.faOfferedAtSeason = S.seasonsPlayed;
       currentEvent = freeAgencyEvent();
       currentEvent._afterOffseason = true;
       renderAll();
       return;
     }
-    // Contract talks: only while under team control
-    if(S.serviceYears<4 && S.seasonsPlayed>0 && S.seasonsPlayed%3===0 && S.contractOfferedAtSeason!==S.seasonsPlayed){
+    // Contract extension talks: only while still under team control, and only
+    // once any earlier extension you signed is close to running out.
+    if(S.serviceYears<6 && S.contractYearsLeft<=1 && S.seasonsPlayed>0 && S.contractOfferedAtSeason!==S.seasonsPlayed){
       S.contractOfferedAtSeason = S.seasonsPlayed;
       currentEvent = contractEvent();
       currentEvent._afterOffseason = true;
       renderAll();
       return;
     }
+    var rare = maybeRareEvent();
+    if(rare){ currentEvent = rare; currentEvent._afterOffseason = true; renderAll(); return; }
+
     var roll = Math.random();
-    if(roll < 0.20 && S.stageKey==="mlb"){
+    if(roll < 0.20 && S.stageKey==="mlb" && S.gameMode!=="turbo"){
       clutchStart();
       return;
     }
@@ -2297,11 +2625,14 @@
       var outcomeI = rollChaosOutcome(choice);
       applyEffects(outcomeI.effects);
       log(ev.h+" — "+choice.l+(outcomeI.text?(" → "+outcomeI.text):"")+".", true);
+      if(choice.wbcElect){ S.wbcCountry = choice.wbcElect; S.career.wbc = "accepted"; if(S.career.wbcFlags.indexOf(choice.wbcElect)<0) S.career.wbcFlags.push(choice.wbcElect); }
+      if(choice.wbcChoice==="accepted" && S.wbcCountry && S.career.wbcFlags.indexOf(S.wbcCountry)<0) S.career.wbcFlags.push(S.wbcCountry);
       if(choice.wbcChoice){ S.career.wbc = choice.wbcChoice; }
       if(choice.wbcSwitch){
         S.wbcCountry = choice.wbcSwitch;
         S.wbcSwitchUsed = true;
         S.career.wbc = "accepted";
+        if(S.career.wbcFlags.indexOf(choice.wbcSwitch)<0) S.career.wbcFlags.push(choice.wbcSwitch);
         adjustRep(-6);
       }
       function proceedInterstitial(){
@@ -2311,6 +2642,7 @@
       if(choice.outcomes){
         showOutcomeReveal(ev.h, outcomeI.text, outcomeI.effects, proceedInterstitial);
       } else {
+        showStatToast(outcomeI.effects);
         proceedInterstitial();
       }
       return;
@@ -2321,6 +2653,9 @@
         var wasRival = areRivals(S.team, fa.team);
         var oldName = S.team ? S.team.name : "";
         S.team = fa.team;
+        S.contractExpectWar = fa.expectWar || 0;
+        S.contractYearsLeft = fa.years || 3;
+        S._signedRival = S._signedRival || wasRival;
         S.teamHistory.push(fa.team);
         applyEffects({bank:fa.bank, fame:fa.npb?3:1});
         var faMsg = fa.npb
@@ -2337,7 +2672,8 @@
         return;
       }
       if(choice.faStay){
-        log("You re-sign and stay with the "+S.team.name+".", true);
+        S.contractYearsLeft = choice.stayYears || 3;
+        log("You re-sign and stay with the "+S.team.name+" for "+S.contractYearsLeft+" more years.", true);
         applyEffects({fame:2});
         simulateSeason();
         return;
@@ -2345,6 +2681,8 @@
       var outcome = rollChaosOutcome(choice);
       applyEffects(outcome.effects);
       log(ev.h+" — "+choice.l+(outcome.text?(" → "+outcome.text):"")+".", true);
+
+      if(choice.contractYears){ S.contractYearsLeft = choice.contractYears; }
 
       if(choice.tradeRequest){
         var traded = Math.random() < 0.6 && S.team;
@@ -2365,6 +2703,7 @@
       if(choice.outcomes){
         showOutcomeReveal(ev.h, outcome.text, outcome.effects, function(){ simulateSeason(); });
       } else {
+        showStatToast(outcome.effects);
         simulateSeason();
       }
       return;
@@ -2404,10 +2743,14 @@
     return clamp(m, 0.30, 1.06);
   }
 
-  function simulateSeason(){
+  function playOneYear(){
     developPlayer();
     var age = S.age;
     var mult = ageCurve(age);
+    // Hot / cold streaks: a run of good years compounds into a career year,
+    // a cold spell digs a hole you have to battle out of.
+    var streakMult = 1 + clamp(S.streak,-3,4)*0.045;
+    mult = mult * streakMult;
     var a = S.attrs;
     S.awardsThisSeason = [];
     var recap, tableStats, war;
@@ -2553,16 +2896,78 @@
       ovr:Math.round(overall()), stats:tableStats, trophy:wonChamp,
       awards:S.awardsThisSeason.slice()});
 
+    var hot=false, cold=false;
+    if(war >= 5.0){ S.streak = Math.max(1,S.streak)+1; S.career.hotSeasons++; hot=true; }
+    else if(war <= 1.0){ S.streak = Math.min(-1,S.streak)-1; S.career.coldSeasons++; cold=true; }
+    else { S.streak = 0; }
+    S.streak = clamp(S.streak,-3,4);
+    if(hot) miles.unshift("\uD83D\uDD25 Locked in \u2014 red-hot stretch");
+    if(cold) miles.push("\uD83E\uDDCA Slumping \u2014 fighting to find it");
+
+    if(war>S.career.bestWar) S.career.bestWar=war;
+    if(S.category==="hitter"){
+      if(hr>S.career.best.hr) S.career.best.hr=hr;
+      if(avg>S.career.best.avg) S.career.best.avg=avg;
+    } else {
+      if(so>S.career.best.so) S.career.best.so=so;
+      if(wins>S.career.best.wins) S.career.best.wins=wins;
+      if(saves>S.career.best.saves) S.career.best.saves=saves;
+    }
+    if(S.contractExpectWar>0){
+      if(war >= S.contractExpectWar){ adjustRep(3); }
+      else if(war <= S.contractExpectWar-2.5){
+        adjustRep(-6);
+        miles.push("\uD83D\uDCE3 Didn't live up to the contract \u2014 fans and front office notice");
+      }
+    }
+    S._newNick=null; checkNicknames();
+    if(S.contractYearsLeft>0) S.contractYearsLeft -= 1;
+
     S.age += 1;
     S.progress = clamp(0.75 + Math.min(0.23, S.seasonsPlayed*0.018), 0.75, 0.98);
 
-    S.pendingReview = {
+    return {
       age:age, record:S.lastRecord, teamWins:teamWins, recap:recap,
       awards:S.awardsThisSeason.slice(), miles:miles,
-      psResult:psResult, wonChamp:wonChamp, madePlayoffs:madePlayoffs, war:war
+      psResult:psResult, wonChamp:wonChamp, madePlayoffs:madePlayoffs, war:war,
+      newNick:S._newNick||null
     };
+  }
+
+  // A "season" is a two-year block: play both years, then show one review
+  // covering the pair — keeps a full career to ~8-10 taps instead of 19.
+  function blockSizeFor(){
+    if(S.gameMode==="insane") return 1;
+    if(S.gameMode==="turbo") return 4;
+    return 2; // standard
+  }
+
+  function simulateSeason(){
+    var n = blockSizeFor();
+    var years = [];
+    for(var i=0;i<n;i++){
+      years.push(playOneYear());
+      if(S.age >= 42 || S.released) break;
+    }
+    S.pendingReview = wrapReview(years);
     showSeasonReview();
   }
+
+  // Merge one or two years into a single review payload
+  function wrapReview(years){
+    var last = years[years.length-1];
+    var miles = [];
+    years.forEach(function(y){ miles = miles.concat(y.miles); });
+    var awards = [];
+    years.forEach(function(y){ y.awards.forEach(function(a){ awards.push({yr:y.age, a:a}); }); });
+    return {
+      years:years, age:last.age, record:last.record, recap:last.recap,
+      awardsByYear:awards, miles:miles,
+      psResult:last.psResult, wonChamp:years.some(function(y){return y.wonChamp;}),
+      madePlayoffs:years.some(function(y){return y.madePlayoffs;})
+    };
+  }
+
 
   // The year-in-review beat: team record, your line, awards, milestones,
   // and how October went — the payoff moment for the season you just played.
@@ -2689,28 +3094,42 @@
   function showSeasonReview(){
     var R = S.pendingReview; S.pendingReview = null;
     if(!R){ afterSeason(); return; }
-    var body = '<div class="rev-line"><span class="rev-k">'+(S.team?S.team.name:"Team")+'</span>'+
-               '<span class="rev-v">'+R.record+'</span></div>'+
-               '<div class="rev-line"><span class="rev-k">Your season</span>'+
-               '<span class="rev-v">'+R.recap+'</span></div>';
-    if(R.awards.length) body += '<div class="rev-awards">'+R.awards.map(function(a){
-        return '<span class="trophy-chip">'+a+'</span>'; }).join("")+'</div>';
+    var body = "";
+    var showBunting = R.wonChamp || S.seasonsPlayed === R.years.length;
+    if(showBunting){
+      body += '<div class="bunting">'+Array(11).fill('<span></span>').join("")+'</div>';
+    }
+    var newNicks = R.years.map(function(y){return y.newNick;}).filter(Boolean);
+    if(newNicks.length){
+      body += '<div class="rev-champ">\uD83C\uDFF7\uFE0F New nickname: \u201C'+newNicks[0]+'\u201D</div>';
+    }
+    // One line per year in the block, each with its team record + stat line
+    R.years.forEach(function(y){
+      body += '<div class="rev-line"><span class="rev-k">Age '+y.age+' \u2022 '+y.record+'</span>'+
+              '<span class="rev-v">'+y.recap+'</span></div>';
+    });
+    if(R.awardsByYear.length) body += '<div class="rev-awards">'+R.awardsByYear.map(function(x){
+        return '<span class="trophy-chip">'+x.a+' \u2019'+String(x.yr).slice(-2)+'</span>'; }).join("")+'</div>';
     if(R.miles.length) body += '<div class="rev-miles">'+R.miles.map(function(m){
         return '<div class="rev-mile">'+m+'</div>'; }).join("")+'</div>';
-    if(R.psResult){
-      var cls = R.wonChamp ? "rev-champ" : "rev-ps";
-      body += '<div class="'+cls+'">'+(R.wonChamp?"\uD83C\uDFC6 "+R.psResult+" \u2014 parade down the canyon of heroes":R.psResult)+'</div>';
-    } else {
-      body += '<div class="rev-ps rev-dim">Season over \u2014 no October baseball this year.</div>';
+    if(R.wonChamp){
+      body += '<div class="rev-champ">\uD83C\uDFC6 '+R.psResult+' \u2014 parade down the canyon of heroes</div>';
+    } else if(R.psResult){
+      body += '<div class="rev-ps">'+R.psResult+'</div>';
+    } else if(!R.madePlayoffs){
+      body += '<div class="rev-ps rev-dim">No October baseball this stretch.</div>';
     }
+    var firstAge = R.years[0].age, lastAge = R.years[R.years.length-1].age;
+    var hasAwards = R.awardsByYear.length>0;
     currentEvent = {
-      h:"Season "+S.seasonsPlayed+" \u2014 Age "+R.age,
+      h: (firstAge===lastAge ? "Age "+firstAge : "Ages "+firstAge+"\u2013"+lastAge),
       t:"", body:body,
       c:[{l:"Continue", e:{}}],
-      _review:true
+      _review:true, _milestone: R.wonChamp ? "champion" : (hasAwards ? "awards" : null)
     };
     renderAll();
   }
+
 
   function afterSeason(){
     if(S.age >= 42){ goToRetirement(); return; }
@@ -2842,6 +3261,132 @@
     return '<span class="org-logos">'+(out||"\u2014")+'</span>';
   }
 
+  // A written, detail-oriented recap a baseball nerd would actually enjoy
+  function careerNarrative(){
+    var c = S.career, nm = escapeHtml(S.name||"The player"), out = [];
+    var pos = S.category==="pitcher"
+      ? (S.pitcherRole==="RP" ? "reliever" : "starting pitcher")
+      : S.position;
+    var span = S.seasonsPlayed;
+    var firstTeam = S.teamHistory.length ? (typeof S.teamHistory[0]==="string"?S.teamHistory[0]:S.teamHistory[0].name) : "the pros";
+    var lastTeam = S.team ? S.team.name : firstTeam;
+    var orgCount = (function(){ var s={}; S.teamHistory.forEach(function(t){ if(t&&typeof t!=="string") s[t.name]=1; }); return Object.keys(s).length; })();
+
+    if(S.released){
+      return nm+" grew up chasing the big leagues as a "+pos+", climbing as high as "+(S.releaseLevel||"the minors")+" before the organization let go. The Show never called \u2014 but the game was played, and the uniform was earned.";
+    }
+    if(S.walkedAway){
+      return nm+" had the offers in hand but walked away from pro ball before ever signing. A road not taken.";
+    }
+
+    // opening
+    out.push(nm+" carved out a "+span+"-year big-league career as a "+pos+", suiting up for "+orgCount+" organization"+(orgCount>1?"s":"")+" from "+firstTeam+" to "+lastTeam+".");
+
+    // the statistical heart
+    if(S.category==="hitter"){
+      var avg = c.pa>0?fmtAvg(c.hitSum/c.pa):"—";
+      out.push("They retired with a "+avg+" average, "+c.hits.toLocaleString()+" hits, "+c.hr+" home runs, "+c.rbi.toLocaleString()+" RBI and "+c.warSum.toFixed(1)+" career WAR.");
+      if(c.hr>=500) out.push("The 500-home-run club is one of the most exclusive addresses in the sport \u2014 and "+nm+" has a locker there.");
+      else if(c.hits>=3000) out.push("Three thousand hits is a number that guarantees immortality, and "+nm+" got there one knock at a time.");
+    } else {
+      var era = c.ip>0?fmtEra(c.eraSum/c.ip):"—";
+      out.push("They walked away with a "+c.wins+"-"+c.losses+" record, a "+era+" ERA, "+c.so.toLocaleString()+" strikeouts"+(c.saves>0?", "+c.saves+" saves":"")+" and "+c.warSum.toFixed(1)+" career WAR.");
+      if(c.wins>=300) out.push("Three hundred wins is a milestone the modern game may never see again \u2014 "+nm+" reached it.");
+      else if(c.saves>=400) out.push("Four hundred saves puts "+nm+" among the greatest closers to ever take a ball in the ninth.");
+    }
+
+    // hardware
+    var hw = [];
+    if(c.mvps) hw.push(c.mvps+"\u00d7 MVP");
+    if(c.cyYoungs) hw.push(c.cyYoungs+"\u00d7 Cy Young");
+    if(c.roy) hw.push("Rookie of the Year");
+    if(c.allStars) hw.push(c.allStars+"\u00d7 All-Star");
+    if(c.goldGloves) hw.push(c.goldGloves+"\u00d7 Gold Glove");
+    if(c.silverSluggers) hw.push(c.silverSluggers+"\u00d7 Silver Slugger");
+    if(hw.length) out.push("The trophy case: "+hw.join(", ")+".");
+
+    // october
+    if(c.championships>=1) out.push(c.championships===1?"They tasted champagne once, riding a World Series run to the top.":"A "+c.championships+"-time World Series champion, they knew the October spotlight well.");
+    else if(c.playoffs>=1) out.push("They reached the postseason "+c.playoffs+" time"+(c.playoffs>1?"s":"")+" but never got their parade.");
+    else out.push("The one thing that got away was October \u2014 the playoffs stayed just out of reach.");
+
+    // international
+    if(c.wbcFlags && c.wbcFlags.length){
+      out.push("On the international stage, they wore the colors of "+c.wbcFlags.map(cap1).join(" and ")+" in the World Baseball Classic.");
+    }
+
+    // reputation coda
+    var rep = repLabel().t;
+    out.push("To the fans, "+nm+" finished as "+(/^[AEIOU]/.test(rep)?"an ":"a ")+rep.toLowerCase()+".");
+
+    return out.join(" ");
+  }
+
+  // Renders the result as a downloadable PNG via canvas
+  function saveResultImage(btn){
+    var c = S.career, score = computeLegacy(), tier = tierFor(score, S.released, S.walkedAway);
+    var W=1080, H=1350, cv=document.createElement("canvas");
+    cv.width=W; cv.height=H; var x=cv.getContext("2d");
+    // background
+    var g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,"#12212B"); g.addColorStop(1,"#0A1319");
+    x.fillStyle=g; x.fillRect(0,0,W,H);
+    var teamCol = (S.team&&S.team.colors)?S.team.colors[0]:"#F2A93B";
+    x.fillStyle=teamCol; x.fillRect(0,0,W,14);
+    function txt(s,size,color,y,weight,align){
+      x.fillStyle=color; x.textAlign=align||"center";
+      x.font=(weight||"400")+" "+size+"px Oswald, Arial, sans-serif";
+      x.fillText(s,align==="left"?90:(align==="right"?W-90:W/2),y);
+    }
+    txt("\u26BE 90 FEET",34,"#8FA3AD",90,"600");
+    txt((S.name||"Player").toUpperCase(),74,"#F5F1E6",180,"700");
+    txt(tier.title,52,"#F2A93B",255,"600");
+    if(!S.released){
+      x.fillStyle="#F2A93B"; x.font="700 150px Oswald, Arial, sans-serif"; x.textAlign="center";
+      x.fillText(score,W/2,430);
+      txt("LEGACY SCORE",26,"#8FA3AD",470,"500");
+    }
+    // stat lines
+    var rows=[];
+    if(S.released){ rows.push(["Highest Level",S.releaseLevel||"Minors"]); }
+    else if(S.category==="hitter"){
+      rows.push(["AVG", c.pa>0?fmtAvg(c.hitSum/c.pa):"—"]);
+      rows.push(["Home Runs", c.hr]); rows.push(["Hits", c.hits.toLocaleString()]);
+      rows.push(["RBI", c.rbi.toLocaleString()]); rows.push(["Runs", c.runs.toLocaleString()]);
+      rows.push(["WAR", c.warSum.toFixed(1)]);
+    } else {
+      rows.push(["ERA", c.ip>0?fmtEra(c.eraSum/c.ip):"—"]);
+      rows.push(["Record", c.wins+"-"+c.losses]);
+      if(c.saves>0) rows.push(["Saves", c.saves]);
+      rows.push(["Strikeouts", c.so.toLocaleString()]); rows.push(["WAR", c.warSum.toFixed(1)]);
+    }
+    if(!S.released){
+      rows.push(["Seasons", S.seasonsPlayed]);
+      rows.push(["All-Star", c.allStars]);
+      rows.push(["Titles", c.championships]);
+    }
+    var y=560;
+    rows.forEach(function(r){
+      x.strokeStyle="rgba(245,241,230,0.10)"; x.beginPath(); x.moveTo(90,y+18); x.lineTo(W-90,y+18); x.stroke();
+      txt(r[0].toUpperCase(),30,"#8FA3AD",y,"500","left");
+      txt(String(r[1]),40,"#F5F1E6",y+3,"600","right");
+      y+=64;
+    });
+    // hardware line
+    var hw=[];
+    if(c.mvps)hw.push(c.mvps+"x MVP"); if(c.cyYoungs)hw.push(c.cyYoungs+"x Cy Young");
+    if(c.roy)hw.push("ROY"); if(c.allStars)hw.push(c.allStars+"x AS");
+    if(c.goldGloves)hw.push(c.goldGloves+"x GG"); if(c.silverSluggers)hw.push(c.silverSluggers+"x SS");
+    if(hw.length){ y+=12; txt(hw.join("  \u2022  "),30,"#F2A93B",y,"500"); y+=30; }
+    if(c.wbcFlags&&c.wbcFlags.length){ y+=34; txt("WBC: "+c.wbcFlags.map(cap1).join(", "),28,"#8FA3AD",y,"400"); }
+    txt("90feet.vercel.app",26,"#5B6B74",H-50,"400");
+
+    var url;
+    try { url = cv.toDataURL("image/png"); } catch(e){ btn.textContent="Couldn't render"; return; }
+    var a=document.createElement("a"); a.href=url; a.download=(S.name||"career").replace(/\s+/g,"_")+"_90feet.png";
+    document.body.appendChild(a); a.click(); a.remove();
+    btn.textContent="Saved!"; setTimeout(function(){btn.textContent="Save result as image";},1600);
+  }
+
   function showEndScreen(){
     document.getElementById("screen-game").classList.add("hidden");
     document.getElementById("screen-end").classList.remove("hidden");
@@ -2875,7 +3420,7 @@
       statsHtml += statRow("Playoff Trips", c.playoffs);
       statsHtml += statRow("Championships", c.championships);
       statsHtml += statRow("All-Star Selections", c.allStars);
-      if(c.wbc==="accepted") statsHtml += statRow("World Baseball Classic", "Represented your country");
+      if(c.wbcFlags && c.wbcFlags.length) statsHtml += statRow("World Baseball Classic", c.wbcFlags.map(function(ct){ return wbcFlag(ct)+" "+cap1(ct); }).join("  "));
       if(c.demotions>0) statsHtml += statRow("Trips to the Minors", c.demotions);
       if(S.teamHistory.length) statsHtml += statRow("Organizations", orgLogosHtml());
     } else if(!S.walkedAway) {
@@ -2898,6 +3443,9 @@
 
     var html = '';
     html += '<div class="event-eyebrow label">'+escapeHtml(S.name||"Player")+"'s Career, "+STAGE_LABELS[S.released ? "retired" : "retired"]+'</div>';
+    if(!S.released && !S.walkedAway && score>=58){
+      html += '<div class="bunting">'+Array(11).fill('<span></span>').join("")+'</div>';
+    }
     html += '<div class="legacy-tier">'+tier.title+'</div>';
     html += '<div class="legacy-blurb">'+tier.blurb+'</div>';
     if(!S.released){
@@ -2905,8 +3453,21 @@
     }
     html += '<div class="stat-table">'+statsHtml+'</div>';
     if(awardsHtml) html += '<div class="awards-wrap">'+awardsHtml+'</div>';
+    html += '<div class="career-summary">'+careerNarrative()+'</div>';
+    html += '<div class="share-row">'+
+              '<button class="cta cta-alt" id="btn-copy">Copy career summary</button>'+
+              '<button class="cta cta-alt" id="btn-img">Save result as image</button>'+
+            '</div>';
     html += '<button class="cta" id="btn-again">Start a New Career</button>';
     el.innerHTML = html;
+
+    document.getElementById("btn-copy").addEventListener("click", function(){
+      var txt = "\u26BE "+(S.name||"My")+" \u2014 90 Feet\n"+tier.title+" ("+score+" Legacy)\n\n"+careerNarrative();
+      var btn = this;
+      navigator.clipboard.writeText(txt).then(function(){ btn.textContent="Copied!"; setTimeout(function(){btn.textContent="Copy career summary";},1600); })
+        .catch(function(){ btn.textContent="Press \u2318C / long-press to copy"; });
+    });
+    document.getElementById("btn-img").addEventListener("click", function(){ saveResultImage(this); });
 
     function statRow(label,val){
       return '<div class="stat-row"><span>'+label+'</span><span>'+val+'</span></div>';
@@ -2921,18 +3482,62 @@
   /* =========================================================
      MASTER RENDER
   ========================================================= */
+  var PROGRESS_STAGES = [
+    {key:"high_school", label:"High School"},
+    {key:"college", label:"College"},
+    {key:"draft", label:"Draft"},
+    {key:"minors", label:"Minors"},
+    {key:"debut", label:"Call-Up"},
+    {key:"mlb", label:"The Show"},
+    {key:"retired", label:"Retired"}
+  ];
+  function currentProgressKey(){
+    var k = S.stageKey;
+    if(k==="low_minors"||k==="high_minors") return "minors";
+    if(k==="crossroads") return "college"; // deciding, shown as approaching college/draft
+    return k;
+  }
+  function renderProgressTracker(){
+    var el = document.getElementById("progress-tracker");
+    if(!el) return;
+    var curKey = currentProgressKey();
+    var curIdx = PROGRESS_STAGES.findIndex(function(s){ return s.key===curKey; });
+    if(curIdx<0) curIdx = 0;
+    // if college was skipped (went pro/indy straight from crossroads), still let Draft catch up
+    el.innerHTML = PROGRESS_STAGES.map(function(s,i){
+      var cls = i<curIdx ? "done" : (i===curIdx ? "current" : "");
+      return '<div class="pt-node '+cls+'"><div class="pt-dot"></div>'+s.label+'</div>';
+    }).join("");
+  }
+
   function renderAll(){
     renderHero();
     renderEventCard();
     renderLog();
     renderCareerTable();
     renderTrophyCase();
+    renderProgressTracker();
   }
 
   /* =========================================================
      START SCREEN WIRING
   ========================================================= */
   var selectedPosition = "Shortstop";
+  var selectedMode = "standard";
+  function wireInfoTabs(){
+    var tabs = document.querySelectorAll(".info-tab");
+    tabs.forEach(function(t){
+      t.addEventListener("click", function(){
+        tabs.forEach(function(x){ x.classList.remove("active"); });
+        this.classList.add("active");
+        var target = this.getAttribute("data-tab");
+        document.querySelectorAll(".info-panel").forEach(function(p){
+          p.classList.toggle("hidden", p.getAttribute("data-panel")!==target);
+        });
+      });
+    });
+  }
+
   function wireStartScreen(){
     var opts = document.querySelectorAll(".pos-opt");
     opts.forEach(function(o){
@@ -2941,6 +3546,14 @@
         opts.forEach(function(x){ x.classList.remove("active"); });
         this.classList.add("active");
         selectedPosition = this.getAttribute("data-pos");
+      });
+    });
+    var modeOpts = document.querySelectorAll(".mode-opt");
+    modeOpts.forEach(function(o){
+      o.addEventListener("click", function(){
+        modeOpts.forEach(function(x){ x.classList.remove("selected"); });
+        this.classList.add("selected");
+        selectedMode = this.getAttribute("data-mode");
       });
     });
     document.getElementById("btn-start").addEventListener("click", startGame);
@@ -2956,6 +3569,7 @@
     S.category = POSITION_FLAVOR[selectedPosition].cat;
     S.attrs = Object.assign(S.attrs, rollStartingAttrs(selectedPosition));
     S.attrs.health = 85; S.attrs.fame = 5; S.attrs.bank = 8;
+    S.gameMode = selectedMode;
     log("Age 16, and it's your first varsity practice — this is where it all begins.", true);
 
     document.getElementById("screen-start").classList.add("hidden");
@@ -2966,6 +3580,7 @@
   }
 
   wireStartScreen();
+  wireInfoTabs();
 })();
 </script>
 </body>
